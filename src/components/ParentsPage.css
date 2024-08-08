@@ -1,0 +1,93 @@
+.parents-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #ebe0e0;
+  }
+  
+  .parents-page__content {
+    display: flex;
+    flex: 1;
+    padding: 20px 10%;
+    flex-wrap: wrap;
+  }
+  
+  .parents-page__left-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-right: 20px;
+    min-width: 300px;
+  }
+  
+  .parents-page__gradient-blue,
+  .parents-page__gradient-pearlwhite {
+    padding: 20px;
+    border-radius: 10px;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+  
+  .parents-page__gradient-blue {
+    background: linear-gradient(to right, #87CEEB, #E0F8FF);
+    height: 158px;
+    box-shadow: 8px 8px 15px #bfbfbf, -8px -8px 15px #ffffff;
+  }
+  
+  .parents-page__gradient-pearlwhite {
+    background: linear-gradient(to right, #6eafe7, #ffffff);
+    height: 158px;
+    box-shadow: 8px 8px 15px #bfbfbf, -8px -8px 15px #ffffff;
+  }
+  
+  .parents-page__right-column {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    min-width: 300px;
+    height: max-content;
+  }
+  
+  .parents-page__right-box {
+    flex: 1;
+    background-color: #f6e2f7;
+    border-radius: 10px;
+    min-height: 100px;
+    padding: 20px;
+    -webkit-box-shadow: 18px 19px 38px -18px rgba(0,0,0,0.75);
+    -moz-box-shadow: 18px 19px 38px -18px rgba(0,0,0,0.75);
+    box-shadow: 18px 19px 38px -18px rgba(0,0,0,0.75);
+  }
+  
+  @media (max-width: 768px) {
+    .parents-page__content {
+      flex-direction: column;
+    }
+  
+    .parents-page__left-column {
+      margin-right: 0;
+      margin-bottom: 20px;
+    }
+  
+    .parents-page__gradient-blue,
+    .parents-page__gradient-pearlwhite {
+      height: auto;
+      min-height: 150px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .parents-page__content {
+      padding: 10px;
+    }
+  
+    .parents-page__left-column,
+    .parents-page__right-column {
+      min-width: 100%;
+    }
+  }

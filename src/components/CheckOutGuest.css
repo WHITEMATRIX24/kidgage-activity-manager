@@ -1,0 +1,438 @@
+.form-body {
+  padding: 25px;
+}
+
+.co-form-container {
+  width: 90%;
+  max-width: 800px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0px auto;
+}
+
+.co-form-container h2 {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+  color: #000066;
+}
+
+.co-form-container label {
+  display: block;
+  margin-bottom: 5px;
+  color: #000066;
+}
+
+.co-form-container input[type="text"],
+.co-form-container input[type="email"],
+.co-form-container input[type="tel"],
+.co-form-container input[type="date"],
+.co-form-container select {
+  width: 95%;
+  padding: 10px;
+  margin-bottom: 5px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 0.9em;
+  background-color: #f9f9f9;
+  color: #000066;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.co-form-container input[type="text"]:focus,
+.co-form-container input[type="email"]:focus,
+.co-form-container input[type="tel"]:focus,
+.co-form-container input[type="date"]:focus,
+.co-form-container select:focus {
+  border: 1px solid #E26936;
+  box-shadow: 0 0 5px rgba(226, 105, 54, 0.5);
+}
+
+.co-form-container input[type="text"]:hover,
+.co-form-container input[type="email"]:hover,
+.co-form-container input[type="tel"]:hover,
+.co-form-container input[type="date"]:hover,
+.co-form-container select:hover {
+  border: 1px solid #E26936;
+}
+
+/* Autofill styles */
+.co-form-container input[type="text"]:-webkit-autofill,
+.co-form-container input[type="email"]:-webkit-autofill,
+.co-form-container input[type="tel"]:-webkit-autofill,
+.co-form-container input[type="date"]:-webkit-autofill,
+.co-form-container select:-webkit-autofill {
+  background-color: #f9f9f9 !important;
+}
+
+.co-form-container .add-interests {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 5px;
+  
+  
+}
+
+.co-form-container .add-interests input[type="text"] {
+  width: 100%;
+  padding: 10px; /* Adjust padding if needed */
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  
+}
+
+.co-form-container .add-interests button {
+  width: 18%;
+  background: white;
+  color:#E26936;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.5em; /* Increased font size */
+  margin-right: 100px; /* Adjust this value to move the button to the left */
+}
+.interests-container label{
+  margin-top: 20px;
+}
+.co-form-container .add-interests button:hover {
+  background: white;
+}
+
+.co-form-container .add-interests .new-interest-ip{
+  border-radius: 20px;  
+  border: 1px solid #E26936;
+}
+.co-form-container .add-interests{
+  width: 120%;
+  max-width: 900px; 
+
+}
+.co-form-container .interest-hint {
+  margin-top: 5px;
+  color: #666;
+  
+}
+.co-form-container .interest-box{
+  width: 90%;
+  max-width: 900px;
+  min-height: 80px;
+}
+
+.co-form-container .checkbox-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.co-form-container .submit-button {
+  background: #E26936;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.co-form-container .submit-button:hover {
+  background: white;
+  color: #E26936;
+  padding: 8px 18px;
+  border: 2px solid #E26936;
+}
+
+.co-form-container .back-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1em;
+  margin-bottom: 20px;
+  text-decoration: none;
+  position: relative;
+}
+
+.co-form-container .back-button:hover {
+  color: #007bff;
+  background-color:transparent;
+  text-shadow: 0 0 10px #007bff; /* Adds a blue glow */
+  text-decoration: underline; /* Underline on hover */
+}
+
+.co-form-container .back-button:before {
+  content: '<';
+  text-decoration: none;
+  margin-right: 5px;
+}
+
+.co-form-container .step-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.co-form-container .step-bar input[type="radio"] {
+  appearance: none; /* Hide default radio button */
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #E26936; /* Border color */
+  outline: none;
+  cursor: pointer;
+  margin-right: -10px;
+  margin-top: -0px;
+  margin-left: 0px;
+  position: relative;
+  z-index: 2;
+}
+
+.co-form-container .step-bar input[type="radio"]:checked::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  background-color: #E26936; /* Green color for the checked state */
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.co-form-container .step-bar input[type="radio"]:checked {
+  border: 2px solid #E26936; /* Green border for checked state */
+}
+
+.co-form-container .step-bar label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.co-form-container .step-bar .progress {
+  flex-grow: 1;
+  height: 4px;
+  background-color: #e0e0e0;
+  position: relative;
+  margin-right: 10px;
+  border-radius: 2px; /* Optional: to match the border-radius of the progress-bar */
+  z-index: 1;
+}
+
+.co-form-container .step-bar .progress-bar {
+  height: 100%;
+  background-color: #E26936;
+  border-radius: 2px 0 0 2px; /* Rounded corners on the left side */
+}
+
+.co-form-container .weekly-booking {
+  width: 100%;
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  margin-bottom: 20px;
+}
+
+.co-form-container .weekly-booking input[type="checkbox"] {
+  appearance: none; /* Hide default checkbox */
+  width: 20px;
+  height: 20px;
+  border-radius: 50%; /* Round shape */
+  border: 2px solid #ccc; /* Border color */
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  background-color: #f9f9f9; /* Background color */
+}
+
+.co-form-container .weekly-booking input[type="checkbox"]:checked {
+  background-color: #13A74E; /* Green background when checked */
+  border-color: #13A74E; /* Green border when checked */
+}
+
+.co-form-container .weekly-booking input[type="checkbox"]:checked::after {
+  content: '✓'; /* Tick mark */
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px; /* Adjust size as needed */
+}
+
+.co-form-container .weekly-booking label {
+  display: flex;
+  align-items: center;
+  cursor: pointer; /* Change cursor to pointer when hovering over label */
+}
+
+.name-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.name-container div {
+  width: 48%;
+}
+
+.dob-gender-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dob-gender-container div {
+  width: 48%;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup {
+  background: white;
+  padding: 40px;
+  border-radius: 10px;
+  text-align: center;
+  width: 400px;
+  margin: 0 20px;
+}
+
+.popup-icon {
+  width: 60px;
+  height: 60px;
+  background-color: #E5C947;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+}
+
+.popup-icon .exclamation-mark {
+  color: white;
+  font-size: 32px;
+}
+
+.popup h2 {
+  font-size: 1.5em;
+  color: #000066;
+  margin-bottom: 10px;
+}
+
+.popup p {
+  margin: 5px 0;
+  color: #000066;
+}
+
+.popup .popup-buttons {
+  margin-top: 20px;
+}
+
+.popup .popup-button {
+  background: #E26936;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1em;
+  margin: 5px;
+  width: 45%;
+}
+
+.popup .popup-button:hover {
+  background: white;
+  color: #E26936;
+  padding: 8px 18px;
+  border: 2px solid #E26936;
+}
+
+.form-container {
+  width: 100%;
+  padding: 20px;
+  margin: 0px auto;
+  max-width: 800px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container .form-section {
+  margin-bottom: 20px;
+}
+
+.form-container .form-section h3 {
+  margin-bottom: 10px;
+  color: #000066;
+}
+
+.form-container .form-group {
+  margin-bottom: 10px;
+}
+
+.form-container .form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #000066;
+}
+
+.form-container .form-group input[type="text"],
+.form-container .form-group input[type="email"],
+.form-container .form-group input[type="tel"],
+.form-container .form-group input[type="date"],
+.form-container .form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.form-container .form-group input[type="text"]:focus,
+.form-container .form-group input[type="email"]:focus,
+.form-container .form-group input[type="tel"]:focus,
+.form-container .form-group input[type="date"]:focus,
+.form-container .form-group select:focus {
+  border-color: #000066;
+}
+
+.form-container .form-group .form-check {
+  display: flex;
+  align-items: center;
+}
+
+.form-container .form-group .form-check input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.form-container .form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-container .form-buttons button {
+  background-color: #000066;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-container .form-buttons button:hover {
+  background-color: #333399;
+}

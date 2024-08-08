@@ -1,0 +1,107 @@
+.course-enrollment-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background-color: #ffffffb8;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+.course-enrollment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 20px;
+}
+.course-enrollment-header h2{
+    margin: 0;
+    font-size: 1.5em;
+    color: #E26936;
+}
+.dropdown-icon {
+    transition: transform 0.3s;
+}
+
+.dropdown-icon.open {
+    transform: rotate(180deg);
+}
+
+.course-search {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.course-search input {
+    flex: 1;
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    border-radius: 25px;
+}
+
+.course-search button {
+    padding: 30px 20px;
+    border: none;
+    color: #E26936;
+    background-color: transparent;
+    border-radius: 4px;
+    font-size: 1.5em;
+
+    cursor: pointer;
+
+}
+
+.course-search button:hover {
+    color: #d9572f;
+}
+
+.students-list {
+    margin-top: 20px;
+}
+
+.students-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.students-list table, .students-list th, .students-list td {
+    border: 1px solid #ddd;
+}
+
+.students-list th, .students-list td {
+    padding: 10px;
+    text-align: left;
+}
+
+.students-list th {
+    background-color: #f4f4f4;
+}
+
+.download-pdf-button {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #E26936;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.download-pdf-button:hover {
+    background-color: #d9572f;
+}
+
+.download-pdf-button svg {
+    margin-right: 8px;
+}

@@ -1,0 +1,167 @@
+.academy-list-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0px 100px;
+  background-color: #f3eeee7e; /* Changed background to white */
+}
+
+.academy-list {
+  width: 100%;
+}
+
+.breadcrumb {
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: ">";
+  padding: 0 8px;
+}
+
+.breadcrumb a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.breadcrumb .active {
+  color: #6c757d;
+}
+
+.provider-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 2px #888;
+  margin-bottom: 20px;
+  width: 100%;
+  padding: 30px;
+  border-radius: 50px;
+}
+
+.provider-card-contents {
+  display: flex;
+  flex-direction: row; /* Arrange image and info side by side */
+  justify-content: space-between; /* Add space between info and images */
+}
+
+.provider-info {
+  display: flex;
+  flex-direction: column;
+  width: 55%; /* Set width to 65% for info section */
+}
+
+.provider-days {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.day {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 3px;
+}
+
+.day.highlight {
+  border: solid 2px #f47536c9;
+  padding: 10px;
+  background-color: #f47536c9;
+}
+
+.provider-logo {
+  width: 15%;
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+.provider-logo-image {
+  width: 100%;
+  height: auto;
+}
+
+.provider-images {
+  display: flex;
+  flex-direction: row; /* Display images side by side */
+  justify-content: flex-end; /* Align images to the right */
+  align-items: flex-start; /* Align items to the start of the container */
+  width: 30%; /* Set width to 35% for image section */
+}
+
+.provider-image-container {
+  width: 100%; /* Adjust as needed */
+  height: 100%; /* Adjust as needed */
+  overflow: hidden;
+  border-radius: 10%;
+  margin-left: 15px;
+}
+
+.provider-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.see-classes-button {
+  background-color: transparent;
+  width: 150px;
+  color: #007bff;
+  text-decoration: underline;
+  border: none;
+  padding: 0px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-top: 120px;
+
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.provider-classes {
+  display: flex;
+  flex-wrap: wrap; /* Wrap class cards to the next line */
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.provider-classes-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: calc(33.33% - 20px); /* 3 cards per row with a gap */
+  border-radius: 10px;
+}
+
+.class-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.class-location {
+  margin-top: 10px;
+}
+
+.book-button {
+  background-color: #f47536c9;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-top: 10px;
+}

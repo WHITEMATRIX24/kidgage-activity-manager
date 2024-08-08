@@ -1,0 +1,147 @@
+.booking-form {
+  width: 90%;
+  max-width: 800px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 7% auto;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.session-count, .session-date {
+  margin: 0;
+  text-align: left;
+  font-size: 14px;
+}
+
+.booking-details {
+  background: #f8f8f8;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.session-info {
+  text-align: left;
+  padding-bottom: 40px;
+}
+
+.attendees {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.attendees button {
+  background-color: #E26936;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 0px;
+margin: 0 20px;
+
+}
+
+.small-price {
+  font-size: 12px;
+  background: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  width: fit-content;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: right;
+  background-color: #40a3ff79;
+  position: absolute;
+  bottom: 80px;
+  right: 10px;
+  
+}
+
+.total-cost {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 20px 0;
+  
+}
+
+.total-cost span {
+  color: #13A74E;
+  font-size: 24px;
+  margin-left: 10px;
+}
+
+.book-next-button {
+  background-color: #E26936;
+  color: white;
+  border: none;
+  padding: 15px 50%;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 18px;
+  width: 100%;
+  margin: 20px auto;
+}
+
+.book-next-button:hover {
+  background-color: #E26936;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+  .booking-form{
+    width: 80%;
+  }
+  .attendees {
+      position: static; /* Adjust position for smaller screens */
+      justify-content: left;
+      margin-bottom: 10px;
+      
+  }
+
+  .booking-details {
+      padding: 15px; /* Adjust padding for smaller screens */
+      overflow: hidden;
+  }
+
+  .small-price {
+      position: static; /* Adjust position for smaller screens */
+      margin-top: 10px;
+      text-align: center;
+  }
+
+  .total-cost {
+      justify-content: center;
+      font-size: 16px; /* Adjust font size for smaller screens */
+  }
+
+  .total-cost span {
+      font-size: 20px; /* Adjust font size for smaller screens */
+  }
+}
+
+@media (max-width: 400px) {
+
+  .book-next-button {
+      padding: 10px 15px; /* Adjust padding for smaller screens */
+      font-size: 16px; /* Adjust font size for smaller screens */
+  }
+}

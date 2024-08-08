@@ -1,0 +1,14 @@
+
+.chats-container {
+    position: relative;
+    display: flex;
+    justify-content: flex-end; 
+    align-items: flex-start; 
+    padding: 20px; 
+  }
+  .chat-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+  }

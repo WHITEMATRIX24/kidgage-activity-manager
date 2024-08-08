@@ -1,0 +1,118 @@
+.secondary-navbar {
+  background-color: #ffffff;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.home-icon-link {
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.home-icon {
+  font-size: 1.5em;
+  color: #333;
+}
+
+.secondary-navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 0 20px;
+  height: 80px;
+}
+
+.secondary-navbar-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.secondary-navbar-item {
+  margin: 0 20px;
+}
+
+.secondary-navbar-link {
+  text-decoration: none;
+  color: #333333;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.secondary-navbar-item.active .secondary-navbar-link {
+  color: #ff0000;
+  border-bottom: 2px solid #ff0000;
+  padding-bottom: 5px;
+}
+
+.secondary-navbar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  font-size: 16px;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.secondary-navbar-toggle span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background-color: #333333;
+  margin: 5px 0;
+}
+
+@media (max-width: 768px) {
+  .secondary-navbar-container {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    padding: 0;
+  }
+
+  .secondary-navbar-toggle {
+    display: block;
+    position: relative;
+    right: 0;
+    top: 0;
+    transform: none;
+    align-self: flex-end;
+    margin: 10px 20px;
+  }
+
+  .secondary-navbar-list {
+    flex-direction: column;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+  }
+
+  .secondary-navbar-list.active {
+    max-height: 300px;
+  }
+
+  .secondary-navbar-item {
+    margin: 0;
+    width: 100%;
+  }
+
+  .secondary-navbar-link {
+    display: block;
+    padding: 10px 20px;
+  }
+
+  .secondary-navbar-item.active .secondary-navbar-link {
+    border-bottom: none;
+  }
+}

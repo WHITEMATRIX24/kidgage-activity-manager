@@ -1,0 +1,316 @@
+.upcoming-events {
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+
+.upcoming-events-heading {
+  background-color: #fff;
+  color: #292929;
+  text-align: center;
+  padding: 20px;
+}
+.upcoming-events.wishlist-events-heading {
+
+  background-color: #fff;
+  color: #292929;
+  text-align: center;
+  padding: 20px;
+  align-items: center;
+  gap: 20px;
+}
+.wishlist-events-heading img{
+  width: 50px;
+  height: auto;
+  margin-top: 50px;
+}
+.wishlist-events-heading h2 {
+  font-size: 35px;               
+  color: rgb(19, 30, 58);
+}
+.upcoming-events-heading h2 {
+  font-family: 'Neue Machina', sans-serif;
+  font-size: 24px;               
+  color: black;
+}
+
+.select-container {
+  position: relative;
+  display: inline-block;
+}
+
+.select-month {
+  background-color: transparent;    
+  color: #0029be;  /* Change this to your desired blue color */
+  border: none;
+  appearance: none;
+  padding: 2px 30px 2px 15px;
+  font-size: 20px;
+  border-radius: 10px;
+  margin-left: 10px;
+  text-decoration: underline;
+}
+
+.event-drop-down {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #0029be; /* Change this to your desired blue color */
+}
+
+
+.events-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.event-card {
+  position: relative;
+  border-radius: 2%;
+  margin: 20px;
+  width: 210px;
+  text-align: center;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.308);
+  transition: transform 0.2s;
+  height: 374px; 
+  overflow: hidden; 
+  display: flex;
+  flex-direction: column;
+}
+
+.event-card img {
+  height: 220px;
+  width: auto;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+.event-card h3 {
+  text-align: left;
+  margin-left: 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 0px;
+  margin-top: -8px;
+}
+.event-card h4 {
+  text-align: left;
+  margin: 10px;
+  font-size: 0.8em;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  
+}
+.event-card a {
+  text-align: left;
+  margin-left: 10px;
+  font-size: 0.8em;
+  margin-bottom: 10px;
+  margin-top: 0px;
+}
+.event-card p {
+  text-align: left;
+  overflow: hidden;
+  margin-left: 10px;
+  font-size: 0.7em;
+  margin-bottom: 10px;
+  margin-top: 0px;
+}
+
+.event-card button#wishlist {
+  position: absolute;
+  top:220px;
+  font-size: 1.0em;
+  cursor: pointer;
+  border: none;
+  background-color: red;
+  right: 0px;
+  color: white;
+  padding-left: 9px;
+  border-radius: 11%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 39px;
+  width: 26px;
+}
+
+.event-card button#book-now {
+  position: absolute;
+  bottom: 7px;
+  left: 72%;
+  background-color: #313131ea;
+  color: #fff;
+  border: none;
+  border-radius: 20px 20px 20px 20px / 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 64px;
+  height: 20px;
+  font-size: 0.48em;
+  margin-top: 20px;
+}
+.event-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Show only 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.8em; /* Adjust if needed */
+  margin-left: 10px;
+  margin-bottom: 10px;
+  margin-top: 0px;
+}
+
+.event-card button#call {
+  position: absolute;
+  bottom: 24px;
+  left: 35px;
+  width: 0px;
+  height: 0px;
+  padding: 0px 0px;
+  font-size: 1.0em;
+  cursor: pointer;
+  border: none;
+} 
+
+.event-card button#calendar {
+  
+  position: absolute;
+  bottom: 25px;
+  left: 10px;
+  width: 0px;
+  height: 0px;
+  padding: 0px 0px;
+  font-size: 1.0em;
+  cursor: pointer;
+  border: none;
+} 
+
+.event-card button:hover {
+  background-color: #292929;
+}
+
+.event-view-all {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #007bff;
+  cursor: pointer;
+  border: none;
+  text-decoration: underline;
+  background-color: transparent;
+  margin: 40px;
+}
+.event-view-all:hover{
+  text-shadow: 0 0 10px #007bff;
+}
+.no-events {
+  font-size: 18px;
+  color: #555;
+  margin-top: 20px;
+  height: 415px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.msg-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  z-index: 1000;
+}
+/* Add this to UpcomingEvents.css */
+
+.floating-btn {
+  position: fixed;
+  bottom: 20px;
+/* Adjust color as needed */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1000; /* Ensure it's on top of other elements */
+}
+
+
+.floating-btn i {
+  margin: 0;
+}
+
+.wishlist-btn {
+  right: 80px; /* Position next to cart button */
+  background-color: #ff4081; 
+
+}
+
+.wishlist-btn:hover{
+  background-color: #e91e63; /* Darker shade on hover */
+}
+
+.cart-btn {
+  right: 20px; /* Position on the right */
+  background-color: #4093ff; 
+
+}
+.cart-btn:hover{
+  background-color: #2f6cbc; 
+
+}
+
+@media (max-width: 500px) {
+  .event-card {
+    width: 60%;
+    margin: 10px;
+  }
+}
+
+@media (min-width: 600px) {
+  .event-card {
+    width: 35%;
+    margin: 10px;
+  }
+}
+
+@media (min-width: 900px) {
+  .event-card {
+    width: 25%;
+    margin: 10px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .event-card {
+    width: 20%;
+    margin: 10px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .event-card {
+    width: 16%;
+    margin: 10px;
+  }
+}
+
+@media (min-width: 1800px) {
+  .event-card {
+    width: 13%;
+    margin: 10px;
+  }
+}

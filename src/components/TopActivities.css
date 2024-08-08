@@ -1,0 +1,44 @@
+.top-activities {
+  padding: 20px;
+  text-align: center;
+  margin-top: 80px;
+  font-family: 'Neue Machina', sans-serif;
+
+}
+
+
+
+.top-activities .top-act-view {
+  margin-bottom: 1em;
+  padding: 10px 20px;
+  font-size: 1.2em;
+  cursor: pointer;
+  border: none;
+  background-color: #ffffff;
+  color: #007bff;
+  border-radius: 5px;
+  display: inline-block;
+  text-decoration: none; /* Remove default underline */
+  transition: background-color 0.3s ease;
+}
+
+.top-activities .top-act-view:hover {
+  background-color: #ffffff;
+  color: #007bff;
+  text-shadow: 0 0 10px #007bff; /* Adds a blue glow */
+  padding: 10px 20px; /* Maintain original padding */
+  text-decoration: underline; /* Underline on hover */
+}
+
+.drawer-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.drawer-container.active {
+  transform: translateY(0);
+}
