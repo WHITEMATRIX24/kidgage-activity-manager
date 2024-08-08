@@ -29,11 +29,11 @@ const SlotSelection = () => {
   useEffect(() => {
     const fetchCourseAndProvider = async () => {
       try {
-        const courseResponse = await axios.get(`http://localhost:5000/api/courses/course/${courseId}`);
+        const courseResponse = await axios.get(`https://kidgage-adminbackend.onrender.com/api/courses/course/${courseId}`);
         const courseData = courseResponse.data;
         setCourse(courseData);
 
-        const providerResponse = await axios.get(`http://localhost:5000/api/users/provider/${courseData.providerId}`);
+        const providerResponse = await axios.get(`https://kidgage-adminbackend.onrender.com/api/users/provider/${courseData.providerId}`);
         setProvider(providerResponse.data);
 
         setAvailableSlots(courseData.timeSlots.map(slot => `${slot.from} to ${slot.to}`));
