@@ -31,7 +31,7 @@ const BusinessSignUp = ({ handleNavigation }) => {
   useEffect(() => {
     const fetchAcademyTypes = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/course-category/categories'); // Adjust endpoint as needed
+        const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/course-category/categories'); // Adjust endpoint as needed
         setAcademyTypes(response.data);
       } catch (error) {
         console.error('Error fetching academy types', error);
@@ -73,7 +73,7 @@ const BusinessSignUp = ({ handleNavigation }) => {
     });
 
     try {
-      const response = await axios.post('http://localhost:5000/api/users/signup', data, {
+      const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/users/signup', data, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
