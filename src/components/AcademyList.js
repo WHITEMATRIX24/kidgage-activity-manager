@@ -34,11 +34,11 @@ const AcademyList = () => {
 
   useEffect(() => {
     if (category) {
-      axios.get(`http://localhost:5000/api/users/all/${category}`)
+      axios.get(`https://kidgage-adminbackend.onrender.com/api/users/all/${category}`)
         .then(response => {
           setProviders(response.data);
           const providerIds = response.data.map(provider => provider._id);
-          return axios.get('http://localhost:5000/api/courses/by-providers', {
+          return axios.get('https://kidgage-adminbackend.onrender.com/api/courses/by-providers', {
             params: { providerIds }
           });
         })
