@@ -28,7 +28,7 @@ const AttendeeInfo = () => {
   useEffect(() => {
     const fetchParentData = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/personal/search?query=${parentEmail}`);
+        const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/personal/search?query=${parentEmail}`);
         const data = await response.json();
 
         if (response.ok) {
@@ -109,7 +109,7 @@ const AttendeeInfo = () => {
     try {
       await Promise.all(formData.students.map(async (student) => {
         if (student.firstName && student.lastName) { // Ensure required fields are filled
-          await axios.post('http://localhost:5000/api/student/add', {
+          await axios.post('https://kidgage-adminbackend.onrender.com/api/student/add', {
             parent: parentId,
             firstName: student.firstName,
             lastName: student.lastName,
