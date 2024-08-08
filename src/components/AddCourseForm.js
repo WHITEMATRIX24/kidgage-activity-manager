@@ -95,7 +95,7 @@ function AddCourseForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5001/api/courses/addcourse', course);
+            const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/courses/addcourse', course);
             console.log('Course added successfully', response.data);
             setCourse(initialCourseState);
             setSuccess('Course added successfully!');
@@ -113,7 +113,7 @@ function AddCourseForm() {
 
     const handleSearch = async () => {
         try {
-            const response = await axios.get(`http://localhost:5001/api/users/search?query=${searchQuery}`);
+            const response = await axios.get(`https://kidgage-adminbackend.onrender.com/api/users/search?query=${searchQuery}`);
             setSearchResult(response.data);
             setSearchError('');
             setCourse((prev) => ({ ...prev, providerId: response.data._id }));
