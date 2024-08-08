@@ -15,7 +15,7 @@ const WishlistPage = () => {
     const fetchWishlistEvents = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/posters?wishlist=true');
+        const response = await fetch('https://kidgage-adminbackend.onrender.com/api/posters?wishlist=true');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -65,7 +65,7 @@ const WishlistPage = () => {
 
   const removeFromWishlist = async (eventId) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/posters/${eventId}/wishlist`, {
+      const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/posters/${eventId}/wishlist`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
