@@ -34,7 +34,7 @@ const AddParentForm = ({ handleNavigation }) => {
     }
     setError('');
     try {
-      const response = await axios.post('http://localhost:5001/api/personal/signup', formData);
+      const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/personal/signup', formData);
       setSuccess('Parent added successfully!');
       setFormData({
         username: '',
