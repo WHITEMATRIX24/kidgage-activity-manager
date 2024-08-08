@@ -10,7 +10,7 @@ const ImageDrawer = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/course-category/categories');
+        const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/course-category/categories');
         console.log('Fetched categories:', response.data); // Log the fetched data
         setCategories(response.data);
       } catch (error) {
