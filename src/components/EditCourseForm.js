@@ -33,7 +33,7 @@ const EditCourseForm = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('http://localhost:5001/api/course-category/categories');
+                const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/course-category/categories');
                 // Handle categories if needed
             } catch (error) {
                 console.error('Error fetching categories', error);
@@ -53,7 +53,7 @@ const EditCourseForm = () => {
 
     const handleSearch = async () => {
         try {
-            const response = await axios.get(`http://localhost:5001/api/courses/search?name=${searchQuery}`);
+            const response = await axios.get(`https://kidgage-adminbackend.onrender.com/api/courses/search?name=${searchQuery}`);
             if (response.data) {
                 setCourseData(response.data);
                 setFormData({
@@ -135,7 +135,7 @@ const EditCourseForm = () => {
         e.preventDefault();
         if (isEditMode) {
             try {
-                const response = await axios.put(`http://localhost:5001/api/courses/update/${courseData._id}`, formData);
+                const response = await axios.put(`https://kidgage-adminbackend.onrender.com/api/courses/update/${courseData._id}`, formData);
                 setSuccess('Course updated successfully!');
                 setError('');
                 setIsEditMode(false);
@@ -152,7 +152,7 @@ const EditCourseForm = () => {
 
     const handleConfirmDelete = async () => {
         try {
-            await axios.delete(`http://localhost:5001/api/courses/delete/${courseData._id}`);
+            await axios.delete(`https://kidgage-adminbackend.onrender.com/api/courses/delete/${courseData._id}`);
             setCourseData(null);
             setFormData({
                 providerId: '',
