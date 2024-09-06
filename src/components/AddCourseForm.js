@@ -167,36 +167,6 @@ function AddCourseForm() {
                             onChange={handleChange}
                         />
                     </div>
-                    <label>Course Hashtags</label>
-                    <div className="side-by-side2">
-                        <div className="interest-input-group">
-                            <input
-                                type="text"
-                                id="newHashtag"
-                                name="newHashtag"
-                                value={course.newHashtag}
-                                onChange={handleHashtagChange}
-                                placeholder="Add new hashtag"
-                            />
-                            <button type="button" className="add-interest-btn" onClick={addHashtag}>
-                                <FaPlus />
-                            </button>
-                        </div>
-                        <div className="interest-box">
-                            {course.hashtags && course.hashtags.map((hashtag) => (
-                                <div key={hashtag} className="interest-item">
-                                    <span>{hashtag}</span>
-                                    <button
-                                        type="button"
-                                        className="remove-interest-btn"
-                                        onClick={() => removeHashtag(hashtag)}
-                                    >
-                                        <FaTimes />
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
                     <div className="form-group add-duration-group">
                         <input
                             type="number"
