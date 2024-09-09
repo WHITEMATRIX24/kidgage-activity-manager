@@ -12,6 +12,115 @@
     overflow: hidden;
     position: fixed;
 }
+/* General button styles */
+.sidebar-heading-button {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    background-color: transparent; /* Blue background color */
+    color: white; /* White text color */
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+    font-weight: bold; /* Bold text */
+    cursor: pointer; /* Pointer cursor on hover */
+    text-align: center; /* Center the text */
+    transition: background-color 0.3s ease; /* Smooth background color transition */
+}
+/* dashboard.css */
+.change-password-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.change-password-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    max-width: 400px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.change-password-form input {
+    display: block;
+    width: 90%;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.change-password-form button {
+    display: block;
+    padding: 10px;
+    margin: 10px;
+    background-color: #d25832;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.change-password-form button:hover {
+    background-color: #a74629;
+}
+
+.change-password-form p {
+    color: red;
+    margin-top: 10px;
+}
+
+/* Hover effect for the buttons */
+.sidebar-heading-button:hover {
+    background-color: #fff; /* Darker blue on hover */
+}
+
+/* Specific styles for the settings-content container */
+.settings-content {
+    display: flex;
+    flex-direction: row;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    background-color: #ffffffb8;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+
+/* Add a slight bottom margin to the buttons */
+.sidebar-heading-button:not(:last-child) {
+    margin-bottom: 10px; /* Space between buttons */
+}
+
+/* Optional: Add an icon next to the button text */
+.sidebar-heading-button .icon {
+    margin-right: 8px; /* Space between icon and text */
+}
+
 .pop-success-message{
     top: 50%;
     left: 50%;

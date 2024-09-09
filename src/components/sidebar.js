@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faSchool, faTags, faUsers, faUserGraduate, faBullhorn, faImages, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faSchool, faTags, faUsers, faUserGraduate, faBullhorn, faImages, faSignOutAlt, faCog } from '@fortawesome/free-solid-svg-icons';
 import profileImage from './assets/images/profile.png';
 import './dashboard.css';
 
-const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
+const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) => {
     const [activeItem, setActiveItem] = useState('courses');
     const sectionRefs = useRef({});
 
     useEffect(() => {
-        const sections = ['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'course-categories'];
+        const sections = ['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'course-categories','settings'];
 
         sections.forEach(section => {
             sectionRefs.current[section] = document.getElementById(section);
@@ -48,6 +48,7 @@ const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
         students: faUserGraduate,
         'add-banners': faBullhorn,
         'event-posters': faImages,
+        settings: faCog,
     };
 
     const handleItemClick = (item) => {
@@ -56,10 +57,6 @@ const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
         if (window.innerWidth <= 768) { // Only toggle on smaller screens
             toggleSidebar(); // Close the sidebar when an item is clicked on smaller screens
         }
-    };
-
-    const handleSignOut = () => {
-        window.location.replace('/');
     };
 
     return (
@@ -74,20 +71,15 @@ const Sidebar = ({ sidebarOpen, toggleSidebar }) => {
             <h1 className="sidebar-heading">Dashboard</h1>
             <nav>
                 <ul>
-                    {['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'course-categories'].map(section => (
+                    {['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'course-categories','settings'].map(section => (
                         <li key={section} className={activeItem === section ? 'active' : ''} onClick={() => handleItemClick(section)}>
                             <a href={`#${section}`}>
                                 <FontAwesomeIcon icon={icons[section]} className="icon" />
                                 {section.charAt(0).toUpperCase() + section.slice(1).replace('-', ' ')}
                             </a>
                         </li>
-                    ))}
-                    <li className="signout" onClick={handleSignOut}>
-                        <button className="sidebar-heading-button">
-                            <FontAwesomeIcon icon={faSignOutAlt} className="icon" />
-                            Sign Out
-                        </button>
-                    </li>
+                    ))} 
+
                 </ul>
             </nav>
             <div className="sidebar-footer">

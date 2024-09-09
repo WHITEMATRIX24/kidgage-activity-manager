@@ -19,6 +19,9 @@ import EventEnrollment from './eventEnrollment';
 import EditStudentForm from './EditStudentForm';
 import EditAcademyForm from './EditAcademyForm';
 import { Divider } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faRedoAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import ChangePasswordForm from './ChangePasswordForm';
 
 const Dashboard = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -26,11 +29,24 @@ const Dashboard = () => {
     const [itemToDelete, setItemToDelete] = useState(null);
     const [deleteType, setDeleteType] = useState(''); // 'poster' or 'student'
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+    const [showChangePasswordForm, setShowChangePasswordForm] = useState(false); // New state
+    const adminId = '66b22d7ec73e3b8a02fda241'; // The ID for the admin
+
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
     };
+    const handleSignOut = () => {
+        window.location.replace('/');
+    };
 
+    const handleChangePassword = () => {
+        setShowChangePasswordForm(true);
+    };
+
+    const handleCloseChangePasswordForm = () => {
+        setShowChangePasswordForm(false);
+    };
     const togglePopup = () => {
         setShowPopup(!showPopup);
     };
@@ -117,8 +133,31 @@ const Dashboard = () => {
                         <AddCourseCategoryForm />
                         <EditCourseCategoryForm />
                     </section>
-                    <button id="signout">
-                    </button>
+                    <section id="settings" className="db-section">
+                        <h1>Settings</h1>
+                        <div className="settings-content">
+                            <button className="sidebar-heading-button" onClick={handleChangePassword}>
+                            <FontAwesomeIcon icon={faRedoAlt} className="icon" />
+
+                                Change Password
+                            </button>
+                            <Divider style={{ margin: '10px 0' }} />
+                            <button className="sidebar-heading-button" onClick={handleSignOut}>
+                            <FontAwesomeIcon icon={faSignOutAlt} className="icon" />
+                                Sign Out
+                            </button>
+                        </div>
+                    </section>
+                    {showChangePasswordForm && (
+                        <div className="change-password-overlay">
+                            <div className="change-password-container">
+                                <button className="close-button" onClick={handleCloseChangePasswordForm}>
+                                    &times;
+                                </button>
+                                <ChangePasswordForm  adminId={adminId} />
+                            </div>
+                        </div>
+                    )}
                 </div>
                 {showPopup && (
                     <>

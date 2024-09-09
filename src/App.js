@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, useNavigate, useLocation, useNavigationType } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTOp';
 import Dashboard from './components/dashboard';
+import AdminSignIn from './components/AdminSignIn';
 
 
 // Add any other paths from your secondary navbar here
