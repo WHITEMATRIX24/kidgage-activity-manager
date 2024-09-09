@@ -1,6 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
 /* General styles for the dashboard */
 .dashboard-body {
-    font-family: 'Arial, sans-serif';
     background-image: url(./assets/images/img1.jpg);
     background-position: bottom right;
     background-size: cover;

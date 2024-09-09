@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Button from './Button';
 import { useNavigate } from 'react-router-dom';
-import './Header.css';
+import './AdminSignin.css';
 import logo from './assets/images/logo.png';
 
 const AdminSignIn = () => {
@@ -42,12 +42,12 @@ const AdminSignIn = () => {
   };
 
   return (
-    <div className='sign-form-body'>
-      <div className='signup-form'>
-        <div className='logo-container'>
+    <div className='asign-form-body'>
+      <div className='asignup-form'>
+        <div className='alogo-container'>
           <img src={logo} alt="KIDGAGE" onClick={() => navigate('/')} style={{ cursor: 'pointer' }} />
         </div>
-        <form className='form-sign-in' onSubmit={handleSubmit}>
+        <form className='aform-sign-in' onSubmit={handleSubmit}>
           <h2>Admin's Sign-In</h2>
           <input
             type="text"
@@ -65,7 +65,7 @@ const AdminSignIn = () => {
             placeholder="Password"
             required
           />
-          <Button primary type="submit">Sign In</Button>
+          <button primary type="submit">Sign In</button>
           {error && <p className="error-message">{error}</p>}
           {success && <p className="success-message">{success}</p>}
         </form>

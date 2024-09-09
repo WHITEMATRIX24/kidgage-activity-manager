@@ -30,9 +30,9 @@ function AppContent() {
   return (
     <ScrollToTop>
       <Routes>
-        {/* <Route path="/" element={<AdminSignIn />} /> */}
-        <Route path="/" element={<Dashboard />} />  
-        {/* <Route path="/dashboard" element={<Dashboard />} />   */}
+        <Route path="/" element={<AdminSignIn />} />
+        {/* <Route path="/" element={<Dashboard />} />   */}
+        <Route path="/dashboard" element={<Dashboard />} />  
 
       </Routes>
     </ScrollToTop>
