@@ -34,6 +34,8 @@
     transition: background-color 0.3s ease; /* Smooth background color transition */
 }
 /* dashboard.css */
+/* ChangePasswordForm.css */
+
 .change-password-overlay {
     position: fixed;
     top: 0;
@@ -53,12 +55,10 @@
     border-radius: 8px;
     position: relative;
     max-width: 400px;
-    align-items: center;
-    justify-content: center;
     width: 100%;
 }
 
-.close-button {
+.change-password-container .close-button {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -68,26 +68,40 @@
     cursor: pointer;
 }
 
+.change-password-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center-aligns the form items */
+}
+
+.change-password-form label {
+    color: #387CB8;
+    margin: 10px;
+}
+
 .change-password-form input {
     display: block;
-    width: 90%;
-    padding: 10px;
+    width: 85%;
+    padding: 0.8rem 0 0.8rem 1.6rem;
+    font-size: .8em;
     margin: 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 30px;
 }
 
 .change-password-form button {
-    display: block;
-    padding: 10px;
-    margin: 10px;
-    background-color: #d25832;
+    padding: .4rem 1.6rem;
+    margin-right: 1.6rem;
+    background-color: #387CB8;
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: 30px;
     cursor: pointer;
+    align-self: flex-end; /* Aligns button to the right */
 }
-
+.change-password-container .form-group{
+    width: 100%;
+}
 .change-password-form button:hover {
     background-color: #a74629;
 }

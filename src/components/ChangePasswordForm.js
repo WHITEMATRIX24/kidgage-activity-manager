@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './dashboard.css';
 
 const ChangePasswordForm = ({ adminId }) => {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -29,29 +30,35 @@ const ChangePasswordForm = ({ adminId }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Current Password:</label>
+    <form className="change-password-form" onSubmit={handleSubmit}>
+      <div className="form-group">
+        <label className="form-label">Current Password</label>
         <input
+        placeholder='current password'
           type="password"
+          className="form-input"
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)}
           required
         />
       </div>
-      <div>
-        <label>New Password:</label>
+      <div className="form-group">
+        <label className="form-label">New Password</label>
         <input
+                placeholder='new password'
+
           type="password"
+          className="form-input"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
           required
         />
       </div>
 
-      <button type="submit">Change Password</button>
-      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+      <button type="submit" className="submit-button">Change Password</button>
+      
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
+      {successMessage && <p className="success-message">{successMessage}</p>}
     </form>
   );
 };
