@@ -18,7 +18,7 @@ const EditAdvertisementForm = () => {
 
     const fetchAdvertisements = async () => {
         try {
-            const response = await axios.get('http://localhost:5001/api/advertisement');
+            const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/advertisement');
             setAdvertisements(response.data);
         } catch (error) {
             console.error('Error fetching advertisements:', error);
@@ -63,7 +63,7 @@ const EditAdvertisementForm = () => {
                 formData.append('mobileImage', editingAdvertisement.mobileImage);
             }
 
-            await axios.put(`http://localhost:5001/api/advertisement/${editingAdvertisement._id}`, formData, {
+            await axios.put(`https://kidgage-adminbackend.onrender.com/api/advertisement/${editingAdvertisement._id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -79,7 +79,7 @@ const EditAdvertisementForm = () => {
 
     const confirmDelete = async () => {
         try {
-            await axios.delete(`http://localhost:5001/api/advertisement/${deletingAdvertisementId}`);
+            await axios.delete(`https://kidgage-adminbackend.onrender.com/api/advertisement/${deletingAdvertisementId}`);
             fetchAdvertisements();
             setShowDeleteModal(false);
             setDeletingAdvertisementId(null);

@@ -41,7 +41,7 @@ function AddAdvertisement() {
         formData.append('mobileImage', advertisement.mobileImage);   // Append the mobile file object
 
         try {
-            const response = await axios.post('http://localhost:5001/api/advertisement/addadvertisement', formData, {
+            const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/advertisement/addadvertisement', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data' // Set the content type to multipart/form-data
                 }
