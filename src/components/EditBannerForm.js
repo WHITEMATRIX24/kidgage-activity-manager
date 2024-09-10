@@ -130,9 +130,11 @@ const EditBannerForm = () => {
                                 <div key={banner._id} className="banner-box">
                                     <img src={banner.imageUrl} alt={banner.title} />
                                     <div className="banner-info">
+                                        <div className='banner-info-text'>
                                         <h3>{banner.title}</h3>
                                         <p>{banner.bookingLink}</p>
-                                        <div className="button-container">
+                                        </div>
+                                        <div className="bbutton-container">
                                             <button className='edit-banner-button' onClick={() => handleEdit(banner)}>
                                                 <FaEdit /> Edit
                                             </button>
