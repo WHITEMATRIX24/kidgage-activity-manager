@@ -38,7 +38,7 @@
 .add-course-form input,
 .add-course-form textarea {
         width: 100%;
-        max-width: 800px;
+        max-width: 600px;
         padding: 10px;
         margin-bottom: 10px;
         border: 1px solid #ccc;
@@ -284,7 +284,8 @@ padding: 10px;
 @media (max-width: 768px) {
     .add-course-form-container {
         padding: 15px;
-        width: 100%;
+        width: 95%;
+        max-width: 900px;
     }
 
     .add-course-form {
