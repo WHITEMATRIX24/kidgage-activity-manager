@@ -18,9 +18,11 @@ import EditParentForm from './EditParentForm';
 import EventEnrollment from './eventEnrollment';
 import EditStudentForm from './EditStudentForm';
 import EditAcademyForm from './EditAcademyForm';
+import AddAdvertisement from './AddAdvertisement';
+import EditAdvertisementForm from './EditAdvertisement';
 import { Divider } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faRedoAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faRedoAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import ChangePasswordForm from './ChangePasswordForm';
 
 const Dashboard = () => {
@@ -105,17 +107,17 @@ const Dashboard = () => {
                     <section id="academies" className="db-section">
                         <h1>Academies</h1>
                         <AddAcademyForm />
-                        <EditAcademyForm/>
+                        <EditAcademyForm />
                     </section>
                     <section id="parents" className="db-section">
                         <h1>Parents</h1>
                         <AddParentForm />
-                        <EditParentForm/>
+                        <EditParentForm />
                     </section>
                     <section id="students" className="db-section">
-                        <h1>Students</h1>
+                        <h1>Stuents</h1>
                         <AddStudentForm />
-                        <EditStudentForm onDelete={handleDeleteStudent}/>
+                        <EditStudentForm onDelete={handleDeleteStudent} />
                     </section>
                     <section id="add-banners" className="db-section">
                         <h1>Add Banners</h1>
@@ -126,7 +128,12 @@ const Dashboard = () => {
                         <h1>Event Posters</h1>
                         <AddPosterForm />
                         <EditPosterForm onDelete={handleDeletePoster} />
-                        <EventEnrollment/>
+                        <EventEnrollment />
+                    </section>
+                    <section id="add-advertisements" className="db-section">
+                        <h1>Advertisements</h1>
+                        <AddAdvertisement />
+                        <EditAdvertisementForm />
                     </section>
                     <section id="course-categories" className="db-section">
                         <h1>Course Categories</h1>
@@ -137,13 +144,13 @@ const Dashboard = () => {
                         <h1>Settings</h1>
                         <div className="settings-content">
                             <button className="sidebar-heading-button" onClick={handleChangePassword}>
-                            <FontAwesomeIcon icon={faRedoAlt} className="icon" />
+                                <FontAwesomeIcon icon={faRedoAlt} className="icon" />
 
                                 Change Password
                             </button>
                             <Divider style={{ margin: '10px 0' }} />
                             <button className="sidebar-heading-button" onClick={handleSignOut}>
-                            <FontAwesomeIcon icon={faSignOutAlt} className="icon" />
+                                <FontAwesomeIcon icon={faSignOutAlt} className="icon" />
                                 Sign Out
                             </button>
                         </div>
@@ -154,7 +161,7 @@ const Dashboard = () => {
                                 <button className="close-button" onClick={handleCloseChangePasswordForm}>
                                     &times;
                                 </button>
-                                <ChangePasswordForm  adminId={adminId} />
+                                <ChangePasswordForm adminId={adminId} />
                             </div>
                         </div>
                     )}
