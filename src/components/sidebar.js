@@ -9,7 +9,7 @@ const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) =>
     const sectionRefs = useRef({});
 
     useEffect(() => {
-        const sections = ['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'course-categories','settings'];
+        const sections = ['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'add-advertisements', 'course-categories', 'settings'];
 
         sections.forEach(section => {
             sectionRefs.current[section] = document.getElementById(section);
@@ -71,14 +71,14 @@ const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) =>
             <h1 className="sidebar-heading">Dashboard</h1>
             <nav>
                 <ul>
-                    {['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'course-categories','settings'].map(section => (
+                    {['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'add-advertisements', 'course-categories', 'settings'].map(section => (
                         <li key={section} className={activeItem === section ? 'active' : ''} onClick={() => handleItemClick(section)}>
                             <a href={`#${section}`}>
                                 <FontAwesomeIcon icon={icons[section]} className="icon" />
                                 {section.charAt(0).toUpperCase() + section.slice(1).replace('-', ' ')}
                             </a>
                         </li>
-                    ))} 
+                    ))}
 
                 </ul>
             </nav>

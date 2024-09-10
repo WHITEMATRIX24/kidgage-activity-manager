@@ -12,7 +12,7 @@ const bannerRoutes = require('./routes/bannerRoutes'); // New routes for banners
 const posterRoutes = require('./routes/posterRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-
+const advertisementRoutes = require('./routes/advertisementRoutes');
 
 
 const app = express();
@@ -25,7 +25,7 @@ app.use(express.json()); // To parse JSON bodies
 mongoose.connect('mongodb+srv://whitematrix2024:5ah1qr0qo50c7yI7@kidgage.gafztzs.mongodb.net/kidgage?retryWrites=true&w=majority&appName=kidgage', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
     .catch((err) => console
-    .error('MongoDB connection error:', err));
+        .error('MongoDB connection error:', err));
 
 // Add routes
 app.use('/api/users', userRoutes);
@@ -37,13 +37,13 @@ app.use('/api/banners', bannerRoutes); // Add the banner routes here
 app.use('/api/posters', posterRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/admin', adminRoutes);
-
+app.use('/api/advertisement', advertisementRoutes);
 
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: 'Something went wrong!' });
-  });
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
