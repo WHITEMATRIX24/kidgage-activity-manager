@@ -18,7 +18,8 @@ import EditParentForm from './EditParentForm';
 import EventEnrollment from './eventEnrollment';
 import EditStudentForm from './EditStudentForm';
 import EditAcademyForm from './EditAcademyForm';
-import AddAdvertisement from './AddAdvertisement';
+import AddAdvertisement from './AddAdvertisement1';
+import AddAdvertisement2 from './AddAdvertisement2';
 import EditAdvertisementForm from './EditAdvertisement';
 import { Divider } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -133,6 +134,7 @@ const Dashboard = () => {
                     <section id="add-advertisements" className="db-section">
                         <h1>Advertisements</h1>
                         <AddAdvertisement />
+                        <AddAdvertisement2 />
                         <EditAdvertisementForm />
                     </section>
                     <section id="course-categories" className="db-section">

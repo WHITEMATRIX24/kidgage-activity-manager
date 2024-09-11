@@ -35,10 +35,14 @@ function AddAdvertisement() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Define the space constant
+        const space = 1;  // Set the constant value for space
+
         const formData = new FormData();
         formData.append('title', advertisement.title);
         formData.append('desktopImage', advertisement.desktopImage); // Append the desktop file object
         formData.append('mobileImage', advertisement.mobileImage);   // Append the mobile file object
+        formData.append('space', space);  // Append the space constant
 
         try {
             const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/advertisement/addadvertisement', formData, {
@@ -66,7 +70,7 @@ function AddAdvertisement() {
     return (
         <div className="add-course-form-container">
             <div className="add-course-form-header" onClick={toggleFormVisibility}>
-                <h2>Add Advertisements</h2>
+                <h2>Add Advertisements</h2> <p>Space 1</p>
                 <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} />
             </div>
             {showForm && (
