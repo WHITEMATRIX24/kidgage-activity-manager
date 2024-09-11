@@ -191,7 +191,7 @@ function AddCourseForm() {
           // Create a new course object with the timeSlotsJson string
           const courseData = { ...course, timeSlots: timeSlotsJson };
       
-          const response = await axios.post('http://localhost:5001/api/courses/addcourse', courseData, {
+          const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/courses/addcourse', courseData, {
             headers: { 'Content-Type': 'application/json' } // Add this to specify the content type
           });
           console.log('Course added successfully', response.data);
