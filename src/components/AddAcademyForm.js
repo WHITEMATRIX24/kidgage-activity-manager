@@ -207,6 +207,8 @@ return (
                         name="crFile"
                         onChange={handleChange}
                         accept=".pdf"
+                        className="hidden-input"
+
                     />
                     <input
                         type="file"

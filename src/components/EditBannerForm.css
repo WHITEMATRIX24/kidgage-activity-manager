@@ -158,3 +158,13 @@
         grid-template-columns: 1fr;
     }
 }
+
+@media  (min-width: 1920px) and (max-width: 2560px) {
+
+    .add-course-form button[type="submit"] {
+        padding: 15px 15px;
+        width: 300px;
+        font-size: 20px;
+        border-radius: 30px;
+    }
+    }

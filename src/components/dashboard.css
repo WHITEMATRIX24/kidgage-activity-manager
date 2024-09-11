@@ -17,6 +17,7 @@
     padding: 25px 0 20px 0;
     overflow: hidden;
 }
+
 /* General button styles */
 .sidebar-heading-button {
     display: block;
@@ -124,7 +125,7 @@
     margin: 20px auto;
     padding: 25px;
     border: 1px solid #e0e0e0;
-    border-radius: 10px;
+    border-radius: 30px;
     background-color: #ffffffb8;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
@@ -567,4 +568,46 @@
     font-size: 14px;
     margin-top: 10px;
   }
-  
+  @media (max-width:768px) {
+    .settings-content{
+        flex-direction: column;
+    }
+}
+
+
+@media  (min-width: 1920px) and (max-width: 2560px) {
+   .header-dash{
+    max-width: 1900px;
+   }
+   .header-dash h1{
+    font-size: 32px;
+   }
+   .dash-logo{
+    height: 80px;
+   }
+   .profile-info{
+    font-size: 24px;
+   }
+   .profile-section img{
+    height: 100px;
+    width: auto;
+   }
+   .sidebar-heading-button{
+    font-size: 28px;
+   }
+   .settings-content{
+    max-width: 1900px;
+    margin-left: 200px;
+   }
+.sidebar nav ul li{
+    font-size: 24px;
+    margin: 20px;
+}
+.sidebar{
+    width: 400px;
+}
+   .dashboard-card{
+    max-width: 1900px;
+   }
+
+}
