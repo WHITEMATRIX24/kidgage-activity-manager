@@ -18,32 +18,38 @@ router.get('/', async (req, res) => {
 });
 
 // Route to add a new advertisement (already exists)
-router.post('/addadvertisement', upload.fields([{ name: 'desktopImage' }, { name: 'mobileImage' }]), async (req, res) => {
-    try {
-        const { title } = req.body;
-        const desktopImage = req.files['desktopImage'][0];
-        const mobileImage = req.files['mobileImage'][0];
+router.post(
+    '/addadvertisement',
+    upload.fields([{ name: 'desktopImage' }, { name: 'mobileImage' }]),
+    async (req, res) => {
+        try {
+            const { title, space } = req.body;  // Extract space from req.body
+            const desktopImage = req.files['desktopImage'][0];
+            const mobileImage = req.files['mobileImage'][0];
 
-        // Convert images to Base64 strings
-        const desktopImageBase64 = desktopImage.buffer.toString('base64');
-        const mobileImageBase64 = mobileImage.buffer.toString('base64');
+            // Convert images to Base64 strings
+            const desktopImageBase64 = desktopImage.buffer.toString('base64');
+            const mobileImageBase64 = mobileImage.buffer.toString('base64');
 
-        // Create a new advertisement document
-        const newAdvertisement = new Advertisement({
-            title,
-            desktopImage: desktopImageBase64,
-            mobileImage: mobileImageBase64
-        });
+            // Create a new advertisement document
+            const newAdvertisement = new Advertisement({
+                title,
+                desktopImage: desktopImageBase64,
+                mobileImage: mobileImageBase64,
+                space: Number(space)  // Use the space value from req.body and convert it to a number
+            });
 
-        // Save the advertisement to the database
-        await newAdvertisement.save();
+            // Save the advertisement to the database
+            await newAdvertisement.save();
 
-        res.status(201).json({ message: 'Advertisement added successfully!' });
-    } catch (error) {
-        console.error('Error adding advertisement:', error);
-        res.status(500).json({ message: 'Server error. Please try again later.' });
+            res.status(201).json({ message: 'Advertisement added successfully!' });
+        } catch (error) {
+            console.error('Error adding advertisement:', error);
+            res.status(500).json({ message: 'Server error. Please try again later.' });
+        }
     }
-});
+);
+
 
 // Route to update an advertisement
 router.put('/:id', upload.fields([{ name: 'desktopImage' }, { name: 'mobileImage' }]), async (req, res) => {
