@@ -60,7 +60,6 @@
     border-radius: 20px;
     box-sizing: border-box;
     background-color: #f9f9f9;
-    color: #000066;
     outline: none;
     transition: border-color 0.3s;
 }
@@ -99,13 +98,11 @@
     border-radius: 20px;
     padding: 10px;
     background-color: #f9f9f9;
-    color: #000066;
     margin-bottom: 30px;
 }
 
 .add-course-form .fee-structure .currency-symbol {
     font-size: 16px;
-    color: #000066;
 }
 
 .add-course-form .days-selection {
@@ -159,7 +156,7 @@
 }
 
 .add-course-form .rem-button {
-    color: #e74c3c;
+    color: #2a5f8e;
     background-color: transparent;
 
 }
@@ -294,12 +291,24 @@ padding: 10px;
 @media (max-width: 768px) {
     .add-course-form-container {
         padding: 15px;
-        width: 100%;
-    }
+        width: 90%;
+        padding-right: 30px;
 
+    }
+    .add-course-form-header{
+        margin: 10px;
+        font-size: .8em;
+    }
     .add-course-form {
         width: 100%;
         padding: 10px;
+        font-size: 12px;
+    }
+    .add-course-form label{
+        color: #387CB8;
+    }
+    .add-course-form input::placeholder,.add-course-form select, .add-course-form input{
+        font-size: 12px;
     }
 
     .add-course-group,
@@ -321,10 +330,15 @@ padding: 10px;
         flex-direction: row;
         gap: 5px;
     }
-
-    .add-time-slot-btn {
-        margin-left: 13%;
-        width: 60%;
+    .add-course-form .add-time-slot-btn{
+        padding: 10px 10px;
+        width: 150px;
+        font-size: 12px;
+    }
+    .add-course-form button[type="submit"] {
+        padding: 10px 10px;
+        width: 150px;
+        font-size: 12px;
     }
 
 }

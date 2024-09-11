@@ -123,7 +123,8 @@
 @media (max-width: 768px) {
     .add-course-form-container {
         padding: 15px;
-        width: 95%;
+        width: 90%;
+        padding-right: 30px;
         max-width: 900px;
     }
 
@@ -138,6 +139,13 @@
 
     .banner-list {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+
+    .add-course-form button[type="submit"] {
+        padding: 10px 10px;
+        width: 150px;
+        font-size: 12px;
+        
     }
 }
 
