@@ -53,11 +53,20 @@ const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) =>
 
     const handleItemClick = (item) => {
         setActiveItem(item);
-        document.getElementById(item)?.scrollIntoView({ behavior: 'smooth' });
-        if (window.innerWidth <= 768) { // Only toggle on smaller screens
-            toggleSidebar(); // Close the sidebar when an item is clicked on smaller screens
+        const section = document.getElementById(item);
+        
+        if (section) {
+            window.scrollTo({
+                top: section.offsetTop,
+                behavior: 'smooth',
+            });
+        }
+    
+        if (window.innerWidth <= 768) {
+            toggleSidebar(); // Close sidebar on smaller screens
         }
     };
+    
 
     return (
         <div className={`sidebar ${sidebarOpen ? 'show' : ''}`}>
@@ -82,11 +91,11 @@ const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) =>
 
                 </ul>
             </nav>
-            <div className="sidebar-footer">
+            {/* <div className="sidebar-footer">
                 <a href="#privacy">Privacy Policy | </a>
                 <a href="#terms">Terms of Service | </a>
                 <a href="#support">Support</a>
-            </div>
+            </div> */}
         </div>
     );
 };

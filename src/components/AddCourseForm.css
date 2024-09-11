@@ -6,7 +6,7 @@
     margin: 20px auto;
     padding: 25px;
     border: 1px solid #e0e0e0;
-    border-radius: 10px;
+    border-radius: 30px;
     background-color: #ffffffb8;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
@@ -18,8 +18,10 @@
     align-items: center;
     cursor: pointer;
     padding-bottom: 10px;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 2px solid #9f9e9e91;
     margin-bottom: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
 }
 
 .add-course-form-header h2 {
@@ -38,7 +40,7 @@
 .add-course-form input,
 .add-course-form textarea {
         width: 100%;
-        max-width: 600px;
+        max-width: 800px;
         padding: 10px;
         margin-bottom: 10px;
         border: 1px solid #ccc;
@@ -137,8 +139,9 @@
 
 .add-course-form .add-time-slot-btn,
 .add-course-form button[type="submit"] {
-    padding: 12px 24px;
-    background-color: #E26936;
+    padding: 10px 20px;
+    background-color: #387CB8;
+    width: 20%;
     border: none;
     border-radius: 20px;
     color: white;
@@ -151,7 +154,7 @@
 .add-course-form .add-time-slot-btn:hover,
 .add-course-form .rem-button:hover,
 .add-course-form button[type="submit"]:hover {
-    background-color: #c05a2b;
+    background-color: #2a5f8e;
     transform: scale(1.05);
 }
 
@@ -212,6 +215,7 @@
     display: flex;
     gap: 10px;
 }
+
 /* Floating button styles */
 .floating-button {
     position: fixed;
@@ -268,10 +272,16 @@ padding: 10px;
 .add-days-group label {
     color: #000066;
 }
-
-.add-time-slot-btn {
+/* .add-time-slot-btn {
     margin-left: 69%;
-}
+} */
+.btn-grpp {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Ensures vertical alignment */
+    width: 100%; /* Adjust based on the container size */
+    margin-bottom: 15px; /* Optional, for spacing */
+  }
 @media (max-width: 1200px) {
 
     .add-time-slot-btn {
@@ -284,8 +294,7 @@ padding: 10px;
 @media (max-width: 768px) {
     .add-course-form-container {
         padding: 15px;
-        width: 95%;
-        max-width: 900px;
+        width: 100%;
     }
 
     .add-course-form {
@@ -659,3 +668,7 @@ padding: 10px;
     }
 }
 /* Optional: Overlay background */
+.label-img-grp{
+    justify-content: space-between;
+    gap: 0px;
+}

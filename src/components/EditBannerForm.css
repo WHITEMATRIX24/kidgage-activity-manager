@@ -1,7 +1,9 @@
 
 .add-course-form button[type="submit"] {
-    padding: 12px 24px;
-    background-color: #E26936;
+    padding: 10px 20px;
+    width: 30%;
+    align-self: flex-end;
+    background-color: #387CB8;
     border: none;
     border-radius: 20px;
     color: white;
@@ -12,7 +14,7 @@
 }
 
 .add-course-form button[type="submit"]:hover {
-    background-color: #c05a2b;
+    background-color: #2a5d8a;
 }
 
 .banner-list {

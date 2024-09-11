@@ -150,12 +150,34 @@
     padding: 15px;
     border-radius: 5px;
 }
+
+.header-dash h1{
+    font-size: 1.6em;
+}
+.header-dash{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    color: #387CB8;
+    max-width: 1400px;
+    width: 100%;
+    margin: auto;
+    margin-top: 20px;
+}
+.dash-logo{
+    height: 60px;
+    gap: 0;
+    align-self: flex-end;
+    margin-top: 20px;
+}
 /* Dashboard Card */
 .dashboard-card {
     position: relative;
     display: flex;
-    height: 89vh;
-    margin: 10px auto;
+    height: 75vh;
+    /* margin-top: 100px; */
+    margin-left: auto;
+    margin-right: auto;
     width: 100%;
     overflow: hidden;
     max-width: 1400px;
@@ -389,7 +411,7 @@
     backdrop-filter: blur(20px); 
     border-radius: 0 8px 8px 0;
     box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1); */
-    height: 90vh;
+    height: 100%;
     overflow-y: scroll;
 
 }

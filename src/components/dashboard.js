@@ -4,7 +4,6 @@ import Sidebar from './sidebar'; // Ensure correct path
 import './dashboard.css'; // Ensure correct path
 import AddCourseForm from './AddCourseForm';
 import EditCourseForm from './EditCourseForm';
-import CourseEnrollment from './CourseEnrollment';
 import AddAcademyForm from './AddAcademyForm';
 import AddParentForm from './AddParentForm';
 import AddStudentForm from './AddStudentForm';
@@ -24,6 +23,7 @@ import { Divider } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRedoAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import ChangePasswordForm from './ChangePasswordForm';
+import Logo from './assets/images/logo2.png';
 
 const Dashboard = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -94,54 +94,49 @@ const Dashboard = () => {
                 <span></span>
                 <span></span>
             </div>
+            <div className='header-dash'>
+            <img className='dash-logo' src={Logo}></img>
+            <h1>Activity Manager</h1>
+            </div>
             <div className={`dashboard-card ${sidebarOpen ? 'expanded' : ''}`}>
+                
                 <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
                 <div className={`dashboard-content ${sidebarOpen ? 'expanded' : ''}`}>
                     <section id="courses" className="db-section">
-                        <h1>Courses</h1>
-                        <CourseEnrollment />
                         <AddCourseForm />
                         <EditCourseForm />
                     </section>
 
                     <section id="academies" className="db-section">
-                        <h1>Academies</h1>
-                        <AddAcademyForm />
+                    <AddAcademyForm />
                         <EditAcademyForm />
                     </section>
                     <section id="parents" className="db-section">
-                        <h1>Parents</h1>
                         <AddParentForm />
                         <EditParentForm />
                     </section>
                     <section id="students" className="db-section">
-                        <h1>Stuents</h1>
                         <AddStudentForm />
                         <EditStudentForm onDelete={handleDeleteStudent} />
                     </section>
                     <section id="add-banners" className="db-section">
-                        <h1>Add Banners</h1>
                         <AddBannerForm />
                         <EditBannerForm />
                     </section>
                     <section id="event-posters" className="db-section">
-                        <h1>Event Posters</h1>
                         <AddPosterForm />
                         <EditPosterForm onDelete={handleDeletePoster} />
                         <EventEnrollment />
                     </section>
                     <section id="add-advertisements" className="db-section">
-                        <h1>Advertisements</h1>
                         <AddAdvertisement />
                         <EditAdvertisementForm />
                     </section>
                     <section id="course-categories" className="db-section">
-                        <h1>Course Categories</h1>
                         <AddCourseCategoryForm />
                         <EditCourseCategoryForm />
                     </section>
                     <section id="settings" className="db-section">
-                        <h1>Settings</h1>
                         <div className="settings-content">
                             <button className="sidebar-heading-button" onClick={handleChangePassword}>
                                 <FontAwesomeIcon icon={faRedoAlt} className="icon" />

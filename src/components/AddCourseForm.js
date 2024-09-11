@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaChevronDown, FaSearch, FaTrash, FaPlus, FaTimes } from 'react-icons/fa';
 import axios from 'axios';
 import './AddCourseForm.css';
@@ -16,9 +16,11 @@ function AddCourseForm() {
         feeType: 'full_course',
         days: [],
         timeSlots: [{ from: '', to: '' }],
-        location: '',
-        hashtags: [],
-        newHashtag: '#' // Initialize with '#'
+        location: [''],
+        courseType: '',
+        images: [],
+        // hashtags: [],
+        // newHashtag: '#' // Initialize with '#'
     };
 
     const [course, setCourse] = useState(initialCourseState);
@@ -28,6 +30,21 @@ function AddCourseForm() {
     const [searchError, setSearchError] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [courseTypes, setCourseTypes] = useState([]);
+
+    useEffect(() => {
+        const fetchCourseTypes = async () => {
+            try {
+                const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/course-category/categories');
+                setCourseTypes(response.data);
+            } catch (error) {
+                console.error('Error fetching course types', error);
+            }
+        };
+
+        fetchCourseTypes();
+    }, []);
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -45,14 +62,14 @@ function AddCourseForm() {
     };
     useEffect(() => {
         if (success) {
-          const timer = setTimeout(() => {
-            setSuccess('');
-          }, 5000); // Hide success message after 5 seconds
-    
-          return () => clearTimeout(timer); // Cleanup the timer on component unmount
+            const timer = setTimeout(() => {
+                setSuccess('');
+            }, 5000); // Hide success message after 5 seconds
+
+            return () => clearTimeout(timer); // Cleanup the timer on component unmount
         }
-      }, [success]);
-    
+    }, [success]);
+
     const handleHashtagChange = (e) => {
         // Ensure that '#' is always the prefix for hashtags
         const value = e.target.value;
@@ -92,20 +109,106 @@ function AddCourseForm() {
         setCourse((prev) => ({ ...prev, timeSlots: prev.timeSlots.filter((_, i) => i !== index) }));
     };
 
+    const handleLocationChange = (index, e) => {
+        const { value } = e.target;
+        const location = [...course.location];
+        location[index] = value;
+        setCourse((prev) => ({ ...prev, location }));
+    };
+
+    const addLocation = () => {
+        setCourse((prev) => ({ ...prev, location: [...prev.location, ''] }));
+    };
+
+    const removeLocation = (index) => {
+        setCourse((prev) => ({ ...prev, location: prev.location.filter((_, i) => i !== index) }));
+    };
+
+    const addImage = () => {
+        setCourse((prevCourse) => ({ ...prevCourse, images: [...prevCourse.images, ''] }));
+      };
+
+      const handleImageChange = (index, e) => {
+        setCourse((prevCourse) => {
+          const newImages = [...prevCourse.images];
+          newImages[index] = e.target.files[0]; // Update the image at the specified index
+          return { ...prevCourse, images: newImages };
+        });
+      };
+
+    const removeImage = (index) => {
+        setCourse({ ...course, images: course.images.filter((_, i) => i !== index) });
+    };
+
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //         console.log('Course data:', course); // Add this to inspect the course data
+
+    //         // Validate timeSlots field before sending the request
+    //         if (!Array.isArray(course.timeSlots) || course.timeSlots.some((timeSlot) => !timeSlot.from || !timeSlot.to)) {
+    //             return setError('Invalid timeSlots field');
+    //         }
+
+    //         // Convert timeSlots array to a JSON string
+    //         const timeSlotsJson = JSON.stringify(course.timeSlots);
+
+    //         // Create a new course object with the timeSlotsJson string
+    //         const courseData = { ...course, timeSlots: timeSlotsJson };
+
+    //         const response = await axios.post('http://localhost:5001/api/courses/addcourse', courseData, {
+    //             headers: { 'Content-Type': 'application/json' } // Add this to specify the content type
+    //         });
+    //         console.log('Course added successfully', response.data);
+    //         setCourse(initialCourseState);
+    //         setSuccess('Course added successfully!');
+    //         setError('');
+    //     } catch (error) {
+    //         console.error('Error adding course', error);
+    //         if (error.response) {
+    //             console.error('Error response:', error.response.data);
+    //             setError(error.response.data.message);
+    //         } else {
+    //             setError('An error occurred. Please try again later.');
+    //         }
+    //         setSuccess('');
+    //     }
+    // };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/courses/addcourse', course);
-            console.log('Course added successfully', response.data);
-            setCourse(initialCourseState);
-            setSuccess('Course added successfully!');
-            setError('');
+          console.log('Course data:', course); // Add this to inspect the course data
+      
+          // Validate timeSlots field before sending the request
+          if (!Array.isArray(course.timeSlots) || course.timeSlots.some((timeSlot) => !timeSlot.from || !timeSlot.to)) {
+            return setError('Invalid timeSlots field');
+          }
+      
+          // Convert timeSlots array to a JSON string
+          const timeSlotsJson = JSON.stringify(course.timeSlots);
+      
+          // Create a new course object with the timeSlotsJson string
+          const courseData = { ...course, timeSlots: timeSlotsJson };
+      
+          const response = await axios.post('http://localhost:5001/api/courses/addcourse', courseData, {
+            headers: { 'Content-Type': 'application/json' } // Add this to specify the content type
+          });
+          console.log('Course added successfully', response.data);
+          setCourse(initialCourseState);
+          setSuccess('Course added successfully!');
+          setError('');
         } catch (error) {
-            console.error('Error adding course', error);
-            setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
-            setSuccess('');
+          console.error('Error adding course', error);
+          if (error.response) {
+            console.error('Error response:', error.response.data);
+            setError(error.response.data.message);
+          } else {
+            setError('An error occurred. Please try again later.');
+          }
+          setSuccess('');
         }
-    };
+      };
 
     const toggleFormVisibility = () => {
         setShowForm(!showForm);
@@ -139,7 +242,7 @@ function AddCourseForm() {
                             name="provider"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search provider..."
+                            placeholder="Search provider by email or phone number..."
                             required
                         />
                         <button type="button" className="search-provider-button" onClick={handleSearch}>
@@ -157,7 +260,7 @@ function AddCourseForm() {
                     <div className="form-group add-course-label-group">
                         <label htmlFor="name">Course Name</label>
                     </div>
-                    <div className="form-group add-course-group">
+                    <div className='form-group add-duration-group'>
                         <input
                             type="text"
                             id="name"
@@ -166,7 +269,23 @@ function AddCourseForm() {
                             value={course.name}
                             onChange={handleChange}
                         />
+
+                    <select
+                        id="courseType"
+                        name="courseType"
+                        value={course.courseType}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="">Select Course Type</option>
+                        {courseTypes.map((type) => (
+                            <option key={type._id} value={type.name}>
+                                {type.name}
+                            </option>
+                        ))}
+                    </select>
                     </div>
+
                     <div className="form-group add-duration-group">
                         <input
                             type="number"
@@ -248,9 +367,9 @@ function AddCourseForm() {
                     </div>
                     <label className='selecet-days-label'>Select Days:</label>
                     <div className="form-group add-days-group">
-                        
+
                         <div className="days-selection">
-                        
+
                             {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
                                 <label key={day} className="day-checkbox">
                                     <input
@@ -266,10 +385,12 @@ function AddCourseForm() {
                         </div>
                     </div>
                     <div className="form-group">
+                        <div className='btn-grpp'>
                         <label>Time Slots:</label>
                         <button type="button" className="add-time-slot-btn" onClick={addTimeSlot}>
                             Add Time Slot
                         </button>
+                        </div>
                         {course.timeSlots.map((slot, index) => (
                             <div key={index} className="time-slot">
                                 <input
@@ -298,15 +419,63 @@ function AddCourseForm() {
                         ))}
                     </div>
                     <div className="form-group">
-                        <label htmlFor="location">Location</label>
-                        <input
-                            type="text"
-                            id="location"
-                            name="location"
-                            value={course.location}
-                            onChange={handleChange}
-                        />
+                        <div className='btn-grpp'>
+                        <label>Locations:</label>
+                        <button type="button" className="add-time-slot-btn" onClick={addLocation}>
+                            Add Location
+                        </button>
+                        </div>
+                        {course.location.map((loc, index) => (
+                            <div key={index} className="time-slot">
+                                <input
+                                    type="text"
+                                    name="location"
+                                    value={loc}
+                                    placeholder={index === 0 ? 'Location' : `Location ${index}`}
+                                    onChange={(e) => handleLocationChange(index, e)}
+                                />
+                                {index > 0 && (
+                                    <button
+                                        type="button"
+                                        className="rem-button"
+                                        onClick={() => removeLocation(index)}
+                                    >
+                                        <FaTrash />
+                                    </button>
+                                )}
+                            </div>
+                        ))}
                     </div>
+
+                    <div className="form-group">
+                        <div className='btn-grpp'>
+                            <label>Course Images:</label>
+                        <button type="button" className="add-time-slot-btn" onClick={addImage}>
+                            Add Images
+                        </button>
+                        </div>
+                        {course.images.map((img, index) => (
+                            <div key={index} className="time-slot">
+                                <input
+                                    type="file"
+                                    name={index === 0 ? "academyImg" : `academyImg-${index}`}
+                                    onChange={(e) => handleImageChange(index, e)}
+                                    accept=".png, .jpg, .jpeg"
+                                />
+                                {index > 0 && (
+                                    <button
+                                        type="button"
+                                        className="rem-button"
+                                        onClick={() => removeImage(index)}
+                                    >
+                                        <FaTrash />
+                                    </button>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+
+
                     <button type="submit" className="submit-button">Submit</button>
                     {error && <p className="error-message">{error}</p>}
                     {success && <p className="success-message">{success}</p>}

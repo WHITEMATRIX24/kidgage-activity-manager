@@ -5,8 +5,8 @@
     max-width: 900px;
     margin: 20px auto;
     padding: 25px;
-    border: 1px solid #e0e0e0;
-    border-radius: 10px;
+    border: 3px solid #9f9e9e91;
+    border-radius: 30px;
     background-color: #ffffffb8;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
@@ -18,7 +18,7 @@
     align-items: center;
     cursor: pointer;
     padding-bottom: 10px;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 2px solid #9f9e9e91;
     margin-bottom: 20px;
 }
 
@@ -26,6 +26,7 @@
     margin: 0;
     font-size: 1.5em;
     color: #E26936;
+    font-weight: 400;
 }
 
 .add-course-form {
@@ -39,7 +40,6 @@
 .add-course-form select,
 .add-course-form textarea {
     width: 100%;
-    max-width: 600px;
     margin-right: 10px;
     padding: 10px;
     margin-bottom: 10px;
@@ -116,8 +116,8 @@
 
 .add-course-form .add-time-slot-btn,
 .add-course-form button[type="submit"] {
-    padding: 12px 24px;
-    background-color: #E26936;
+    padding: 10px 24px;
+    background-color: #387CB8;
     border: none;
     border-radius: 20px;
     color: white;
@@ -216,9 +216,6 @@
     color: #000066;
 }
 
-.add-time-slot-btn {
-    margin-left: 69%;
-}
 
 .file-upload-container {
     display: flex;

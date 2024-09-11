@@ -8,36 +8,56 @@ const Course = require('../models/Course');
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Add a new course
-router.post('/addcourse', upload.single('image'), async (req, res) => {
-    const { providerId, name, duration, durationUnit, startDate, endDate, description, feeAmount, feeType, days, timeSlots, location, hashtags } = req.body;
-    const imageBase64 = req.file ? req.file.buffer.toString('base64') : null; // Ensure image file is optional
 
+// Add a new course
+router.post('/addcourse', upload.array('academyImg', 10), async (req, res) => {
     try {
-        const parsedTimeSlots = JSON.parse(timeSlots);
-        const newCourse = new Course({
-            providerId,
-            name,
-            duration,
-            durationUnit,
-            startDate,
-            endDate,
-            description,
-            feeAmount,
-            feeType,
-            days,
-            timeSlots: parsedTimeSlots,
-            location,
-            hashtags,
-            image: imageBase64,
-        });
-        const savedCourse = await newCourse.save();
-        res.status(201).json(savedCourse);
+      const {
+        providerId,
+        name,
+        duration,
+        durationUnit,
+        startDate,
+        endDate,
+        description,
+        feeAmount,
+        feeType,
+        days,
+        timeSlots,
+        location,
+        courseType,
+      } = req.body;
+  
+      // Parse the timeSlotsJson string back to an array of objects
+      const parsedTimeSlots = JSON.parse(timeSlots);
+      const images = req.files ? req.files.map((file) => file.buffer.toString('base64')) : [];
+  
+      const newCourse = new Course({
+        providerId,
+        name,
+        duration,
+        durationUnit,
+        startDate,
+        endDate,
+        description,
+        feeAmount,
+        feeType,
+        days,
+        timeSlots: parsedTimeSlots, // Use the parsed timeSlots array
+        location,
+        courseType,
+        images: images, // Use the images array
+        // hashtags,
+        // images: imageBase64,
+      });
+  
+      const savedCourse = await newCourse.save();
+      res.status(201).json(savedCourse);
     } catch (error) {
-        console.error('Error adding course:', error);
-        res.status(500).json({ message: 'Error adding course', error });
+      console.error('Error adding course:', error);
+      res.status(500).json({ message: 'Error adding course', error: error.message });
     }
-});
+  });
 
 // Route to search for a course by name
 router.get('/search', async (req, res) => {
