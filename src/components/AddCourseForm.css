@@ -250,13 +250,13 @@ padding: 10px;
     background-color: transparent;
     border: none;
     cursor: pointer;
-    color: #E26936;
+    color: #387cb8c7;
     font-size: 1.5em;
 }
 
 .add-course-form .search-provider-button:hover {
     background-color: transparent;
-    color: #000000;
+    color: #265279c7;
 }
 
 .add-days-group {
@@ -267,7 +267,7 @@ padding: 10px;
 }
 
 .add-days-group label {
-    color: #000066;
+    color: #387cb8c7;
 }
 /* .add-time-slot-btn {
     margin-left: 69%;
@@ -286,7 +286,10 @@ padding: 10px;
     }
 }
 
+.form-group label{
+    color: #387cb8c7;
 
+}
 /* Media Queries */
 @media (max-width: 768px) {
     .add-course-form-container {

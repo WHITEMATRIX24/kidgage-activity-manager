@@ -24,7 +24,7 @@
     padding: 12px 20px;
     margin: 8px 0;
     background-color: transparent; /* Blue background color */
-    color: white; /* White text color */
+    color: #387cb8c7;
     border: none;
     border-radius: 5px; /* Rounded corners */
     font-size: 16px; /* Font size */
@@ -301,12 +301,12 @@
     margin: 0;
 }
 .sidebar nav ul li{
-    border-bottom: 1px solid #a0a0a0;
+    border-bottom: 2px solid #9f9e9e91;
     margin:0px 0px 0px 50px;
 
 }
 
-.sidebar nav li a ,.sidebar-heading-button{
+.sidebar nav li a{
     text-decoration: none;
     color: #333;
     display: flex;
@@ -437,7 +437,7 @@
 
 .add-course-form label {
     margin-bottom: 10px;
-    color: #333;
+    color: #387cb8c7;
 }
 
 .add-course-form input,
