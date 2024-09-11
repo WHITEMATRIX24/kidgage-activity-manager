@@ -129,7 +129,7 @@ const Dashboard = () => {
                         <EditPosterForm onDelete={handleDeletePoster} />
                         <EventEnrollment />
                     </section>
-                    <section id="add-advertisements" className="db-section">
+                    <section id="advertisements" className="db-section">
                         <AddAdvertisement />
                         <AddAdvertisement2 />
                         <EditAdvertisementForm />

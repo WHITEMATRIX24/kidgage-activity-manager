@@ -308,6 +308,7 @@
     }
     .add-course-form .search-provider-button{
         padding: 0px;
+        margin-right: 0px;
     }
     .add-course-form .search-provider-group {
        gap: 8px;

@@ -10,7 +10,7 @@
     /* background-position: bottom right;
     background-size: cover;
     background-repeat: no-repeat; */
-    background:linear-gradient(#e0ccc7,#dbd4d2) ;
+    background:linear-gradient(#FDF8FC,#F8EAEA) ;
     color: #333;
     width: 100%;
     height: 95.5vh;
@@ -166,7 +166,7 @@
     margin-top: 20px;
 }
 .dash-logo{
-    height: 60px;
+    height: 50px;
     gap: 0;
     align-self: flex-end;
     margin-top: 20px;
@@ -208,7 +208,7 @@
 
 /* Profile section styles */
 .profile-section {
-    padding: 40px;
+    padding: 20px 40px;
     display: flex;
     align-items: center;
 }
@@ -291,7 +291,7 @@
     margin: 0;
     font-size: 1.5em;
     color: #E26936;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 /* Navigation styles */
@@ -300,16 +300,22 @@
     padding: 0;
     margin: 0;
 }
+.sidebar nav ul li{
+    border-bottom: 1px solid #a0a0a0;
+    margin:0px 0px 0px 50px;
+
+}
 
 .sidebar nav li a ,.sidebar-heading-button{
     text-decoration: none;
     color: #333;
     display: flex;
+    
     align-items: center;
     padding: 10px;
     background-color: transparent;
     border: none;
-    padding-left: 40px;
+    padding-left: 0px;
 }
 
 .sidebar-heading-button:active{
@@ -327,22 +333,22 @@
 }
 
 .sidebar nav li.active a {
-    margin-left: 10px;
+    margin-left: 0px;
     color: #E26936;
-    border-radius: 20px 0 0 20px;
+    /* border-radius: 20px 0 0 20px; */
     font-weight: bold;
-    padding: 10px 20px;
+    padding: 10px 10px;
     background-color: rgba(255, 255, 255, 0.2); /* Translucent background */
     backdrop-filter: blur(2px); /* Blur effect */
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar nav li a:hover {
-    margin-left: 10px;
+    margin-left: 0px;
     color: #E26936;
     font-weight: bold;
-    border-radius: 20px 0 0 20px;
-    padding: 10px 20px;
+    /* border-radius: 20px 0 0 20px; */
+    padding: 10px 10px;
     background-color: rgba(255, 255, 255, 0.1); /* Translucent background */
     backdrop-filter: blur(1px); /* Blur effect */
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);

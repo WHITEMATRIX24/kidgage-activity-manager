@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBook, faSchool, faTags, faUsers, faUserGraduate, faBullhorn, faImages, faSignOutAlt, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faSchool, faTags, faUsers, faUserGraduate, faBullhorn, faImages, faAd, faCog } from '@fortawesome/free-solid-svg-icons';
 import profileImage from './assets/images/profile.png';
 import './dashboard.css';
 
@@ -9,7 +9,7 @@ const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) =>
     const sectionRefs = useRef({});
 
     useEffect(() => {
-        const sections = ['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'add-advertisements', 'course-categories', 'settings'];
+        const sections = ['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'advertisements', 'course-categories', 'settings'];
 
         sections.forEach(section => {
             sectionRefs.current[section] = document.getElementById(section);
@@ -49,6 +49,8 @@ const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) =>
         'add-banners': faBullhorn,
         'event-posters': faImages,
         settings: faCog,
+        advertisements: faAd, // or faBullseye or faMegaphone
+
     };
 
     const handleItemClick = (item) => {
@@ -77,10 +79,10 @@ const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) =>
                     <p>Admin</p>
                 </div>
             </div>
-            <h1 className="sidebar-heading">Dashboard</h1>
+            {/* <h1 className="sidebar-heading">Dashboard</h1> */}
             <nav>
                 <ul>
-                    {['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'add-advertisements', 'course-categories', 'settings'].map(section => (
+                    {['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'advertisements', 'course-categories', 'settings'].map(section => (
                         <li key={section} className={activeItem === section ? 'active' : ''} onClick={() => handleItemClick(section)}>
                             <a href={`#${section}`}>
                                 <FontAwesomeIcon icon={icons[section]} className="icon" />
