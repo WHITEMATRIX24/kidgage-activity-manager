@@ -20,6 +20,7 @@ import EditAcademyForm from './EditAcademyForm';
 import AddAdvertisement from './AddAdvertisement1';
 import AddAdvertisement2 from './AddAdvertisement2';
 import EditAdvertisementForm from './EditAdvertisement';
+import PromoteCourse from './PromoteCourse';
 import { Divider } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRedoAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
@@ -96,20 +97,22 @@ const Dashboard = () => {
                 <span></span>
             </div>
             <div className='header-dash'>
-            <img className='dash-logo' src={Logo}></img>
-            <h1>Activity Manager</h1>
+                <img className='dash-logo' src={Logo}></img>
+                <h1>Activity Manager</h1>
             </div>
             <div className={`dashboard-card ${sidebarOpen ? 'expanded' : ''}`}>
-                
+
                 <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
                 <div className={`dashboard-content ${sidebarOpen ? 'expanded' : ''}`}>
                     <section id="courses" className="db-section">
                         <AddCourseForm />
+                        <PromoteCourse />
                         <EditCourseForm />
+
                     </section>
 
                     <section id="academies" className="db-section">
-                    <AddAcademyForm />
+                        <AddAcademyForm />
                         <EditAcademyForm />
                     </section>
                     <section id="parents" className="db-section">

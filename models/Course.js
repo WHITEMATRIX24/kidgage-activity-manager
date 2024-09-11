@@ -18,11 +18,10 @@ const courseSchema = new mongoose.Schema({
     days: { type: [String], required: true },
     timeSlots: { type: [timeSlotSchema], required: true },
     location: { type: [String], required: true },
-    courseType: { type: String, required: true }, // Added courseType field
-    images: [{ type: String, required: true }], // Store the images as an array of Base64 encoded strings
-    // hashtags: { type: [String], required: true },
+    courseType: { type: String, required: true },
+    images: [{ type: String, required: true }],
+    promoted: { type: Boolean, default: false },  // Add this field to track promoted courses
 });
-
 
 const Course = mongoose.model('Course', courseSchema);
 

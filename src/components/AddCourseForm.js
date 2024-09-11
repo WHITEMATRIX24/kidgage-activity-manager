@@ -19,6 +19,7 @@ function AddCourseForm() {
         location: [''],
         courseType: '',
         images: [],
+        promoted: false,
         // hashtags: [],
         // newHashtag: '#' // Initialize with '#'
     };
@@ -35,7 +36,7 @@ function AddCourseForm() {
     useEffect(() => {
         const fetchCourseTypes = async () => {
             try {
-                const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/course-category/categories');
+                const response = await axios.get('http://localost:5001/api/course-category/categories');
                 setCourseTypes(response.data);
             } catch (error) {
                 console.error('Error fetching course types', error);
@@ -126,15 +127,15 @@ function AddCourseForm() {
 
     const addImage = () => {
         setCourse((prevCourse) => ({ ...prevCourse, images: [...prevCourse.images, ''] }));
-      };
+    };
 
-      const handleImageChange = (index, e) => {
+    const handleImageChange = (index, e) => {
         setCourse((prevCourse) => {
-          const newImages = [...prevCourse.images];
-          newImages[index] = e.target.files[0]; // Update the image at the specified index
-          return { ...prevCourse, images: newImages };
+            const newImages = [...prevCourse.images];
+            newImages[index] = e.target.files[0]; // Update the image at the specified index
+            return { ...prevCourse, images: newImages };
         });
-      };
+    };
 
     const removeImage = (index) => {
         setCourse({ ...course, images: course.images.filter((_, i) => i !== index) });
@@ -178,37 +179,37 @@ function AddCourseForm() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-          console.log('Course data:', course); // Add this to inspect the course data
-      
-          // Validate timeSlots field before sending the request
-          if (!Array.isArray(course.timeSlots) || course.timeSlots.some((timeSlot) => !timeSlot.from || !timeSlot.to)) {
-            return setError('Invalid timeSlots field');
-          }
-      
-          // Convert timeSlots array to a JSON string
-          const timeSlotsJson = JSON.stringify(course.timeSlots);
-      
-          // Create a new course object with the timeSlotsJson string
-          const courseData = { ...course, timeSlots: timeSlotsJson };
-      
-          const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/courses/addcourse', courseData, {
-            headers: { 'Content-Type': 'application/json' } // Add this to specify the content type
-          });
-          console.log('Course added successfully', response.data);
-          setCourse(initialCourseState);
-          setSuccess('Course added successfully!');
-          setError('');
+            console.log('Course data:', course); // Add this to inspect the course data
+
+            // Validate timeSlots field before sending the request
+            if (!Array.isArray(course.timeSlots) || course.timeSlots.some((timeSlot) => !timeSlot.from || !timeSlot.to)) {
+                return setError('Invalid timeSlots field');
+            }
+
+            // Convert timeSlots array to a JSON string
+            const timeSlotsJson = JSON.stringify(course.timeSlots);
+
+            // Create a new course object with the timeSlotsJson string
+            const courseData = { ...course, timeSlots: timeSlotsJson };
+
+            const response = await axios.post('http://localhost:5001/api/courses/addcourse', courseData, {
+                headers: { 'Content-Type': 'application/json' } // Add this to specify the content type
+            });
+            console.log('Course added successfully', response.data);
+            setCourse(initialCourseState);
+            setSuccess('Course added successfully!');
+            setError('');
         } catch (error) {
-          console.error('Error adding course', error);
-          if (error.response) {
-            console.error('Error response:', error.response.data);
-            setError(error.response.data.message);
-          } else {
-            setError('An error occurred. Please try again later.');
-          }
-          setSuccess('');
+            console.error('Error adding course', error);
+            if (error.response) {
+                console.error('Error response:', error.response.data);
+                setError(error.response.data.message);
+            } else {
+                setError('An error occurred. Please try again later.');
+            }
+            setSuccess('');
         }
-      };
+    };
 
     const toggleFormVisibility = () => {
         setShowForm(!showForm);
@@ -270,20 +271,20 @@ function AddCourseForm() {
                             onChange={handleChange}
                         />
 
-                    <select
-                        id="courseType"
-                        name="courseType"
-                        value={course.courseType}
-                        onChange={handleChange}
-                        required
-                    >
-                        <option value="">Select Course Type</option>
-                        {courseTypes.map((type) => (
-                            <option key={type._id} value={type.name}>
-                                {type.name}
-                            </option>
-                        ))}
-                    </select>
+                        <select
+                            id="courseType"
+                            name="courseType"
+                            value={course.courseType}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="">Select Course Type</option>
+                            {courseTypes.map((type) => (
+                                <option key={type._id} value={type.name}>
+                                    {type.name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="form-group add-duration-group">
@@ -386,10 +387,10 @@ function AddCourseForm() {
                     </div>
                     <div className="form-group">
                         <div className='btn-grpp'>
-                        <label>Time Slots:</label>
-                        <button type="button" className="add-time-slot-btn" onClick={addTimeSlot}>
-                            Add Time Slot
-                        </button>
+                            <label>Time Slots:</label>
+                            <button type="button" className="add-time-slot-btn" onClick={addTimeSlot}>
+                                Add Time Slot
+                            </button>
                         </div>
                         {course.timeSlots.map((slot, index) => (
                             <div key={index} className="time-slot">
@@ -420,10 +421,10 @@ function AddCourseForm() {
                     </div>
                     <div className="form-group">
                         <div className='btn-grpp'>
-                        <label>Locations:</label>
-                        <button type="button" className="add-time-slot-btn" onClick={addLocation}>
-                            Add Location
-                        </button>
+                            <label>Locations:</label>
+                            <button type="button" className="add-time-slot-btn" onClick={addLocation}>
+                                Add Location
+                            </button>
                         </div>
                         {course.location.map((loc, index) => (
                             <div key={index} className="time-slot">
@@ -450,9 +451,9 @@ function AddCourseForm() {
                     <div className="form-group">
                         <div className='btn-grpp'>
                             <label>Course Images:</label>
-                        <button type="button" className="add-time-slot-btn" onClick={addImage}>
-                            Add Images
-                        </button>
+                            <button type="button" className="add-time-slot-btn" onClick={addImage}>
+                                Add Images
+                            </button>
                         </div>
                         {course.images.map((img, index) => (
                             <div key={index} className="time-slot">
