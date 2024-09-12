@@ -25,12 +25,15 @@ router.post('/addcourse', upload.array('academyImg', 10), async (req, res) => {
       days,
       timeSlots,
       location,
+      ageGroup,
       courseType,
       promoted,
     } = req.body;
 
     // Ensure the timeSlots are parsed correctly
     const parsedTimeSlots = typeof timeSlots === 'string' ? JSON.parse(timeSlots) : timeSlots;
+    const parsedLocation = typeof location === 'string' ? JSON.parse(location) : location;
+    const parsedAge = typeof ageGroup === 'string' ? JSON.parse(ageGroup) : ageGroup;
 
     // Handle the images
     const images = req.files ? req.files.map((file) => file.buffer.toString('base64')) : [];
@@ -47,7 +50,8 @@ router.post('/addcourse', upload.array('academyImg', 10), async (req, res) => {
       feeType,
       days,
       timeSlots: parsedTimeSlots,
-      location,
+      location: parsedLocation,
+      ageGroup: parsedAge,
       courseType,
       images,  // Base64 encoded images
       promoted,

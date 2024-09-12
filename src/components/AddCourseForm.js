@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaChevronDown, FaSearch, FaTrash} from 'react-icons/fa';
 import axios from 'axios';
 import './AddCourseForm.css';
-
+import LocationInput from './LocationInput';
 function AddCourseForm() {
     const initialCourseState = {
         providerId: '',
@@ -16,10 +16,13 @@ function AddCourseForm() {
         feeType: 'full_course',
         days: [],
         timeSlots: [{ from: '', to: '' }],
-        location: [''],
+        location: [{ adress: '', city: '', phoneNumber: '' }],
         courseType: '',
         images: [],
         promoted: false,
+        ageGroup: { ageStart: '', ageEnd: '' },
+        // hashtags: [],
+        // newHashtag: '#' // Initialize with '#'
     };
 
     const [course, setCourse] = useState(initialCourseState);
@@ -34,7 +37,7 @@ function AddCourseForm() {
     useEffect(() => {
         const fetchCourseTypes = async () => {
             try {
-                const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/course-category/categories');
+                const response = await axios.get('http://localhost:5001/api/course-category/categories');
                 setCourseTypes(response.data);
             } catch (error) {
                 console.error('Error fetching course types', error);
@@ -86,11 +89,16 @@ function AddCourseForm() {
         setCourse((prev) => ({ ...prev, timeSlots: prev.timeSlots.filter((_, i) => i !== index) }));
     };
 
-    const handleLocationChange = (index, e) => {
-        const { value } = e.target;
-        const location = [...course.location];
-        location[index] = value;
-        setCourse((prev) => ({ ...prev, location }));
+    const handleLocationChange = (index, field, e) => {
+        const value = e.target ? e.target.value : e; // Check if value comes from input or custom LocationInput
+        const updatedLocation = [...course.location];
+        updatedLocation[index][field] = value;
+        setCourse({ ...course, location: updatedLocation });
+    };
+
+    const handleSelectAddress = (selectedAddress) => {
+        // Handle the selected address here
+        console.log("Selected address:", selectedAddress);
     };
 
     const addLocation = () => {
@@ -179,14 +187,22 @@ function AddCourseForm() {
 
             // Append days and locations as arrays
             course.days.forEach(day => formData.append('days[]', day));
-            course.location.forEach(location => formData.append('location[]', location));
+            const validatedLocations = course.location.map((loc) => ({
+                address: loc.address || '',
+                city: loc.city || '',
+                phoneNumber: loc.phoneNumber || ''
+            }));
 
+            // Append location array as a JSON string
+            formData.append('location', JSON.stringify(validatedLocations));
+            formData.append('ageGroup', JSON.stringify(course.ageGroup));
             // Append each image file (File object)
             course.images.forEach((image) => {
                 if (image) {
                     formData.append('academyImg', image); // Send file object directly
                 }
             });
+
 
             const response = await axios.post('http://localhost:5001/api/courses/addcourse', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
@@ -207,10 +223,13 @@ function AddCourseForm() {
             setSuccess('');
         }
     };
-
-
-
-
+    const handleAgeGroupChange = (e) => {
+        const { name, value } = e.target;
+        setCourse((prev) => ({
+            ...prev,
+            ageGroup: { ...prev.ageGroup, [name]: value }
+        }));
+    };
     const toggleFormVisibility = () => {
         setShowForm(!showForm);
     };
@@ -419,6 +438,26 @@ function AddCourseForm() {
                             </div>
                         ))}
                     </div>
+                    <div className="form-group add-duration-label-group">
+                        <label htmlFor="ageStart">Age Group Start</label>
+                        <label htmlFor="ageEnd">Age Group End</label>
+                    </div>
+                    <div className="form-group add-duration-group">
+                        <input
+                            type="date"
+                            id="ageStart"
+                            name="ageStart"
+                            value={course.ageGroup.ageStart}
+                            onChange={handleAgeGroupChange}
+                        />
+                        <input
+                            type="date"
+                            id="ageEnd"
+                            name="ageEnd"
+                            value={course.ageGroup.ageEnd}
+                            onChange={handleAgeGroupChange}
+                        />
+                    </div>
                     <div className="form-group">
                         <div className='btn-grpp'>
                             <label>Locations:</label>
@@ -426,15 +465,37 @@ function AddCourseForm() {
                                 Add Location
                             </button>
                         </div>
+
                         {course.location.map((loc, index) => (
-                            <div key={index} className="time-slot">
+                            <div key={index} className="time-slot" style={{ display: 'flex', gap: '1rem' }}>
+                                {/* Address input */}
                                 <input
                                     type="text"
-                                    name="location"
-                                    value={loc}
-                                    placeholder={index === 0 ? 'Location' : `Location ${index}`}
-                                    onChange={(e) => handleLocationChange(index, e)}
+                                    name="address"
+                                    value={loc.address}
+                                    placeholder={index === 0 ? 'Address' : `Address ${index}`}
+                                    onChange={(e) => handleLocationChange(index, 'address', e.target.value)}
+                                    style={{ width: '33%' }}  // Inline style for 25% width
                                 />
+
+                                {/* City input using LocationInput component */}
+                                <LocationInput
+                                    className="form-group"
+                                    value={loc.city}
+                                    onSelectAddress={(city, latLng) => handleLocationChange(index, 'city', { target: { value: city } })}
+                                    style={{ width: '33%' }}  // Inline style for 25% width
+                                />
+
+                                {/* Phone Number input */}
+                                <input
+                                    type="text"
+                                    name="phoneNumber"
+                                    value={loc.phoneNumber}
+                                    placeholder={index === 0 ? 'Phone Number' : `Phone Number ${index}`}
+                                    onChange={(e) => handleLocationChange(index, 'phoneNumber', e.target.value)}
+                                    style={{ width: '36%' }}  // Inline style for 25% width
+                                />
+
                                 {index > 0 && (
                                     <button
                                         type="button"
@@ -446,6 +507,8 @@ function AddCourseForm() {
                                 )}
                             </div>
                         ))}
+
+
                     </div>
 
                     <div className="form-group">
@@ -463,6 +526,7 @@ function AddCourseForm() {
                                     onChange={(e) => handleImageChange(index, e)}
                                     accept=".png, .jpg, .jpeg"
                                 />
+
                                 {index > 0 && (
                                     <button
                                         type="button"
