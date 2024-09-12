@@ -87,13 +87,16 @@ function AddAdvertisement() {
                             />
                         </div>
                         <div className="form-group file-upload-container">
-                            <label htmlFor="desktop-file-upload">Desktop View Image</label>
+                            <label htmlFor="desktop-file-upload">
+                                Desktop View Image<br /><span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 634 X 342 ]</span>
+                            </label>
+
                             <input
                                 type="file"
                                 id="desktop-file-upload"
                                 onChange={(e) => handleFileChange(e, 'desktopImage')}
                             />
-                            <span>{desktopFileName}</span>
+
                         </div>
                     </div>
                     <div className="form-group file-upload-container">
@@ -103,7 +106,6 @@ function AddAdvertisement() {
                             id="mobile-file-upload"
                             onChange={(e) => handleFileChange(e, 'mobileImage')}
                         />
-                        <span>{mobileFileName}</span>
                     </div>
                     <button type="submit" className="add-time-slot-btn">Add Advertisement</button>
                     {error && <p className="error-message">{error}</p>}

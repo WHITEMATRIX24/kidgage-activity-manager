@@ -36,7 +36,7 @@ function AddCourseForm() {
     useEffect(() => {
         const fetchCourseTypes = async () => {
             try {
-                const response = await axios.get('http://localost:5001/api/course-category/categories');
+                const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/course-category/categories');
                 setCourseTypes(response.data);
             } catch (error) {
                 console.error('Error fetching course types', error);
@@ -45,6 +45,7 @@ function AddCourseForm() {
 
         fetchCourseTypes();
     }, []);
+
 
 
     const handleChange = (e) => {
@@ -130,11 +131,14 @@ function AddCourseForm() {
     };
 
     const handleImageChange = (index, e) => {
-        setCourse((prevCourse) => {
-            const newImages = [...prevCourse.images];
-            newImages[index] = e.target.files[0]; // Update the image at the specified index
-            return { ...prevCourse, images: newImages };
-        });
+        const file = e.target.files[0]; // Get the selected file
+        if (file) {
+            setCourse((prevCourse) => {
+                const newImages = [...prevCourse.images];
+                newImages[index] = file; // Store the file directly
+                return { ...prevCourse, images: newImages };
+            });
+        }
     };
 
     const removeImage = (index) => {
@@ -178,31 +182,49 @@ function AddCourseForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
-            console.log('Course data:', course); // Add this to inspect the course data
+            const formData = new FormData();
 
-            // Validate timeSlots field before sending the request
-            if (!Array.isArray(course.timeSlots) || course.timeSlots.some((timeSlot) => !timeSlot.from || !timeSlot.to)) {
-                return setError('Invalid timeSlots field');
-            }
+            // Append all course data to the formData object
+            formData.append('providerId', course.providerId);
+            formData.append('name', course.name);
+            formData.append('duration', course.duration);
+            formData.append('durationUnit', course.durationUnit);
+            formData.append('startDate', course.startDate);
+            formData.append('endDate', course.endDate);
+            formData.append('description', course.description);
+            formData.append('feeAmount', course.feeAmount);
+            formData.append('feeType', course.feeType);
+            formData.append('promoted', course.promoted);
+            formData.append('courseType', course.courseType);
 
-            // Convert timeSlots array to a JSON string
-            const timeSlotsJson = JSON.stringify(course.timeSlots);
+            // Append each timeSlot as a JSON string
+            formData.append('timeSlots', JSON.stringify(course.timeSlots));
 
-            // Create a new course object with the timeSlotsJson string
-            const courseData = { ...course, timeSlots: timeSlotsJson };
+            // Append days and locations as arrays
+            course.days.forEach(day => formData.append('days[]', day));
+            course.location.forEach(location => formData.append('location[]', location));
 
-            const response = await axios.post('http://localhost:5001/api/courses/addcourse', courseData, {
-                headers: { 'Content-Type': 'application/json' } // Add this to specify the content type
+            // Append each image file (File object)
+            course.images.forEach((image) => {
+                if (image) {
+                    formData.append('academyImg', image); // Send file object directly
+                }
             });
+
+            const response = await axios.post('http://localhost:5001/api/courses/addcourse', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
             console.log('Course added successfully', response.data);
             setCourse(initialCourseState);
             setSuccess('Course added successfully!');
             setError('');
+
         } catch (error) {
             console.error('Error adding course', error);
             if (error.response) {
-                console.error('Error response:', error.response.data);
                 setError(error.response.data.message);
             } else {
                 setError('An error occurred. Please try again later.');
@@ -210,6 +232,9 @@ function AddCourseForm() {
             setSuccess('');
         }
     };
+
+
+
 
     const toggleFormVisibility = () => {
         setShowForm(!showForm);

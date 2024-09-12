@@ -29,8 +29,10 @@ router.post('/addcourse', upload.array('academyImg', 10), async (req, res) => {
       promoted,
     } = req.body;
 
-    // Parse the timeSlotsJson string back to an array of objects
-    const parsedTimeSlots = JSON.parse(timeSlots);
+    // Ensure the timeSlots are parsed correctly
+    const parsedTimeSlots = typeof timeSlots === 'string' ? JSON.parse(timeSlots) : timeSlots;
+
+    // Handle the images
     const images = req.files ? req.files.map((file) => file.buffer.toString('base64')) : [];
 
     const newCourse = new Course({
@@ -44,11 +46,11 @@ router.post('/addcourse', upload.array('academyImg', 10), async (req, res) => {
       feeAmount,
       feeType,
       days,
-      timeSlots: parsedTimeSlots, // Use the parsed timeSlots array
+      timeSlots: parsedTimeSlots,
       location,
       courseType,
-      images: images, // Use the images array
-      promoted,  // Set the promoted field to false by default
+      images,  // Base64 encoded images
+      promoted,
     });
 
     const savedCourse = await newCourse.save();
@@ -58,6 +60,8 @@ router.post('/addcourse', upload.array('academyImg', 10), async (req, res) => {
     res.status(500).json({ message: 'Error adding course', error: error.message });
   }
 });
+
+
 
 
 // Route to search for a course by name
