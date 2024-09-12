@@ -129,21 +129,23 @@ const EditPosterForm = ({ onDelete }) => {
             {showForm && (
                 <div className="add-course-form">
                     {!editMode ? (
-                        <div className="banner-list">
+                        <div className="poster-list">
                             {posters.map((poster) => (
-                                <div className="banner-box" key={poster._id}>
+                                <div className="poster-box" key={poster._id}>
                                     <img src={getImageSource(poster.image)} alt={poster.name} />
-                                    <div className="banner-info">
+                                    <div className="poster-info">
                                         <h3>{poster.name}</h3>
                                         <p>{poster.description}</p>
                                         <p>{poster.phone}</p>
                                         <p>{poster.startDate} - {poster.endDate}</p>
-                                        <button onClick={() => handleEdit(poster)}>
+                                        <div className='button-container'>
+                                        <button  onClick={() => handleEdit(poster)}>
                                             <FaEdit /> Edit
                                         </button>
                                         <button onClick={() => handleDelete(poster)}>
                                             <FaTrash /> Delete
                                         </button>
+                                        </div>
                                     </div>
                                 </div>
                             ))}

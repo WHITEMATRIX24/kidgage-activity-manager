@@ -726,3 +726,28 @@ padding: 10px;
     font-weight: bold;
     color: #9f9e9e91;
 }
+
+.courses-list {
+    margin-top: 20px;
+}
+
+.course-item {
+    display: flex;
+    justify-content: space-between; /* This pushes the button to the right */
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.course-name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.add-course-form .course-item button{
+    border-radius: 30px;
+    padding: 10px;
+    width: 200px;
+    background-color: #387CB8;
+}

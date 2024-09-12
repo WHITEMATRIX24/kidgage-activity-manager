@@ -134,13 +134,15 @@ const EditAdvertisementForm = () => {
                             <button type="submit">Submit</button>
                         </form>
                     ) : (
-                        <div className="banner-list">
+                        <div className="poster-list">
                             {advertisements.map(ad => (
-                                <div key={ad._id} className="banner-box">
+                                <div key={ad._id} className="poster-box">
+                                    <div className='poster-img-cont'>
                                     <img src={`data:image/jpeg;base64,${ad.mobileImage}`} alt={ad.title} />
                                     <img src={`data:image/jpeg;base64,${ad.desktopImage}`} alt={ad.title} />
-                                    <div className="banner-info">
-                                        <div className='banner-info-text'>
+                                    </div>
+                                    <div className="poster-info">
+                                        <div className='poster-info-text'>
                                             <h3>{ad.title}</h3>
                                         </div>
                                         <div className="button-container">

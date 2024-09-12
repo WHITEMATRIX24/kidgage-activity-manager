@@ -125,16 +125,16 @@ const EditBannerForm = () => {
                             <button type="submit">Submit</button>
                         </form>
                     ) : (
-                        <div className="banner-list">
+                        <div className="poster-list">
                             {banners.map(banner => (
-                                <div key={banner._id} className="banner-box">
+                                <div key={banner._id} className="poster-box">
                                     <img src={banner.imageUrl} alt={banner.title} />
-                                    <div className="banner-info">
-                                        <div className='banner-info-text'>
+                                    <div className="poster-info">
+                                        <div className='poster-info-text'>
                                         <h3>{banner.title}</h3>
                                         <p>{banner.bookingLink}</p>
                                         </div>
-                                        <div className="bbutton-container">
+                                        <div className="button-container">
                                             <button className='edit-banner-button' onClick={() => handleEdit(banner)}>
                                                 <FaEdit /> Edit
                                             </button>
