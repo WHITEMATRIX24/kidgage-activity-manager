@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaChevronDown, FaSearch, FaTrash, FaPlus, FaTimes } from 'react-icons/fa';
+import { FaChevronDown, FaSearch, FaTrash} from 'react-icons/fa';
 import axios from 'axios';
 import './AddCourseForm.css';
 
@@ -20,8 +20,6 @@ function AddCourseForm() {
         courseType: '',
         images: [],
         promoted: false,
-        // hashtags: [],
-        // newHashtag: '#' // Initialize with '#'
     };
 
     const [course, setCourse] = useState(initialCourseState);
@@ -71,30 +69,7 @@ function AddCourseForm() {
         }
     }, [success]);
 
-    const handleHashtagChange = (e) => {
-        // Ensure that '#' is always the prefix for hashtags
-        const value = e.target.value;
-        setCourse((prev) => ({ ...prev, newHashtag: value }));
-    };
-
-    const addHashtag = () => {
-        const hashtag = course.newHashtag.trim();
-        if (hashtag && !course.hashtags.includes(hashtag)) {
-            setCourse((prev) => ({
-                ...prev,
-                hashtags: [...prev.hashtags, hashtag],
-                newHashtag: '#' // Reset to default '#'
-            }));
-        }
-    };
-
-    const removeHashtag = (hashtag) => {
-        setCourse((prev) => ({
-            ...prev,
-            hashtags: prev.hashtags.filter(h => h !== hashtag)
-        }));
-    };
-
+ 
     const handleTimeSlotChange = (index, e) => {
         const { name, value } = e.target;
         const timeSlots = [...course.timeSlots];
