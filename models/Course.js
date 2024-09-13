@@ -4,11 +4,13 @@ const timeSlotSchema = new mongoose.Schema({
     from: { type: String, required: true },
     to: { type: String, required: true }
 });
+
 const locationSchema = new mongoose.Schema({
     address: { type: String, required: true },
     city: { type: String, required: true },
     phoneNumber: { type: String, required: true }
-})
+});
+
 const ageGroupSchema = new mongoose.Schema({
     ageStart: { type: Date, required: true },
     ageEnd: { type: Date, required: true }

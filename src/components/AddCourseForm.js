@@ -16,13 +16,13 @@ function AddCourseForm() {
         feeType: 'full_course',
         days: [],
         timeSlots: [{ from: '', to: '' }],
-        location: [{ adress: '', city: '', phoneNumber: '' }],
+        location: [
+            { address: '', city: '', phoneNumber: '' }
+        ],
         courseType: '',
         images: [],
         promoted: false,
         ageGroup: { ageStart: '', ageEnd: '' },
-        // hashtags: [],
-        // newHashtag: '#' // Initialize with '#'
     };
 
     const [course, setCourse] = useState(initialCourseState);
@@ -89,12 +89,15 @@ function AddCourseForm() {
         setCourse((prev) => ({ ...prev, timeSlots: prev.timeSlots.filter((_, i) => i !== index) }));
     };
 
-    const handleLocationChange = (index, field, e) => {
-        const value = e.target ? e.target.value : e; // Check if value comes from input or custom LocationInput
+    const handleLocationChange = (index, field, value) => {
         const updatedLocation = [...course.location];
-        updatedLocation[index][field] = value;
-        setCourse({ ...course, location: updatedLocation });
+        updatedLocation[index] = {
+            ...updatedLocation[index],
+            [field]: value
+        };
+        setCourse(prev => ({ ...prev, location: updatedLocation }));
     };
+
 
     const handleSelectAddress = (selectedAddress) => {
         // Handle the selected address here
@@ -128,40 +131,6 @@ function AddCourseForm() {
         setCourse({ ...course, images: course.images.filter((_, i) => i !== index) });
     };
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         console.log('Course data:', course); // Add this to inspect the course data
-
-    //         // Validate timeSlots field before sending the request
-    //         if (!Array.isArray(course.timeSlots) || course.timeSlots.some((timeSlot) => !timeSlot.from || !timeSlot.to)) {
-    //             return setError('Invalid timeSlots field');
-    //         }
-
-    //         // Convert timeSlots array to a JSON string
-    //         const timeSlotsJson = JSON.stringify(course.timeSlots);
-
-    //         // Create a new course object with the timeSlotsJson string
-    //         const courseData = { ...course, timeSlots: timeSlotsJson };
-
-    //         const response = await axios.post('http://localhost:5001/api/courses/addcourse', courseData, {
-    //             headers: { 'Content-Type': 'application/json' } // Add this to specify the content type
-    //         });
-    //         console.log('Course added successfully', response.data);
-    //         setCourse(initialCourseState);
-    //         setSuccess('Course added successfully!');
-    //         setError('');
-    //     } catch (error) {
-    //         console.error('Error adding course', error);
-    //         if (error.response) {
-    //             console.error('Error response:', error.response.data);
-    //             setError(error.response.data.message);
-    //         } else {
-    //             setError('An error occurred. Please try again later.');
-    //         }
-    //         setSuccess('');
-    //     }
-    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -223,6 +192,7 @@ function AddCourseForm() {
             setSuccess('');
         }
     };
+
     const handleAgeGroupChange = (e) => {
         const { name, value } = e.target;
         setCourse((prev) => ({
@@ -475,26 +445,25 @@ function AddCourseForm() {
                                     value={loc.address}
                                     placeholder={index === 0 ? 'Address' : `Address ${index}`}
                                     onChange={(e) => handleLocationChange(index, 'address', e.target.value)}
-                                    style={{ width: '33%' }}  // Inline style for 25% width
+                                    style={{ width: '33%' }}
                                 />
 
-                                {/* City input using LocationInput component */}
                                 <LocationInput
                                     className="form-group"
                                     value={loc.city}
-                                    onSelectAddress={(city, latLng) => handleLocationChange(index, 'city', { target: { value: city } })}
-                                    style={{ width: '33%' }}  // Inline style for 25% width
+                                    onSelectAddress={(newCity) => handleLocationChange(index, 'city', newCity)}
+                                    style={{ width: '33%' }}
                                 />
 
-                                {/* Phone Number input */}
                                 <input
                                     type="text"
                                     name="phoneNumber"
                                     value={loc.phoneNumber}
                                     placeholder={index === 0 ? 'Phone Number' : `Phone Number ${index}`}
                                     onChange={(e) => handleLocationChange(index, 'phoneNumber', e.target.value)}
-                                    style={{ width: '36%' }}  // Inline style for 25% width
+                                    style={{ width: '36%' }}
                                 />
+
 
                                 {index > 0 && (
                                     <button
