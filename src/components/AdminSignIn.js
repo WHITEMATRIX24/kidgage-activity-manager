@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Button from './Button';
 import { useNavigate } from 'react-router-dom';
 import './AdminSignin.css';
 import logo from './assets/images/logo.png';
@@ -27,17 +28,12 @@ const AdminSignIn = () => {
     try {
       const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/admin/signin', formData);
       console.log('Sign-in successful:', response.data);
-
-      // Store token or flag in localStorage to indicate successful login
-      localStorage.setItem('adminToken', response.data.token); // Replace 'token' with the actual token key from response
-
       setSuccess('Sign-in successful');
       setFormData({
         name: '',
         password: ''
       });
-
-      // Navigate to dashboard upon successful sign-in
+      // Navigate to another page or perform additional actions
       navigate('/dashboard');
     } catch (error) {
       console.error('Sign-in error:', error.response ? error.response.data : error.message);
@@ -69,7 +65,7 @@ const AdminSignIn = () => {
             placeholder="Password"
             required
           />
-          <button type="submit">Sign In</button>
+          <button primary type="submit">Sign In</button>
           {error && <p className="error-message">{error}</p>}
           {success && <p className="success-message">{success}</p>}
         </form>

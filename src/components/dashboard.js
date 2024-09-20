@@ -40,12 +40,9 @@ const Dashboard = () => {
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
     };
-const handleSignOut = () => {
-  // Remove the token from localStorage
-  localStorage.removeItem('adminToken');
-  window.location.replace('/'); // Redirect to the login page
-};
-
+    const handleSignOut = () => {
+        window.location.replace('/');
+    };
 
     const handleChangePassword = () => {
         setShowChangePasswordForm(true);
