@@ -88,7 +88,7 @@ function AddAdvertisement() {
                         </div>
                         <div className="form-group file-upload-container">
                             <label htmlFor="desktop-file-upload">
-                                Desktop View Image<br /><span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 634 X 342 ]</span>
+                                Desktop View Image<br /><span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 342 X 634 ]</span>
                             </label>
 
                             <input
@@ -100,7 +100,7 @@ function AddAdvertisement() {
                         </div>
                     </div>
                     <div className="form-group file-upload-container">
-                        <label htmlFor="mobile-file-upload">Mobile View Image</label>
+                        <label htmlFor="mobile-file-upload">Mobile View Image<br /><span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 634 X 342 ]</span></label>
                         <input
                             type="file"
                             id="mobile-file-upload"

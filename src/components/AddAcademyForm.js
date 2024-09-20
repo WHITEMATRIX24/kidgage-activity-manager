@@ -180,7 +180,7 @@ return (
                         required
                     />
                 </div>
-                <label className='sign-in-label' htmlFor="logo">Academy Logo</label>
+                <label className='sign-in-label' htmlFor="logo">Academy Logo <span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 80 X 80 ]</span></label>
                 <div className='side-by-side'>
                     <input
                         type="file"

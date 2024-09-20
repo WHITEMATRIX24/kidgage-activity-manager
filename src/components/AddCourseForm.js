@@ -37,7 +37,7 @@ function AddCourseForm() {
     useEffect(() => {
         const fetchCourseTypes = async () => {
             try {
-                const response = await axios.get('http://localhost:5001/api/course-category/categories');
+                const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/course-category/categories');
                 setCourseTypes(response.data);
             } catch (error) {
                 console.error('Error fetching course types', error);
@@ -173,7 +173,7 @@ function AddCourseForm() {
             });
 
 
-            const response = await axios.post('http://localhost:5001/api/courses/addcourse', formData, {
+            const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/courses/addcourse', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
@@ -482,10 +482,11 @@ function AddCourseForm() {
 
                     <div className="form-group">
                         <div className='btn-grpp'>
-                            <label>Course Images:</label>
+                            <label>Course Images<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 1280 X 1028 ]</span>:</label>
                             <button type="button" className="add-time-slot-btn" onClick={addImage}>
                                 Add Images
                             </button>
+                            
                         </div>
                         {course.images.map((img, index) => (
                             <div key={index} className="time-slot">

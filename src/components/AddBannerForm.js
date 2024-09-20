@@ -81,7 +81,7 @@ function AddBannerForm() {
                         />
                     </div>
                     <div className="form-group file-upload-container">
-                        <label htmlFor="file-upload">Image</label>
+                        <label htmlFor="file-upload">Banner Image<br></br><span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 1045 X 275 ]</span></label>
                         <input
                             type="file"
                             id="file-upload"

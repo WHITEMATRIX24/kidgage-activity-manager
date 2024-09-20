@@ -43,7 +43,7 @@ const PromoteCourse = () => {
         if (!selectedCourse) return;
 
         try {
-            await axios.post(`https://kidgage-adminbackend.onrender.com/api/promoted/promote/${selectedCourse._id}`, { promote: promoteMode });
+            await axios.post(`http://kidgage-adminbackend.onrender.com/api/promoted/promote/${selectedCourse._id}`, { promote: promoteMode });
             fetchCourses(provider._id); // Refresh the courses list
             setShowConfirmPopup(false);
             setSelectedCourse(null);

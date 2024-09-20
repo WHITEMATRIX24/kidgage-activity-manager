@@ -128,9 +128,9 @@ function AddPosterForm() {
             </div>
             {showForm && (
                 <form className="add-course-form" onSubmit={handleSubmit}>
-                    <div className="form-group add-course-label-group">
+                    <div className="form-group add-upload-label-group">
                         <label htmlFor="name">Title</label>
-                        <label htmlFor="file-upload">Image</label>
+                        <label htmlFor="file-upload">Image<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 1080 X 1080 ]</span></label>
                     </div>
                     <div className="form-group add-course-group">
                         <input
