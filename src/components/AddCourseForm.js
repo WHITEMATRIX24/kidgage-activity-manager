@@ -262,8 +262,8 @@ function AddCourseForm() {
                             onChange={handleChange}
                         />
                     <div className="form-group add-course-label-group">
+                    <label htmlFor="preferredGender">Preferred Gender</label>
                         <label htmlFor="preferredGender">Course Type</label>
-                        <label htmlFor="preferredGender">Preferred Gender</label>
                     </div>
                     <div className='form-group add-duration-group'>
                         <select
