@@ -23,6 +23,8 @@ function AddCourseForm() {
         images: [],
         promoted: false,
         ageGroup: { ageStart: '', ageEnd: '' },
+        preferredGender: 'Any' // Default value can be set as needed
+
     };
 
     const [course, setCourse] = useState(initialCourseState);
@@ -37,7 +39,7 @@ function AddCourseForm() {
     useEffect(() => {
         const fetchCourseTypes = async () => {
             try {
-                const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/course-category/categories');
+                const response = await axios.get('https://kidgage-admin-rdld.onrender.com/api/course-category/categories');
                 setCourseTypes(response.data);
             } catch (error) {
                 console.error('Error fetching course types', error);
@@ -150,6 +152,8 @@ function AddCourseForm() {
             formData.append('feeType', course.feeType);
             formData.append('promoted', course.promoted);
             formData.append('courseType', course.courseType);
+            formData.append('preferredGender', course.preferredGender); // Append the new field
+
 
             // Append each timeSlot as a JSON string
             formData.append('timeSlots', JSON.stringify(course.timeSlots));
@@ -173,7 +177,7 @@ function AddCourseForm() {
             });
 
 
-            const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/courses/addcourse', formData, {
+            const response = await axios.post('https://kidgage-admin-rdld.onrender.com/api/courses/addcourse', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
@@ -206,7 +210,7 @@ function AddCourseForm() {
 
     const handleSearch = async () => {
         try {
-            const response = await axios.get(`https://kidgage-adminbackend.onrender.com/api/users/search?query=${searchQuery}`);
+            const response = await axios.get(`https://kidgage-admin-rdld.onrender.com/api/users/search?query=${searchQuery}`);
             setSearchResult(response.data);
             setSearchError('');
             setCourse((prev) => ({ ...prev, providerId: response.data._id }));
@@ -247,11 +251,9 @@ function AddCourseForm() {
                             <p>ID: {searchResult._id}</p>
                         </div>
                     )}
-                    <div className="form-group add-course-label-group">
-                        <label htmlFor="name">Course Name</label>
-                    </div>
-                    <div className='form-group add-duration-group'>
-                        <input
+                    <label htmlFor="name">Course Name</label>
+
+                    <input
                             type="text"
                             id="name"
                             name="name"
@@ -259,7 +261,22 @@ function AddCourseForm() {
                             value={course.name}
                             onChange={handleChange}
                         />
-
+                    <div className="form-group add-course-label-group">
+                        <label htmlFor="preferredGender">Course Type</label>
+                        <label htmlFor="preferredGender">Preferred Gender</label>
+                    </div>
+                    <div className='form-group add-duration-group'>
+                        <select
+                            id="preferredGender"
+                            name="preferredGender"
+                            value={course.preferredGender}
+                            onChange={handleChange}
+                            required
+                        >
+                            <option value="Any">Any</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
                         <select
                             id="courseType"
                             name="courseType"
@@ -275,7 +292,9 @@ function AddCourseForm() {
                             ))}
                         </select>
                     </div>
-
+                    <div className="form-group add-course-label-group">
+                        <label htmlFor="preferredGender">Course Duration</label>
+                    </div>
                     <div className="form-group add-duration-group">
                         <input
                             type="number"

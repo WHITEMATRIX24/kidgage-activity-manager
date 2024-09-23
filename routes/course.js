@@ -28,6 +28,7 @@ router.post('/addcourse', upload.array('academyImg', 10), async (req, res) => {
       ageGroup,
       courseType,
       promoted,
+      preferredGender
     } = req.body;
 
     // Ensure the timeSlots are parsed correctly
@@ -55,6 +56,7 @@ router.post('/addcourse', upload.array('academyImg', 10), async (req, res) => {
       courseType,
       images,  // Base64 encoded images
       promoted,
+      preferredGender
     });
 
     const savedCourse = await newCourse.save();

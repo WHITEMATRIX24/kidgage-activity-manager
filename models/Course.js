@@ -32,6 +32,12 @@ const courseSchema = new mongoose.Schema({
     images: [{ type: String, required: true }],
     ageGroup: { type: [ageGroupSchema], required: true },
     promoted: { type: Boolean, default: false },  // Add this field to track promoted courses
+
+    preferredGender: {
+        type: String,
+        enum: ['Male', 'Female', 'Any'],
+        default: 'Any' // You can set a default value if desired
+    }
 });
 
 const Course = mongoose.model('Course', courseSchema);

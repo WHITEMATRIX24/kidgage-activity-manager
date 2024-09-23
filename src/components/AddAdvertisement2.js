@@ -45,7 +45,7 @@ function AddAdvertisement2() {
         formData.append('space', space);  // Append the space constant
 
         try {
-            const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/advertisement/addadvertisement', formData, {
+            const response = await axios.post('https://kidgage-admin-rdld.onrender.com/api/advertisement/addadvertisement', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data' // Set the content type to multipart/form-data
                 }

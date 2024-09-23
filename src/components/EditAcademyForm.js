@@ -32,7 +32,7 @@ const EditAcademyForm = () => {
   useEffect(() => {
     const fetchAcademyTypes = async () => {
       try {
-        const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/course-category/categories');
+        const response = await axios.get('https://kidgage-admin-rdld.onrender.com/api/course-category/categories');
         setAcademyTypes(response.data);
       } catch (error) {
         console.error('Error fetching academy types', error);
@@ -44,7 +44,7 @@ const EditAcademyForm = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/users/search', {
+      const response = await axios.get('https://kidgage-admin-rdld.onrender.com/api/users/search', {
         params: { query }
       });
       if (response.data) {
@@ -86,44 +86,7 @@ const EditAcademyForm = () => {
       return () => clearTimeout(timer); // Cleanup the timer on component unmount
     }
   }, [success]);
- 
-//   const handleChange = (e) => {
-//     const { name, value, type, files } = e.target;
-//     if (files) {
-//         setFormData(prevState => ({
-//            ...prevState,
-//             [name]: Array.from(files)
-//         }));
-//     } else {
-//         setFormData(prevState => ({
-//            ...prevState,
-//             [name]: value
-//         }));
-//     }
-// };
 
-// const handleChange = (e) => {
-//     const { name, value, type, files } = e.target;
-//     let formData = new FormData();
-  
-//     if (files) {
-//       // Convert files to base64 strings and append to FormData
-//       Object.keys(files).forEach(key => {
-//         const file = files[key];
-//         const reader = new FileReader();
-//         reader.onloadend = () => {
-//           formData.append(name, reader.result);
-//         };
-//         reader.readAsDataURL(file);
-//       });
-//     } else {
-//       // Append non-file fields to FormData
-//       formData.append(name, value);
-//     }
-  
-//     // Update the state with the FormData object
-//     setFormData(formData);
-//   };
   
 const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -154,7 +117,7 @@ const handleChange = (e) => {
   if (isEditMode) {
     try {
 
-      const response = await axios.put(`https://kidgage-adminbackend.onrender.com/api/users/academy/${academyData._id}`, formData, {
+      const response = await axios.put(`https://kidgage-admin-rdld.onrender.com/api/users/academy/${academyData._id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setSuccess('Academy updated successfully!');
@@ -183,7 +146,7 @@ const handleChange = (e) => {
 
   const handleConfirmDelete = async () => {
     try {
-      await axios.delete(`https://kidgage-adminbackend.onrender.com/api/users/academy/${academyData._id}`);
+      await axios.delete(`https://kidgage-admin-rdld.onrender.com/api/users/academy/${academyData._id}`);
       setAcademyData(null);
       setFormData({
         username: '',
