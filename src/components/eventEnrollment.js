@@ -18,7 +18,7 @@ const EventEnrollment = () => {
 
     const fetchPosters = async () => {
         try {
-            const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/posters');
+            const response = await axios.get('https://kidgage-admin-rdld.onrender.com/api/posters');
             setPosters(response.data);
         } catch (error) {
             console.error('Error fetching posters:', error);
@@ -38,7 +38,7 @@ const EventEnrollment = () => {
 
     const handleViewEnrollment = async (poster) => {
         try {
-            const response = await axios.get(`https://kidgage-adminbackend.onrender.com/api/bookings/event/${poster._id}`);
+            const response = await axios.get(`https://kidgage-admin-rdld.onrender.com/api/bookings/event/${poster._id}`);
             setStudents(response.data);
             setSelectedPoster(poster);
             setViewMode(true);

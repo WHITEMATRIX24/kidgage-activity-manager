@@ -14,7 +14,7 @@ const PromoteCourse = () => {
 
     const handleSearch = async () => {
         try {
-            const response = await axios.get(`https://kidgage-adminbackend.onrender.com/api/promoted/search?email=${searchQuery}`);
+            const response = await axios.get(`https://kidgage-admin-rdld.onrender.com/api/promoted/search?email=${searchQuery}`);
             setProvider(response.data);
             fetchCourses(response.data._id);
         } catch (error) {
@@ -26,7 +26,7 @@ const PromoteCourse = () => {
 
     const fetchCourses = async (providerId) => {
         try {
-            const response = await axios.get(`https://kidgage-adminbackend.onrender.com/api/promoted/courses/${providerId}`);
+            const response = await axios.get(`https://kidgage-admin-rdld.onrender.com/api/promoted/courses/${providerId}`);
             setCourses(response.data);
         } catch (error) {
             console.error('Error fetching courses:', error);
