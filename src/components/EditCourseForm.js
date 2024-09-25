@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './AddCourseForm.css'; // Reuse the same CSS file for styling
-import { FaChevronDown, FaEdit, FaTrash, FaSearch} from 'react-icons/fa';
+import { FaChevronDown, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
 import LocationInput from './LocationInput'; // Reuse the LocationInput component
 
 const EditCourseForm = () => {
@@ -138,7 +138,7 @@ const EditCourseForm = () => {
         e.preventDefault();
         if (isEditMode) {
             try {
-                const response = await axios.put(`https://kidgage-admin-rdld.onrender.com/api/courses/update/${courseData._id}`, formData);
+                const response = await axios.put(`http://localhost:5001/api/courses/update/${courseData._id}`, formData);
                 setSuccess('Course updated successfully!');
                 setError('');
                 setIsEditMode(false);
@@ -159,24 +159,24 @@ const EditCourseForm = () => {
             setCourseData(null);
             setFormData({
                 providerId: '',
-        name: '',
-        duration: '',
-        durationUnit: 'days',
-        startDate: '',
-        endDate: '',
-        description: '',
-        feeAmount: '',
-        feeType: 'full_course',
-        days: [],
-        timeSlots: [{ from: '', to: '' }],
-        location: [
-            { address: '', city: '', phoneNumber: '' }
-        ],
-        courseType: '',
-        images: [],
-        promoted: false,
-        ageGroup: { ageStart: '', ageEnd: '' },
-        preferredGender: 'Any'
+                name: '',
+                duration: '',
+                durationUnit: 'days',
+                startDate: '',
+                endDate: '',
+                description: '',
+                feeAmount: '',
+                feeType: 'full_course',
+                days: [],
+                timeSlots: [{ from: '', to: '' }],
+                location: [
+                    { address: '', city: '', phoneNumber: '' }
+                ],
+                courseType: '',
+                images: [],
+                promoted: false,
+                ageGroup: { ageStart: '', ageEnd: '' },
+                preferredGender: 'Any'
             });
             setShowConfirmPopup(false);
             setSuccess('Course deleted successfully!');
@@ -227,8 +227,8 @@ const EditCourseForm = () => {
     const removeLocation = (index) => {
         setFormData(prev => ({ ...prev, location: prev.location.filter((_, i) => i !== index) }));
     };
-     // Add a new image input
-     const addImage = () => {
+    // Add a new image input
+    const addImage = () => {
         setFormData(prev => ({ ...prev, images: [...prev.images, ''] }));
     };
 
@@ -251,11 +251,19 @@ const EditCourseForm = () => {
 
     const handleAgeGroupChange = (e) => {
         const { name, value } = e.target;
+
         setFormData((prev) => ({
             ...prev,
-            ageGroup: { ...prev.ageGroup, [name]: value }
+            ageGroup: Array.isArray(prev.ageGroup) && prev.ageGroup.length > 0
+                ? prev.ageGroup.map((group, index) =>
+                    index === 0
+                        ? { ...group, [name]: value }  // Update the first object in the array
+                        : group
+                )
+                : [{ [name]: value }] // If ageGroup is empty or not an array, initialize it with an object
         }));
     };
+
 
     return (
         <div className="add-course-form-container">
@@ -286,16 +294,16 @@ const EditCourseForm = () => {
                         <form className="add-course-form" onSubmit={handleSubmit}>
 
                             <div className="form-group add-course-group">
-                            <label htmlFor="name">Course Name</label>
-                            <input
-                                        type="text"
-                                        name="name"
-                                        value={formData.name}
-                                        onChange={handleChange}
-                                        placeholder="Course Name"
-                                        required
-                                        disabled={!isEditMode}
-                                    />
+                                <label htmlFor="name">Course Name</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    placeholder="Course Name"
+                                    required
+                                    disabled={!isEditMode}
+                                />
                             </div>
                             {/* Preferred Gender and Course Type */}
                             <div className="form-group add-course-label-group">
@@ -420,9 +428,9 @@ const EditCourseForm = () => {
                             </div>
                             <label className='selecet-days-label'>Select Days:</label>
                             <div className="form-group add-days-group">
-                                
+
                                 <div className="days-selection">
-                                
+
                                     {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
                                         <label key={day} className="day-checkbox">
                                             <input
@@ -440,12 +448,12 @@ const EditCourseForm = () => {
                             </div>
 
                             <div className="form-group">
-                                
+
                                 <div className='btn-grpp'>
-                                <label>Time Slots:</label>
-                                <button disabled={!isEditMode} type="button" className="add-time-slot-btn" onClick={addTimeSlot}>
-                                    Add Time Slot
-                                </button>
+                                    <label>Time Slots:</label>
+                                    <button disabled={!isEditMode} type="button" className="add-time-slot-btn" onClick={addTimeSlot}>
+                                        Add Time Slot
+                                    </button>
                                 </div>
                                 {formData.timeSlots.map((slot, index) => (
                                     <div key={index} className="time-slot">
@@ -489,8 +497,8 @@ const EditCourseForm = () => {
                                     name="ageStart"
                                     placeholder='Start Age'
                                     value={
-                                        formData.ageGroup && formData.ageGroup[0]?.ageStart 
-                                            ? new Date(formData.ageGroup[0].ageStart).toISOString().split('T')[0] 
+                                        formData.ageGroup && formData.ageGroup[0]?.ageStart
+                                            ? new Date(formData.ageGroup[0].ageStart).toISOString().split('T')[0]
                                             : ''
                                     }
                                     onChange={handleAgeGroupChange}
@@ -503,8 +511,8 @@ const EditCourseForm = () => {
                                     name="ageEnd"
                                     placeholder='End Age'
                                     value={
-                                        formData.ageGroup && formData.ageGroup[0]?.ageEnd 
-                                            ? new Date(formData.ageGroup[0].ageEnd).toISOString().split('T')[0] 
+                                        formData.ageGroup && formData.ageGroup[0]?.ageEnd
+                                            ? new Date(formData.ageGroup[0].ageEnd).toISOString().split('T')[0]
                                             : ''
                                     }
                                     onChange={handleAgeGroupChange}
@@ -512,8 +520,6 @@ const EditCourseForm = () => {
                                     disabled={!isEditMode}
                                 />
                             </div>
-
-                            {/* Locations */}
                             <div className="form-group">
                                 <div className='btn-grpp'>
                                     <label>Locations:</label>
@@ -540,7 +546,7 @@ const EditCourseForm = () => {
                                             value={loc.city}
                                             onSelectAddress={(newCity) => handleLocationChange(index, 'city', newCity)}
                                             disabled={!isEditMode}
-                                            placeholder="City"
+                                            placeholder={index === 0 ? 'city' : `city ${index + 1}`}
                                             style={{ width: '30%' }}
                                         />
 
@@ -569,7 +575,7 @@ const EditCourseForm = () => {
                                         )}
                                     </div>
                                 ))}
-                            </div>  
+                            </div>
                             {/* Course Images */}
                             <div className="form-group">
                                 <div className='btn-grpp'>
@@ -578,12 +584,12 @@ const EditCourseForm = () => {
                                         Add Images
                                     </button>
                                 </div>
-                                
+
                                 {formData.images.map((img, index) => (
-                                    
-                                    <div key={index} className="time-slot">   
+
+                                    <div key={index} className="time-slot">
                                         {/* Display existing image in base64 format */}
-                                         <input
+                                        <input
                                             type="file"
                                             name={`academyImg-${index}`}
                                             onChange={(e) => handleImageChange(index, e)}
@@ -610,7 +616,7 @@ const EditCourseForm = () => {
                             <div className="button-container">
                                 {!isEditMode ? (
                                     <>
-                                    <></>
+                                        <></>
                                         <button type="button" onClick={() => setIsEditMode(true)}><FaEdit /> Edit</button>
                                         <button type="button" className='delete-course-button' onClick={handleDelete}>
                                             <FaTrash /> Delete

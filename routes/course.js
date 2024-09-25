@@ -89,17 +89,41 @@ router.get('/search', async (req, res) => {
 });
 
 // Update a course
+// router.put('/update/:id', async (req, res) => {
+//   try {
+//     const course = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true });
+//     if (!course) {
+//       return res.status(404).json({ message: 'Course not found' });
+//     }
+//     res.json(course);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// });
 router.put('/update/:id', async (req, res) => {
   try {
-    const course = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    // Find the course by ID
+    let course = await Course.findById(req.params.id);
     if (!course) {
       return res.status(404).json({ message: 'Course not found' });
     }
-    res.json(course);
+
+    // Merge existing course with the fields to be updated
+    Object.keys(req.body).forEach((key) => {
+      if (req.body[key] !== undefined && req.body[key] !== null) {
+        course[key] = req.body[key]; // Update only fields that are provided and not null/undefined
+      }
+    });
+
+    // Save the updated course
+    const updatedCourse = await course.save();
+
+    res.json(updatedCourse);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
+
 
 // Delete a course
 router.delete('/delete/:id', async (req, res) => {

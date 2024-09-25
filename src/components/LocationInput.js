@@ -45,7 +45,6 @@ class LocationInput extends React.Component {
                     type="text"
                     value={this.state.address}
                     onChange={(e) => this.handleChange(e.target.value)}
-                    placeholder="City"
                     className="time-slot"
                 />
                 <div className="autocomplete-dropdown-container">
