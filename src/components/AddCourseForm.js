@@ -468,13 +468,24 @@ const removeImage = (index) => {
                                     style={{ width: '33%' }}
                                 />
 
-                                <LocationInput
-                                    className="form-group"
+                                {/* Dropdown for selecting a city */}
+                                <select
+                                    name="city"
                                     value={loc.city}
-                                    onSelectAddress={(newCity) => handleLocationChange(index, 'city', newCity)}
+                                    onChange={(e) => handleLocationChange(index, 'city', e.target.value)}
                                     style={{ width: '33%' }}
-                                />
-
+                                >
+                                            <option value="Doha">Doha</option>
+                                            <option value="Al Rayyan">Al Rayyan</option>
+                                            <option value="Al Wakrah">Al Wakrah</option>
+                                            <option value="Al Shamal">Al Shamal</option>
+                                            <option value="Al Khor">Al Khor</option>
+                                            <option value="Umm Salal">Umm Salal</option>
+                                            <option value="Al Daayen">Al Daayen</option>
+                                            <option value="Al Shahaniya">Al Shahaniya</option>
+                                            <option value="Dukhan">Dukhan</option>
+                                            <option value="Mesaieed">Mesaieed</option>
+                                </select>
                                 <input
                                     type="text"
                                     name="phoneNumber"

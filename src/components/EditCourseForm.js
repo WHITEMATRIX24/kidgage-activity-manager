@@ -540,15 +540,25 @@ const EditCourseForm = () => {
                                             required
                                             disabled={!isEditMode}
                                         />
-
-                                        {/* City input using LocationInput component */}
-                                        <LocationInput
+                                        <select
+                                            name="city"
                                             value={loc.city}
-                                            onSelectAddress={(newCity) => handleLocationChange(index, 'city', newCity)}
-                                            disabled={!isEditMode}
-                                            placeholder={index === 0 ? 'city' : `city ${index + 1}`}
-                                            style={{ width: '30%' }}
-                                        />
+                                            onChange={(e) => handleLocationChange(index, 'city', e.target.value)}
+                                            style={{ width: '33%' }}
+                                        >
+                                            <option value="Doha">Doha</option>
+                                            <option value="Al Rayyan">Al Rayyan</option>
+                                            <option value="Al Wakrah">Al Wakrah</option>
+                                            <option value="Al Shamal">Al Shamal</option>
+                                            <option value="Al Khor">Al Khor</option>
+                                            <option value="Umm Salal">Umm Salal</option>
+                                            <option value="Al Daayen">Al Daayen</option>
+                                            <option value="Al Shahaniya">Al Shahaniya</option>
+                                            <option value="Dukhan">Dukhan</option>
+                                            <option value="Mesaieed">Mesaieed</option>
+
+                                        </select>
+
 
                                         {/* Phone Number input */}
                                         <input
