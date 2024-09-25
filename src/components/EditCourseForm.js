@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './AddCourseForm.css'; // Reuse the same CSS file for styling
-import { FaChevronDown, FaEdit, FaTrash, FaSearch,FaTimes ,FaPlus} from 'react-icons/fa';
+import { FaChevronDown, FaEdit, FaTrash, FaSearch} from 'react-icons/fa';
+import LocationInput from './LocationInput'; // Reuse the LocationInput component
 
 const EditCourseForm = () => {
     const [showForm, setShowForm] = useState(true);
@@ -10,18 +11,23 @@ const EditCourseForm = () => {
     const [formData, setFormData] = useState({
         providerId: '',
         name: '',
-        hashtags: [],
         duration: '',
         durationUnit: 'days',
         startDate: '',
         endDate: '',
         description: '',
         feeAmount: '',
-        feeType: '',
+        feeType: 'full_course',
         days: [],
         timeSlots: [{ from: '', to: '' }],
-        location: '',
-        newHashtag: '#' // Initialize with '#'
+        location: [
+            { address: '', city: '', phoneNumber: '' }
+        ],
+        courseType: '',
+        images: [],
+        promoted: false,
+        ageGroup: { ageStart: '', ageEnd: '' },
+        preferredGender: 'Any'
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -59,7 +65,6 @@ const EditCourseForm = () => {
                 setFormData({
                     providerId: response.data.providerId,
                     name: response.data.name,
-                    hashtags: response.data.hashtags,
                     duration: response.data.duration,
                     durationUnit: response.data.durationUnit,
                     startDate: response.data.startDate,
@@ -69,7 +74,12 @@ const EditCourseForm = () => {
                     feeType: response.data.feeType,
                     days: response.data.days,
                     timeSlots: response.data.timeSlots,
-                    location: response.data.location
+                    location: response.data.location,
+                    courseType: response.data.courseType,
+                    images: [], // Images are handled separately
+                    promoted: response.data.promoted,
+                    ageGroup: response.data.ageGroup,
+                    preferredGender: response.data.preferredGender
                 });
                 setSearchError('');
                 setError('');
@@ -92,13 +102,6 @@ const EditCourseForm = () => {
         }));
     };
 
-    const handleHashtagsChange = (e) => {
-        const { value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
-            hashtags: value.split(',').map(tag => tag.trim()).filter(tag => tag)
-        }));
-    };
 
     const handleDayChange = (e) => {
         const { value, checked } = e.target;
@@ -156,18 +159,24 @@ const EditCourseForm = () => {
             setCourseData(null);
             setFormData({
                 providerId: '',
-                name: '',
-                hashtags: [],
-                duration: '',
-                durationUnit: 'days',
-                startDate: '',
-                endDate: '',
-                description: '',
-                feeAmount: '',
-                feeType: '',
-                days: [],
-                timeSlots: [{ from: '', to: '' }],
-                location: ''
+        name: '',
+        duration: '',
+        durationUnit: 'days',
+        startDate: '',
+        endDate: '',
+        description: '',
+        feeAmount: '',
+        feeType: 'full_course',
+        days: [],
+        timeSlots: [{ from: '', to: '' }],
+        location: [
+            { address: '', city: '', phoneNumber: '' }
+        ],
+        courseType: '',
+        images: [],
+        promoted: false,
+        ageGroup: { ageStart: '', ageEnd: '' },
+        preferredGender: 'Any'
             });
             setShowConfirmPopup(false);
             setSuccess('Course deleted successfully!');
@@ -177,6 +186,20 @@ const EditCourseForm = () => {
             setShowConfirmPopup(false);
         }
     };
+    const [courseTypes, setCourseTypes] = useState([]);
+
+    // Fetch course categories when the component mounts
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get('https://kidgage-admin-rdld.onrender.com/api/course-category/categories');
+                setCourseTypes(response.data);
+            } catch (error) {
+                console.error('Error fetching categories', error);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     const handleCancelDelete = () => {
         setShowConfirmPopup(false);
@@ -185,31 +208,54 @@ const EditCourseForm = () => {
     const toggleFormVisibility = () => {
         setShowForm(!showForm);
     };
-
-    const handleHashtagChange = (e) => {
-        // Ensure that '#' is always the prefix for hashtags
-        const value = e.target.value;
-        setFormData((prev) => ({ ...prev, newHashtag: value }));
+    // Handle location changes
+    const handleLocationChange = (index, field, value) => {
+        const updatedLocation = [...formData.location];
+        updatedLocation[index] = {
+            ...updatedLocation[index],
+            [field]: value
+        };
+        setFormData(prev => ({ ...prev, location: updatedLocation }));
     };
 
-    const addHashtag = () => {
-        const hashtag = formData.newHashtag.trim();
-        if (hashtag && !formData.hashtags.includes(hashtag)) {
-            setFormData((prev) => ({
-                ...prev,
-                hashtags: [...prev.hashtags, hashtag],
-                newHashtag: '#' // Reset to default '#'
-            }));
+    // Add a new location
+    const addLocation = () => {
+        setFormData(prev => ({ ...prev, location: [...prev.location, { address: '', city: '', phoneNumber: '' }] }));
+    };
+
+    // Remove a location
+    const removeLocation = (index) => {
+        setFormData(prev => ({ ...prev, location: prev.location.filter((_, i) => i !== index) }));
+    };
+     // Add a new image input
+     const addImage = () => {
+        setFormData(prev => ({ ...prev, images: [...prev.images, ''] }));
+    };
+
+    // Remove an image input
+    const removeImage = (index) => {
+        setFormData(prev => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }));
+    };
+
+    // Handle image uploads
+    const handleImageChange = (index, e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setFormData(prev => {
+                const newImages = [...prev.images];
+                newImages[index] = file;
+                return { ...prev, images: newImages };
+            });
         }
     };
 
-    const removeHashtag = (hashtag) => {
+    const handleAgeGroupChange = (e) => {
+        const { name, value } = e.target;
         setFormData((prev) => ({
             ...prev,
-            hashtags: prev.hashtags.filter(h => h !== hashtag)
+            ageGroup: { ...prev.ageGroup, [name]: value }
         }));
     };
-
 
     return (
         <div className="add-course-form-container">
@@ -238,10 +284,9 @@ const EditCourseForm = () => {
                     {searchError && <p className="error-message">{searchError}</p>}
                     {courseData && (
                         <form className="add-course-form" onSubmit={handleSubmit}>
-                            <div className="form-group add-course-label-group">
-                        <label htmlFor="name">Course Name</label>
-                            </div>
+
                             <div className="form-group add-course-group">
+                            <label htmlFor="name">Course Name</label>
                             <input
                                         type="text"
                                         name="name"
@@ -252,38 +297,39 @@ const EditCourseForm = () => {
                                         disabled={!isEditMode}
                                     />
                             </div>
-                            <label>Course Hashtags</label>
-                            <div className="side-by-side2">
-                                <div className="interest-input-group">
-                                    <input
-                                        type="text"
-                                        id="newHashtag"
-                                        name="newHashtag"
-                                        value={formData.newHashtag}
-                                        onChange={handleHashtagChange}
-                                        placeholder="Add new hashtag"
-                                        disabled={!isEditMode}
-                                    
-                                    />
-                                    <button disabled={!isEditMode} type="button" className="add-interest-btn" onClick={addHashtag}>
-                                        <FaPlus />
-                                    </button>
-                                </div>
-                                <div className="interest-box">
-                                    {formData.hashtags && formData.hashtags.map((hashtag) => (
-                                        <div key={hashtag} className="interest-item">
-                                            <span>{hashtag}</span>
-                                            <button
-                                                type="button"
-                                                className="remove-interest-btn"
-                                                onClick={() => removeHashtag(hashtag)}
-                                                disabled={!isEditMode}
-                                            >
-                                                <FaTimes />
-                                            </button>
-                                        </div>
+                            {/* Preferred Gender and Course Type */}
+                            <div className="form-group add-course-label-group">
+                                <label htmlFor="preferredGender">Preferred Gender</label>
+                                <label htmlFor="courseType">Course Type</label>
+                            </div>
+                            <div className='form-group add-duration-group'>
+                                <select
+                                    id="preferredGender"
+                                    name="preferredGender"
+                                    value={formData.preferredGender}
+                                    onChange={handleChange}
+                                    required
+                                    disabled={!isEditMode}
+                                >
+                                    <option value="Any">Any</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                                <select
+                                    id="courseType"
+                                    name="courseType"
+                                    value={formData.courseType}
+                                    onChange={handleChange}
+                                    required
+                                    disabled={!isEditMode}
+                                >
+                                    <option value="">Select Course Type</option>
+                                    {courseTypes.map((type) => (
+                                        <option key={type._id} value={type.name}>
+                                            {type.name}
+                                        </option>
                                     ))}
-                                </div>
+                                </select>
                             </div>
                             <div className="form-group add-duration-label-group">
                                 <label htmlFor="startDate">Course Duration</label>
@@ -321,7 +367,7 @@ const EditCourseForm = () => {
                                     type="date"
                                     id="startDate"
                                     name="startDate"
-                                    value={formData.startDate}
+                                    value={formData.startDate ? new Date(formData.startDate).toISOString().split('T')[0] : ''}
                                     onChange={handleChange}
                                     disabled={!isEditMode}
                                 />
@@ -330,7 +376,7 @@ const EditCourseForm = () => {
                                     type="date"
                                     id="endDate"
                                     name="endDate"
-                                    value={formData.endDate}
+                                    value={formData.endDate ? new Date(formData.endDate).toISOString().split('T')[0] : ''}
                                     onChange={handleChange}
                                     disabled={!isEditMode}
                                 />
@@ -394,10 +440,13 @@ const EditCourseForm = () => {
                             </div>
 
                             <div className="form-group">
+                                
+                                <div className='btn-grpp'>
                                 <label>Time Slots:</label>
                                 <button disabled={!isEditMode} type="button" className="add-time-slot-btn" onClick={addTimeSlot}>
                                     Add Time Slot
                                 </button>
+                                </div>
                                 {formData.timeSlots.map((slot, index) => (
                                     <div key={index} className="time-slot">
                                         <input
@@ -428,18 +477,136 @@ const EditCourseForm = () => {
                                     </div>
                                 ))}
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="location">Location</label>
+                            {/* Age Group */}
+                            <div className="form-group add-course-label-group">
+                                <label htmlFor="ageStart">Age Group Start</label>
+                                <label htmlFor="ageEnd">Age Group End</label>
+                            </div>
+                            <div className="form-group add-duration-group">
                                 <input
-                                    type="text"
-                                    id="location"
-                                    name="location"
-                                    value={formData.location}
-                                    onChange={handleChange}
+                                    type="date"
+                                    id="ageStart"
+                                    name="ageStart"
+                                    placeholder='Start Age'
+                                    value={
+                                        formData.ageGroup && formData.ageGroup[0]?.ageStart 
+                                            ? new Date(formData.ageGroup[0].ageStart).toISOString().split('T')[0] 
+                                            : ''
+                                    }
+                                    onChange={handleAgeGroupChange}
+                                    required
                                     disabled={!isEditMode}
                                 />
-                            </div>     
-                            
+                                <input
+                                    type="date"
+                                    id="ageEnd"
+                                    name="ageEnd"
+                                    placeholder='End Age'
+                                    value={
+                                        formData.ageGroup && formData.ageGroup[0]?.ageEnd 
+                                            ? new Date(formData.ageGroup[0].ageEnd).toISOString().split('T')[0] 
+                                            : ''
+                                    }
+                                    onChange={handleAgeGroupChange}
+                                    required
+                                    disabled={!isEditMode}
+                                />
+                            </div>
+
+                            {/* Locations */}
+                            <div className="form-group">
+                                <div className='btn-grpp'>
+                                    <label>Locations:</label>
+                                    <button type="button" className="add-time-slot-btn" onClick={addLocation} disabled={!isEditMode}>
+                                        Add Location
+                                    </button>
+                                </div>
+                                {formData.location.map((loc, index) => (
+                                    <div key={index} className="time-slot" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                        {/* Address input */}
+                                        <input
+                                            type="text"
+                                            name="address"
+                                            value={loc.address}
+                                            placeholder={index === 0 ? 'Address' : `Address ${index + 1}`}
+                                            onChange={(e) => handleLocationChange(index, 'address', e.target.value)}
+                                            style={{ width: '30%' }}
+                                            required
+                                            disabled={!isEditMode}
+                                        />
+
+                                        {/* City input using LocationInput component */}
+                                        <LocationInput
+                                            value={loc.city}
+                                            onSelectAddress={(newCity) => handleLocationChange(index, 'city', newCity)}
+                                            disabled={!isEditMode}
+                                            placeholder="City"
+                                            style={{ width: '30%' }}
+                                        />
+
+                                        {/* Phone Number input */}
+                                        <input
+                                            type="text"
+                                            name="phoneNumber"
+                                            value={loc.phoneNumber}
+                                            placeholder={index === 0 ? 'Phone Number' : `Phone Number ${index + 1}`}
+                                            onChange={(e) => handleLocationChange(index, 'phoneNumber', e.target.value)}
+                                            style={{ width: '30%' }}
+                                            required
+                                            disabled={!isEditMode}
+                                        />
+
+                                        {/* Remove Location Button */}
+                                        {index > 0 && (
+                                            <button
+                                                type="button"
+                                                className="rem-button"
+                                                onClick={() => removeLocation(index)}
+                                                disabled={!isEditMode}
+                                            >
+                                                <FaTrash />
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>  
+                            {/* Course Images */}
+                            <div className="form-group">
+                                <div className='btn-grpp'>
+                                    <label>Course Images<span style={{ fontSize: '.8rem', color: 'grey' }}> [ size: 1280 X 1028 ]</span>:</label>
+                                    <button type="button" className="add-time-slot-btn" onClick={addImage} disabled={!isEditMode}>
+                                        Add Images
+                                    </button>
+                                </div>
+                                
+                                {formData.images.map((img, index) => (
+                                    
+                                    <div key={index} className="time-slot">   
+                                        {/* Display existing image in base64 format */}
+                                         <input
+                                            type="file"
+                                            name={`academyImg-${index}`}
+                                            onChange={(e) => handleImageChange(index, e)}
+                                            accept=".png, .jpg, .jpeg"
+                                            disabled={!isEditMode}
+                                            required={index === 0} // Require at least one image
+                                        />
+                                        {index > 0 && (
+                                            <button
+                                                type="button"
+                                                className="rem-button"
+                                                onClick={() => removeImage(index)}
+                                                disabled={!isEditMode}
+                                            >
+                                                <FaTrash />
+                                            </button>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Action Buttons */}
+
                             <div className="button-container">
                                 {!isEditMode ? (
                                     <>

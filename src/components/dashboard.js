@@ -14,7 +14,6 @@ import EditPosterForm from './EditPosterForm';
 import AddCourseCategoryForm from './AddCourseCategory';
 import EditCourseCategoryForm from './EditCourseCategoryForm';
 import EditParentForm from './EditParentForm';
-import EventEnrollment from './eventEnrollment';
 import EditStudentForm from './EditStudentForm';
 import EditAcademyForm from './EditAcademyForm';
 import AddAdvertisement from './AddAdvertisement1';
@@ -130,7 +129,6 @@ const Dashboard = () => {
                     <section id="event-posters" className="db-section">
                         <AddPosterForm />
                         <EditPosterForm onDelete={handleDeletePoster} />
-                        <EventEnrollment />
                     </section>
                     <section id="advertisements" className="db-section">
                         <AddAdvertisement />

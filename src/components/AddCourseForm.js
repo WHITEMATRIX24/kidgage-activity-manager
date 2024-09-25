@@ -20,7 +20,7 @@ function AddCourseForm() {
             { address: '', city: '', phoneNumber: '' }
         ],
         courseType: '',
-        images: [],
+        images: [''],
         promoted: false,
         ageGroup: { ageStart: '', ageEnd: '' },
         preferredGender: 'Any' // Default value can be set as needed
@@ -101,11 +101,6 @@ function AddCourseForm() {
     };
 
 
-    const handleSelectAddress = (selectedAddress) => {
-        // Handle the selected address here
-        console.log("Selected address:", selectedAddress);
-    };
-
     const addLocation = () => {
         setCourse((prev) => ({ ...prev, location: [...prev.location, ''] }));
     };
@@ -113,26 +108,30 @@ function AddCourseForm() {
     const removeLocation = (index) => {
         setCourse((prev) => ({ ...prev, location: prev.location.filter((_, i) => i !== index) }));
     };
+// Function to add a new image input
+const addImage = () => {
+    setCourse((prevCourse) => ({ ...prevCourse, images: [...prevCourse.images, ''] }));
+};
 
-    const addImage = () => {
-        setCourse((prevCourse) => ({ ...prevCourse, images: [...prevCourse.images, ''] }));
-    };
+// Function to handle the image input change
+const handleImageChange = (index, e) => {
+    const file = e.target.files[0]; // Get the selected file
+    if (file) {
+        setCourse((prevCourse) => {
+            const newImages = [...prevCourse.images];
+            newImages[index] = file; // Store the file directly
+            return { ...prevCourse, images: newImages };
+        });
+    }
+};
 
-    const handleImageChange = (index, e) => {
-        const file = e.target.files[0]; // Get the selected file
-        if (file) {
-            setCourse((prevCourse) => {
-                const newImages = [...prevCourse.images];
-                newImages[index] = file; // Store the file directly
-                return { ...prevCourse, images: newImages };
-            });
-        }
-    };
-
-    const removeImage = (index) => {
-        setCourse({ ...course, images: course.images.filter((_, i) => i !== index) });
-    };
-
+// Function to remove an image input
+const removeImage = (index) => {
+    setCourse((prevCourse) => ({
+        ...prevCourse,
+        images: prevCourse.images.filter((_, i) => i !== index),
+    }));
+};
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -201,9 +200,11 @@ function AddCourseForm() {
         const { name, value } = e.target;
         setCourse((prev) => ({
             ...prev,
-            ageGroup: { ...prev.ageGroup, [name]: value }
+            ageGroup: { ...prev.ageGroup, [name]: value || '' }, // Set to empty string if value is undefined
         }));
     };
+
+    
     const toggleFormVisibility = () => {
         setShowForm(!showForm);
     };

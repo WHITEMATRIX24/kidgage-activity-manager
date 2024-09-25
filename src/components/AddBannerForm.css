@@ -121,7 +121,7 @@
 
 .add-course-form .add-time-slot-btn,
 .add-course-form button[type="submit"] {
-    padding: 10px 24px;
+    padding: 10px 15px;
     background-color: #387CB8;
     border: none;
     border-radius: 20px;
@@ -299,13 +299,13 @@
 
     .add-course-form .add-time-slot-btn{
         padding: 10px 10px;
-        width: 150px;
-        font-size: 12px;
+        width: 130px;
+        font-size: 10px;
     }
     .add-course-form button[type="submit"] {
         padding: 10px 10px;
-        width: 150px;
-        font-size: 12px;
+        width: 130px;
+        font-size: 10px;
     }
 }
 
