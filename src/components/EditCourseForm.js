@@ -138,7 +138,7 @@ const EditCourseForm = () => {
         e.preventDefault();
         if (isEditMode) {
             try {
-                const response = await axios.put(`http://localhost:5001/api/courses/update/${courseData._id}`, formData);
+                const response = await axios.put(`https://kidgage-admin-rdld.onrender.com/api/courses/update/${courseData._id}`, formData);
                 setSuccess('Course updated successfully!');
                 setError('');
                 setIsEditMode(false);
