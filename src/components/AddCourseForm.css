@@ -754,3 +754,21 @@ padding: 10px;
 .add-course-form .course-item:hover,.add .course-item::selection{
     background-color: #2a5f8e;
 }
+
+.saved-images-display {
+    margin-top: 20px;
+}
+
+.image-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.image-container {
+    border: 1px solid #ddd;
+    padding: 5px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    align-items: center;
+}

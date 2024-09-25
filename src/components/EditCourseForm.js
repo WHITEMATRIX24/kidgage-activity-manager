@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import axios from 'axios';
 import './AddCourseForm.css'; // Reuse the same CSS file for styling
-import { FaChevronDown, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
-import LocationInput from './LocationInput'; // Reuse the LocationInput component
+import { FaChevronDown, FaEdit, FaTrash, FaSearch,FaTrashAlt,FaPlus } from 'react-icons/fa';
 
 const EditCourseForm = () => {
     const [showForm, setShowForm] = useState(true);
@@ -76,7 +75,7 @@ const EditCourseForm = () => {
                     timeSlots: response.data.timeSlots,
                     location: response.data.location,
                     courseType: response.data.courseType,
-                    images: [], // Images are handled separately
+                    images: response.data.images || [], // Fetch images from the response
                     promoted: response.data.promoted,
                     ageGroup: response.data.ageGroup,
                     preferredGender: response.data.preferredGender
@@ -227,28 +226,88 @@ const EditCourseForm = () => {
     const removeLocation = (index) => {
         setFormData(prev => ({ ...prev, location: prev.location.filter((_, i) => i !== index) }));
     };
-    // Add a new image input
-    const addImage = () => {
-        setFormData(prev => ({ ...prev, images: [...prev.images, ''] }));
-    };
+    // // Add a new image input
+    // const addImage = () => {
+    //     setFormData(prev => ({ ...prev, images: [...prev.images, ''] }));
+    // };
 
-    // Remove an image input
-    const removeImage = (index) => {
-        setFormData(prev => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }));
-    };
+    // // Remove an image input
+    // const removeImage = (index) => {
+    //     setFormData(prev => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }));
+    // };
 
-    // Handle image uploads
-    const handleImageChange = (index, e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setFormData(prev => {
-                const newImages = [...prev.images];
-                newImages[index] = file;
-                return { ...prev, images: newImages };
+    // // Handle image uploads
+    // const handleImageChange = (index, e) => {
+    //     const file = e.target.files[0];
+    //     if (file) {
+    //         setFormData(prev => {
+    //             const newImages = [...prev.images];
+    //             newImages[index] = file;
+    //             return { ...prev, images: newImages };
+    //         });
+    //     }
+    // };
+    const fileInputRef = useRef(null); // Reference for the file input
+// Helper function to convert ArrayBuffer to Base64
+const arrayBufferToBase64 = (buffer) => {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+
+    for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+
+    return btoa(binary); // Encode binary string to Base64
+};
+    const handleImageChange = (event) => {
+        const files = event.target.files;
+        const newImagesPromises = Array.from(files).map(file => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+    
+                // Read the file as an ArrayBuffer
+                reader.readAsArrayBuffer(file);
+    
+                reader.onload = () => {
+                    // Convert the ArrayBuffer to Base64
+                    const base64String = arrayBufferToBase64(reader.result);
+                    resolve(base64String); // Resolve promise with the Base64 string
+                };
+    
+                reader.onerror = (error) => {
+                    reject(error); // Reject promise on error
+                };
             });
+        });
+        // Wait for all images to be read and then update the state
+        Promise.all(newImagesPromises).then((loadedImages) => {
+            setFormData(prevState => ({
+                ...prevState,
+                images: [...prevState.images, ...loadedImages] // Add new images to the existing array
+            }));
+        });
+
+        event.target.value = null; // Reset file input
+    };
+
+    // Function to trigger file input
+    const addImage = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click(); // Simulate click on file input
         }
     };
 
+    // Function to remove an image
+    const removeImage = (index) => {
+        const updatedImages = formData.images.filter((_, imgIndex) => imgIndex !== index);
+        setFormData(prevState => ({
+            ...prevState,
+            images: updatedImages // Update images in state
+        }));
+    };
+
+    
     const handleAgeGroupChange = (e) => {
         const { name, value } = e.target;
 
@@ -263,7 +322,7 @@ const EditCourseForm = () => {
                 : [{ [name]: value }] // If ageGroup is empty or not an array, initialize it with an object
         }));
     };
-
+    const getBase64ImageSrc = (base64String) => `data:image/jpeg;base64,${base64String}`;
 
     return (
         <div className="add-course-form-container">
@@ -587,7 +646,7 @@ const EditCourseForm = () => {
                                 ))}
                             </div>
                             {/* Course Images */}
-                            <div className="form-group">
+                            {/* <div className="form-group">
                                 <div className='btn-grpp'>
                                     <label>Course Images<span style={{ fontSize: '.8rem', color: 'grey' }}> [ size: 1280 X 1028 ]</span>:</label>
                                     <button type="button" className="add-time-slot-btn" onClick={addImage} disabled={!isEditMode}>
@@ -598,7 +657,6 @@ const EditCourseForm = () => {
                                 {formData.images.map((img, index) => (
 
                                     <div key={index} className="time-slot">
-                                        {/* Display existing image in base64 format */}
                                         <input
                                             type="file"
                                             name={`academyImg-${index}`}
@@ -619,7 +677,63 @@ const EditCourseForm = () => {
                                         )}
                                     </div>
                                 ))}
+                            </div> */}
+                            {/* Display Saved Images or Text if None */}
+                            <div className="saved-images-display">
+                <label>Saved Course Images:</label>
+                <div className="image-grid">
+                    {formData.images && formData.images.length > 0 ? (
+                        formData.images.map((img, index) => (
+                            <div key={index} className="image-container">
+                                <img
+                                    src={getBase64ImageSrc(img)} // Use the same method for displaying images
+                                    alt={`Course-${index + 1}`} 
+                                    className="saved-image"
+                                    style={{ maxWidth: '150px', maxHeight: '150px', objectFit: 'cover' }}
+                                />
+                                {isEditMode && (
+                                    <div className="image-actions">
+                                        <button 
+                                            type="button" 
+                                            onClick={() => removeImage(index)} 
+                                            className="remove-image-button"
+                                            title="Remove Image"
+                                            style={{ width: '100%' }}
+                                        >
+                                            <FaTrashAlt /> Delete
+                                        </button>
+                                    </div>
+                                )}
                             </div>
+                        ))
+                    ) : (
+                        <p>No images available</p>
+                    )}
+                    {isEditMode && (
+                    <div className="add-image-container">
+                        <button 
+                            type="button" 
+                            className="add-image-button" 
+                            onClick={addImage}
+                            title="Add Image"
+                            style={{ background: 'transparent', border: '1px solid #ccc' }}
+                        >
+                            <FaPlus style={{ height: '200px', width: '50px', fontSize: '64px', color: '#387CB8' }} />
+                        </button>
+                        <input 
+                            type="file" 
+                            ref={fileInputRef} 
+                            onChange={handleImageChange} 
+                            style={{ display: 'none' }} // Hide the file input
+                            accept="image/*" // Accept only image files
+                            multiple // Allow multiple file selection
+                        />
+                    </div>
+                )}
+                </div>
+                
+                
+            </div>
 
                             {/* Action Buttons */}
 
