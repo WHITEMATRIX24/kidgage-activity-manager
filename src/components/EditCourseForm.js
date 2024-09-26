@@ -83,6 +83,7 @@ const EditCourseForm = () => {
                 setSearchError('');
                 setError('');
                 setIsEditMode(false);
+                console.log(response.data.images);
             } else {
                 setSearchError('Course not found.');
                 setCourseData(null);
@@ -132,12 +133,33 @@ const EditCourseForm = () => {
             timeSlots: prevState.timeSlots.filter((_, i) => i !== index)
         }));
     };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log(courseData); // Original course data
+        console.log(formData); // New form data
+    
         if (isEditMode) {
+            // Create an object to hold the modified fields
+            const modifiedData = {};
+    
+            // Check for each field to see if it's different from the original course data
+            Object.keys(formData).forEach((key) => {
+                if (formData[key] !== courseData[key]) {
+                    modifiedData[key] = formData[key];
+                }
+            });
+    
+            // Check if there's any modified data before sending the request
+            if (Object.keys(modifiedData).length === 0) {
+                setError('No changes made to the course data.');
+                return;
+            }
+    
             try {
-                const response = await axios.put(`https://kidgage-admin-rdld.onrender.com/api/courses/update/${courseData._id}`, formData);
+                const response = await axios.put(
+                    `https://kidgage-admin-rdld.onrender.com/api/courses/update/${courseData._id}`,
+                    modifiedData // Send only modified data
+                );
                 setSuccess('Course updated successfully!');
                 setError('');
                 setIsEditMode(false);
@@ -147,6 +169,7 @@ const EditCourseForm = () => {
             }
         }
     };
+    
 
     const handleDelete = () => {
         setShowConfirmPopup(true);
@@ -306,6 +329,7 @@ const arrayBufferToBase64 = (buffer) => {
             images: updatedImages // Update images in state
         }));
     };
+    const getBase64ImageSrc = (base64String) => `data:image/jpeg;base64,${base64String}`;
 
     
     const handleAgeGroupChange = (e) => {
@@ -322,7 +346,6 @@ const arrayBufferToBase64 = (buffer) => {
                 : [{ [name]: value }] // If ageGroup is empty or not an array, initialize it with an object
         }));
     };
-    const getBase64ImageSrc = (base64String) => `data:image/jpeg;base64,${base64String}`;
 
     return (
         <div className="add-course-form-container">
