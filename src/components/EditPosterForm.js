@@ -136,7 +136,6 @@ const EditPosterForm = ({ onDelete }) => {
                                     <div className="poster-info">
                                         <h3>{poster.name}</h3>
                                         <p>{poster.description}</p>
-                                        <p>{poster.link}</p>
                                         <p>{poster.startDate} - {poster.endDate}</p>
                                         <div className='button-container'>
                                         <button  onClick={() => handleEdit(poster)}>
