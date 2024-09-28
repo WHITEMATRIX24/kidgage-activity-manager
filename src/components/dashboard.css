@@ -177,7 +177,7 @@
 .dashboard-card {
     position: relative;
     display: flex;
-    height: 75vh;
+    height: 70vh;
     /* margin-top: 100px; */
     margin-left: auto;
     margin-right: auto;
@@ -201,6 +201,7 @@
     flex-direction: column;
     height: 100%;
     position: absolute;
+    overflow-y: auto;
     top: 0;
     left: 0;
     transition: transform 0.3s ease;

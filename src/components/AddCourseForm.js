@@ -186,7 +186,7 @@ const removeImage = (index) => {
             setError('');
 
         } catch (error) {
-            console.error('Error adding course', error);
+            console.error('Error adding course. Check if all fields are filled', error);
             if (error.response) {
                 setError(error.response.data.message);
             } else {
@@ -475,6 +475,7 @@ const removeImage = (index) => {
                                     onChange={(e) => handleLocationChange(index, 'city', e.target.value)}
                                     style={{ width: '33%' }}
                                 >
+                                    
                                             <option value="Doha">Doha</option>
                                             <option value="Al Rayyan">Al Rayyan</option>
                                             <option value="Al Wakrah">Al Wakrah</option>

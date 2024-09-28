@@ -364,7 +364,7 @@ const arrayBufferToBase64 = (buffer) => {
                                 name="search"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                placeholder="Enter course name..."
+                                placeholder="Enter Full course name..."
                             />
                             <button type="button" className="search-provider-button" onClick={handleSearch}>
                                 <FaSearch />
