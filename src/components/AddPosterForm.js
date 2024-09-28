@@ -8,7 +8,7 @@ function AddPosterForm() {
         name: '',
         description: '',
         location: '',
-        phone: '',
+        link: '',
         startDate: '',
         endDate: '',
     });
@@ -85,7 +85,7 @@ function AddPosterForm() {
         formData.append('name', course.name);
         formData.append('description', course.description);
         formData.append('location', course.location);
-        formData.append('phone', course.phone);
+        formData.append('link', course.link);
         formData.append('startDate', course.startDate);
         formData.append('endDate', course.endDate);
         formData.append('image', file);
@@ -103,7 +103,7 @@ function AddPosterForm() {
                 name: '',
                 description: '',
                 location: '',
-                phone: '',
+                link: '',
                 startDate: '',
                 endDate: '',
             });
@@ -163,13 +163,13 @@ function AddPosterForm() {
                         <p className="character-count">Characters: {characterCount}</p> {/* Display character count */}
                     </div>
                     <div className="form-group">
-                        <label htmlFor="phone">Phone Number</label>
+                        <label htmlFor="link">Link to Register</label>
                         <input
                             type="text"
-                            id="phone"
-                            name="phone"
-                            placeholder="Enter Phone Number"
-                            value={course.phone}
+                            id="link"
+                            name="link"
+                            placeholder="Enter link to register"
+                            value={course.link}
                             onChange={handleChange}
                         />
                     </div>

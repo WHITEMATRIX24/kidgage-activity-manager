@@ -10,7 +10,7 @@ const upload = multer({ storage });
 
 // Route to add a new poster
 router.post('/add', upload.single('image'), async (req, res) => {
-  const { name, description, location, phone, startDate, endDate } = req.body;
+  const { name, description, location, link, startDate, endDate } = req.body;
 
   if (!req.file) {
     return res.status(400).json({ message: 'Image is required' });
@@ -23,7 +23,7 @@ router.post('/add', upload.single('image'), async (req, res) => {
       name,
       description,
       location,
-      phone,
+      link,
       startDate,
       endDate,
       image: imageBase64,
@@ -76,7 +76,7 @@ router.get('/:id', async (req, res) => {
 // Route to update a specific poster by ID
 router.put('/:id', upload.single('image'), async (req, res) => {
   const { id } = req.params;
-  const { name, description, location, phone, startDate, endDate } = req.body;
+  const { name, description, location, link, startDate, endDate } = req.body;
   let imageBase64 = null;
 
   if (req.file) {
@@ -88,7 +88,7 @@ router.put('/:id', upload.single('image'), async (req, res) => {
       name,
       description,
       location,
-      phone,
+      link,
       startDate,
       endDate,
       image: imageBase64 || undefined, // Only update image if a new file is provided

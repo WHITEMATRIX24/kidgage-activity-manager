@@ -90,7 +90,7 @@ const EditPosterForm = ({ onDelete }) => {
         formData.append('name', selectedPoster.name);
         formData.append('description', selectedPoster.description);
         formData.append('location', selectedPoster.location);
-        formData.append('phone', selectedPoster.phone);
+        formData.append('link', selectedPoster.link);
         formData.append('startDate', selectedPoster.startDate);
         formData.append('endDate', selectedPoster.endDate);
         if (file) {
@@ -136,7 +136,7 @@ const EditPosterForm = ({ onDelete }) => {
                                     <div className="poster-info">
                                         <h3>{poster.name}</h3>
                                         <p>{poster.description}</p>
-                                        <p>{poster.phone}</p>
+                                        <p>{poster.link}</p>
                                         <p>{poster.startDate} - {poster.endDate}</p>
                                         <div className='button-container'>
                                         <button  onClick={() => handleEdit(poster)}>
@@ -183,11 +183,11 @@ const EditPosterForm = ({ onDelete }) => {
                                 />
                             </div>
                             <div>
-                                <label>Phone:</label>
+                                <label>Link to Register:</label>
                                 <input
                                     type="text"
-                                    name="phone"
-                                    value={selectedPoster?.phone || ''}
+                                    name="link"
+                                    value={selectedPoster?.link || ''}
                                     onChange={handleChange}
                                 />
                             </div>
