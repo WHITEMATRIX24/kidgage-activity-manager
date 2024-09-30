@@ -12,6 +12,8 @@ const ViewCourses = ({ handleSubmit }) => {
     const [providers, setProviders] = useState([]);
     const [courses, setCourses] = useState({});
     const [selectedCourse, setSelectedCourse] = useState(null); // State for the selected course
+    const [selectedProviderId, setSelectedProviderId] = useState(null); // State for the selected course
+
     const [visibleCourses, setVisibleCourses] = useState({});
 
     const toggleFormVisibility = () => {
@@ -54,9 +56,11 @@ const ViewCourses = ({ handleSubmit }) => {
         }
     }, [providers]);
 
-    const handleAddAcademyClick = () => {
+    const handleAddAcademyClick = (providerId) => {
         setShowAForm(true);
         setShowForm(false);
+        setSelectedProviderId(providerId);
+
     };
 
     const handleCloseForm = () => {
@@ -103,7 +107,7 @@ const ViewCourses = ({ handleSubmit }) => {
                                             </div>
                                             <button
                                                 type="button"
-                                                onClick={handleAddAcademyClick}
+                                                onClick={() => handleAddAcademyClick(provider._id)}
                                                 className="add-image-button"
                                                 title="Add Academy"
                                                 style={{ color: 'black', display: 'flex', alignItems: 'center', padding: ' 0 5px', background: 'transparent', border: '1px solid #ccc' }}
@@ -147,7 +151,7 @@ const ViewCourses = ({ handleSubmit }) => {
                             <FaTimes style={{ fontSize: '24px', color: 'red' }} />
                         </button>
                     </div>
-                    <AddCourseForm handleSubmit={handleCloseForm} />
+                    <AddCourseForm handleSubmit={handleCloseForm} providerId={selectedProviderId}/>
                 </div>
             )}
 

@@ -79,6 +79,18 @@ router.get('/course/:id', async (req, res) => {
   }
 });
 
+// router.get('/course/:id', async (req, res) => {
+//   try {
+//     const course = await Course.findById(req.params.id);
+//     if (!course) {
+//       return res.status(404).json({ message: 'Course not found' });
+//     }
+//     res.status(200).json(course);
+//   } catch (error) {
+//     res.status(500).json({ message: 'Server error', error });
+//   }
+// });
+
 // Route to search for a course by ID
 router.get('/search', async (req, res) => {
   try {
@@ -172,16 +184,5 @@ router.get('/by-providers', async (req, res) => {
   }
 });
 
-// router.get('/course/:id', async (req, res) => {
-//   try {
-//     const course = await Course.findById(req.params.id);
-//     if (!course) {
-//       return res.status(404).json({ message: 'Course not found' });
-//     }
-//     res.status(200).json(course);
-//   } catch (error) {
-//     res.status(500).json({ message: 'Server error', error });
-//   }
-// });
 
 module.exports = router;

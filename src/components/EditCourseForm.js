@@ -20,7 +20,7 @@ const EditCourseForm = ({id}) => {
         days: [],
         timeSlots: [{ from: '', to: '' }],
         location: [
-            { address: '', city: '', phoneNumber: '' }
+            { address: '', city: '', phoneNumber: '', link: '' }
         ],
         courseType: '',
         images: [],
@@ -201,7 +201,7 @@ const EditCourseForm = ({id}) => {
                 days: [],
                 timeSlots: [{ from: '', to: '' }],
                 location: [
-                    { address: '', city: '', phoneNumber: '' }
+                    { address: '', city: '', phoneNumber: '',link: '' }
                 ],
                 courseType: '',
                 images: [],
@@ -251,7 +251,7 @@ const EditCourseForm = ({id}) => {
 
     // Add a new location
     const addLocation = () => {
-        setFormData(prev => ({ ...prev, location: [...prev.location, { address: '', city: '', phoneNumber: '' }] }));
+        setFormData(prev => ({ ...prev, location: [...prev.location, { address: '', city: '', phoneNumber: '',link: '' }] }));
     };
 
     // Remove a location
@@ -598,14 +598,21 @@ const arrayBufferToBase64 = (buffer) => {
                                         Add Location
                                     </button>
                                 </div>
+                                <div className="form-group add-location-label-group">
+                        <label>Location/Area to be displayed</label>
+                        <label htmlFor="ageStart">Municipality</label>
+                        <label htmlFor="ageEnd">Phone No.</label>
+                    </div>
                                 {formData.location.map((loc, index) => (
-                                    <div key={index} className="time-slot" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                    <div key={index} className="time-slot" style={{ width:'100%', display: 'flex',flexDirection:'column', gap: '1rem', alignItems: 'center' }}>
                                         {/* Address input */}
+                                       <div style={{display:'flex',flexDirection:'row',width:'100%'}}>
+                                       <div style={{display:'flex', flexDirection:'row',width:'100%'}}>
                                         <input
                                             type="text"
                                             name="address"
                                             value={loc.address}
-                                            placeholder={index === 0 ? 'Address' : `Address ${index + 1}`}
+                                            placeholder={index === 0 ? 'Area' : `Area ${index + 1}`}
                                             onChange={(e) => handleLocationChange(index, 'address', e.target.value)}
                                             style={{ width: '30%' }}
                                             required
@@ -643,6 +650,7 @@ const arrayBufferToBase64 = (buffer) => {
                                             disabled={!isEditMode}
                                         />
 
+                                        </div>
                                         {/* Remove Location Button */}
                                         {index > 0 && (
                                             <button
@@ -654,6 +662,17 @@ const arrayBufferToBase64 = (buffer) => {
                                                 <FaTrash />
                                             </button>
                                         )}
+                                       </div>
+                                        <input
+                                            type="text"
+                                            name="link"
+                                            value={loc.link}
+                                            placeholder={index === 0 ? 'Map Link to location' : `Map Link to location ${index + 1}`}
+                                            onChange={(e) => handleLocationChange(index, 'link', e.target.value)}
+                                            style={{ width: '100%' }}
+                                            required
+                                            disabled={!isEditMode}
+                                        />
                                     </div>
                                 ))}
                             </div>

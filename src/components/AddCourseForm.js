@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { FaChevronDown, FaSearch, FaTrash} from 'react-icons/fa';
 import axios from 'axios';
 import './AddCourseForm.css';
-import LocationInput from './LocationInput';
-function AddCourseForm() {
+function AddCourseForm({providerId}) {
     const initialCourseState = {
-        providerId: '',
+        providerId: providerId,
         name: '',
         duration: '',
         durationUnit: 'days',
@@ -17,7 +16,7 @@ function AddCourseForm() {
         days: [],
         timeSlots: [{ from: '', to: '' }],
         location: [
-            { address: '', city: '', phoneNumber: '' }
+            { address: '', city: '', phoneNumber: '',link: '' }
         ],
         courseType: '',
         images: [''],
@@ -162,7 +161,9 @@ const removeImage = (index) => {
             const validatedLocations = course.location.map((loc) => ({
                 address: loc.address || '',
                 city: loc.city || '',
-                phoneNumber: loc.phoneNumber || ''
+                phoneNumber: loc.phoneNumber || '',
+                link: loc.link || ''
+
             }));
 
             // Append location array as a JSON string
@@ -229,7 +230,7 @@ const removeImage = (index) => {
             </div>
             {/* {showForm && ( */}
                 <form className="add-course-form" onSubmit={handleSubmit}>
-                    <div className="form-group search-provider-group">
+                    {/* <div className="form-group search-provider-group">
                         <label htmlFor="provider">Provider</label>
                         <input
                             type="text"
@@ -238,7 +239,6 @@ const removeImage = (index) => {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             placeholder="Search provider by email or phone number..."
-                            required
                         />
                         <button type="button" className="search-provider-button" onClick={handleSearch}>
                             <FaSearch />
@@ -251,7 +251,7 @@ const removeImage = (index) => {
                             <p>Email: {searchResult.email}</p>
                             <p>ID: {searchResult._id}</p>
                         </div>
-                    )}
+                    )} */}
                     <label htmlFor="name">Course Name</label>
 
                     <input
@@ -455,20 +455,90 @@ const removeImage = (index) => {
                                 Add Location
                             </button>
                         </div>
+                        <div className="form-group add-location-label-group">
+                        <label>Location/Area to be displayed</label>
+                        <label htmlFor="ageStart">Municipality</label>
+                        <label htmlFor="ageEnd">Phone No.</label>
+                    </div>
+                    {course.location.map((loc, index) => (
+                                    <div key={index} className="time-slot" style={{ width:'100%', display: 'flex',flexDirection:'column', gap: '1rem', alignItems: 'center' }}>
+                                        {/* Address input */}
+                                       <div style={{display:'flex',flexDirection:'row',width:'100%'}}>
+                                       <div style={{display:'flex', flexDirection:'row',width:'100%'}}>
+                                        <input
+                                            type="text"
+                                            name="address"
+                                            value={loc.address}
+                                            placeholder={index === 0 ? 'Area' : `Area ${index + 1}`}
+                                            onChange={(e) => handleLocationChange(index, 'address', e.target.value)}
+                                            style={{ width: '33%' }}
+                                            required
+                                        />
+                                        <select
+                                            name="city"
+                                            value={loc.city}
+                                            onChange={(e) => handleLocationChange(index, 'city', e.target.value)}
+                                            style={{ width: '33%' }}
+                                        >
+                                            <option value="Doha">Doha</option>
+                                            <option value="Al Rayyan">Al Rayyan</option>
+                                            <option value="Al Wakrah">Al Wakrah</option>
+                                            <option value="Al Shamal">Al Shamal</option>
+                                            <option value="Al Khor">Al Khor</option>
+                                            <option value="Umm Salal">Umm Salal</option>
+                                            <option value="Al Daayen">Al Daayen</option>
+                                            <option value="Al Shahaniya">Al Shahaniya</option>
+                                            <option value="Dukhan">Dukhan</option>
+                                            <option value="Mesaieed">Mesaieed</option>
 
-                        {course.location.map((loc, index) => (
+                                        </select>
+
+
+                                        {/* Phone Number input */}
+                                        <input
+                                            type="text"
+                                            name="phoneNumber"
+                                            value={loc.phoneNumber}
+                                            placeholder={index === 0 ? 'Phone Number' : `Phone Number ${index + 1}`}
+                                            onChange={(e) => handleLocationChange(index, 'phoneNumber', e.target.value)}
+                                            style={{ width: '36%' }}
+                                            required
+                                        />
+
+                                        </div>
+                                        {/* Remove Location Button */}
+                                        {index > 0 && (
+                                            <button
+                                                type="button"
+                                                className="rem-button"
+                                                onClick={() => removeLocation(index)}
+                                            >
+                                                <FaTrash />
+                                            </button>
+                                        )}
+                                       </div>
+                                        <input
+                                            type="text"
+                                            name="link"
+                                            value={loc.link}
+                                            placeholder={index === 0 ? 'Map Link to location' : `Map Link to location ${index + 1}`}
+                                            onChange={(e) => handleLocationChange(index, 'link', e.target.value)}
+                                            style={{ width: '100%' }}
+                                            required
+                                        />
+                                    </div>
+                                ))}
+                        {/* {course.location.map((loc, index) => (
                             <div key={index} className="time-slot" style={{ display: 'flex', gap: '1rem' }}>
-                                {/* Address input */}
                                 <input
                                     type="text"
                                     name="address"
                                     value={loc.address}
-                                    placeholder={index === 0 ? 'Address' : `Address ${index}`}
+                                    placeholder={index === 0 ? 'Area name' : `Area name ${index+1}`}
                                     onChange={(e) => handleLocationChange(index, 'address', e.target.value)}
                                     style={{ width: '33%' }}
                                 />
 
-                                {/* Dropdown for selecting a city */}
                                 <select
                                     name="city"
                                     value={loc.city}
@@ -491,7 +561,7 @@ const removeImage = (index) => {
                                     type="text"
                                     name="phoneNumber"
                                     value={loc.phoneNumber}
-                                    placeholder={index === 0 ? 'Phone Number' : `Phone Number ${index}`}
+                                    placeholder={index === 0 ? 'Phone Number' : `Phone Number ${index+1}`}
                                     onChange={(e) => handleLocationChange(index, 'phoneNumber', e.target.value)}
                                     style={{ width: '36%' }}
                                 />
@@ -507,7 +577,7 @@ const removeImage = (index) => {
                                     </button>
                                 )}
                             </div>
-                        ))}
+                        ))} */}
 
 
                     </div>

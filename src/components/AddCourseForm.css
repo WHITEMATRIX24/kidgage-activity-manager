@@ -245,7 +245,15 @@ padding: 10px;
     display: flex;
     gap: 42%;
 }
-
+.add-location-label-group {
+    display: flex;
+    }
+    .add-location-label-group :nth-child(1){
+        margin-right: 5%;
+        }
+        .add-location-label-group :nth-child(2){
+            margin-right: 20%;
+            }
 .add-course-form .search-provider-button {
     background-color: transparent;
     border: none;

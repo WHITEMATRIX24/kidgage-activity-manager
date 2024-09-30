@@ -8,7 +8,9 @@ const timeSlotSchema = new mongoose.Schema({
 const locationSchema = new mongoose.Schema({
     address: { type: String, required: true },
     city: { type: String, required: true },
-    phoneNumber: { type: String, required: true }
+    phoneNumber: { type: String, required: true },
+    link: { type: String, required: true }
+
 });
 
 const ageGroupSchema = new mongoose.Schema({

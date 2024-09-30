@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import './AddCourseForm.css';
 import './ViewForm.css';
-import { FaChevronDown, FaPlus, FaTimes } from "react-icons/fa";
+import { FaChevronDown, FaPlus, FaTimes,FaEye } from "react-icons/fa";
 import axios from 'axios';
 import AddAcademyForm from './AddAcademyForm'; // Import AddAcademyForm component
 import EditAcademyForm from './EditAcademy'; // Import EditAcademyForm component
@@ -65,7 +65,7 @@ const ViewAcademy = ({ handleSubmit }) => {
                                         <img src={`data:image/jpeg;base64,${user.logo}`} alt={`${user.username}'s logo`} className="user-logo" />
                                         <p className="user-name">{user.username}</p>
                                         {/* <p className="user-name">{user.email}</p> */}
-
+                                        
                                         <div className="vbutton-container">
                                             {/* Optionally, add buttons for editing/deleting here */}
                                         </div>
