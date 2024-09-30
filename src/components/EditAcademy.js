@@ -70,88 +70,46 @@ const EditAcademyForm = ({ email }) => {
       setSearchError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
     }
   };
-  const handleChange = (e) => {
-    const { name, value, type, files } = e.target;
-    if (files) {
-        const updatedFiles = Array.from(files);
-        setFormData((prevState) => ({
-            ...prevState,
-            [name]: updatedFiles,
-        }));
-    } else {
-        setFormData((prevState) => ({
-            ...prevState,
-            [name]: value,
-        }));
-    }
+    
+const handleChange = (e) => {
+  const { name, value, type, files } = e.target;
+  let formData = new FormData();
+
+  if (files) {
+    // Handle file inputs
+    Object.keys(files).forEach(key => {
+      const file = files[key];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        formData.append(name, reader.result);
+      };
+      reader.readAsDataURL(file);
+    });
+  } else {
+    // Handle text inputs
+    formData.append(name, value);
+  }
+
+  // Update the state with the FormData object
+  setFormData(prevState => ({ ...prevState, [name]: value }));
 };
+
 const handleSubmit = async (e) => {
   e.preventDefault();
+  if (isEditMode) {
+    try {
 
-  // Assuming originalData comes from props or state
-  const originalData = { ...academyData }; // Ensure this is correctly initialized
-
-  // Create FormData object
-  const formDataToSend = new FormData();
-
-  // Log original data and current form data for comparison
-  console.log('Original Data:', originalData);
-  console.log('Current Form Data:', formData);
-
-  const fieldsToCheck = [
-    'username',
-    'email',
-    'phoneNumber',
-    'firstName',
-    'lastName',
-    'licenseNo',
-    'description',
-    'location'
-  ];
-
-  // Append updated fields to FormData
-  fieldsToCheck.forEach(field => {
-    if (formData[field] !== originalData[field]) {
-      formDataToSend.append(field, formData[field]);
-      console.log(`Appending ${field}:`, formData[field]); // Debugging log
+      const response = await axios.put(`http://localhost:5001/api/users/academy/${academyData._id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      setSuccess('Academy updated successfully!');
+      setError('');
+      setIsEditMode(false);
+    } catch (error) {
+      console.error('Error updating academy:', error);
+      setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
+      setSuccess('');
     }
-  });
-
-  // Append files only if they are provided and are different from the original
-  const fileFields = ['logo', 'crFile', 'idCard', 'academyImg'];
-  fileFields.forEach(field => {
-    if (formData[field] && formData[field][0] && formData[field][0] !== originalData[field]) {
-      formDataToSend.append(field, formData[field][0]);
-      console.log(`Appending file ${field}:`, formData[field][0]); // Debugging log
-    }
-  });
-
-  // Log FormData contents for debugging
-  for (let [key, value] of formDataToSend.entries()) {
-    console.log(key, value);
-  }
-
-  // Check if FormData is empty before making the request
-  if (formDataToSend.entries().length === 0) {
-    console.log('No fields have been modified.');
-    return;
-  }
-
-  try {
-    console.log(formDataToSend)
-    const response = await axios.put(
-      `https://kidgage-admin-cxde.onrender.com/api/users/academy/${academyData._id}`,
-      formDataToSend,
-      { headers: { 'Content-Type': 'multipart/form-data' } }
-    );
-    console.log('Response:', response.data); // Debugging log
-    setSuccess('Academy updated successfully!');
-    setError('');
-    setIsEditMode(false);
-  } catch (error) {
-    console.error('Error updating academy:', error);
-    setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
-    setSuccess('');
   }
 };
 
