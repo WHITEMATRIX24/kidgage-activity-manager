@@ -222,12 +222,12 @@ const removeImage = (index) => {
     };
 
     return (
-        <div className="add-course-form-container">
+        <div className="">
             <div className="add-course-form-header" onClick={toggleFormVisibility}>
                 <h2>Add Course</h2>
-                <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} />
+                {/* <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} /> */}
             </div>
-            {showForm && (
+            {/* {showForm && ( */}
                 <form className="add-course-form" onSubmit={handleSubmit}>
                     <div className="form-group search-provider-group">
                         <label htmlFor="provider">Provider</label>
@@ -547,7 +547,7 @@ const removeImage = (index) => {
                     {error && <p className="error-message">{error}</p>}
                     {success && <p className="success-message">{success}</p>}
                 </form>
-            )}
+            {/* )} */}
         </div>
     );
 }

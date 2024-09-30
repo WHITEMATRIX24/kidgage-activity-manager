@@ -3,7 +3,7 @@ import axios from 'axios';
 import './AddCourseForm.css'; // Reuse the same CSS file for styling
 import { FaChevronDown, FaEdit, FaTrash, FaSearch,FaTrashAlt,FaPlus } from 'react-icons/fa';
 
-const EditCourseForm = () => {
+const EditCourseForm = ({id}) => {
     const [showForm, setShowForm] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [courseData, setCourseData] = useState(null);
@@ -34,6 +34,13 @@ const EditCourseForm = () => {
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
 
+    useEffect(() => {
+        if (id) {
+            console.log("Received ID:", id); // Log the ID
+            handleSearch(id); // Call handleSearch with the id
+        }
+    }, [id]);
+    
     // Fetch course categories when the component mounts
     useEffect(() => {
         const fetchCategories = async () => {
@@ -55,10 +62,11 @@ const EditCourseForm = () => {
             return () => clearTimeout(timer);
         }
     }, [success]);
-
-    const handleSearch = async () => {
+    const handleSearch = async (courseId) => {
+        console.log('Searching for course ID:', courseId); // Log the courseId
         try {
-            const response = await axios.get(`https://kidgage-admin-rdld.onrender.com/api/courses/search?name=${searchQuery}`);
+            // Assuming searchQuery now contains the course ID
+            const response = await axios.get(`https://kidgage-admin-rdld.onrender.com/api/courses/course/${courseId}`);
             if (response.data) {
                 setCourseData(response.data);
                 setFormData({
@@ -75,7 +83,7 @@ const EditCourseForm = () => {
                     timeSlots: response.data.timeSlots,
                     location: response.data.location,
                     courseType: response.data.courseType,
-                    images: response.data.images || [], // Fetch images from the response
+                    images: response.data.images || [],
                     promoted: response.data.promoted,
                     ageGroup: response.data.ageGroup,
                     preferredGender: response.data.preferredGender
@@ -93,6 +101,7 @@ const EditCourseForm = () => {
             setCourseData(null);
         }
     };
+    
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -249,27 +258,7 @@ const EditCourseForm = () => {
     const removeLocation = (index) => {
         setFormData(prev => ({ ...prev, location: prev.location.filter((_, i) => i !== index) }));
     };
-    // // Add a new image input
-    // const addImage = () => {
-    //     setFormData(prev => ({ ...prev, images: [...prev.images, ''] }));
-    // };
 
-    // // Remove an image input
-    // const removeImage = (index) => {
-    //     setFormData(prev => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }));
-    // };
-
-    // // Handle image uploads
-    // const handleImageChange = (index, e) => {
-    //     const file = e.target.files[0];
-    //     if (file) {
-    //         setFormData(prev => {
-    //             const newImages = [...prev.images];
-    //             newImages[index] = file;
-    //             return { ...prev, images: newImages };
-    //         });
-    //     }
-    // };
     const fileInputRef = useRef(null); // Reference for the file input
 // Helper function to convert ArrayBuffer to Base64
 const arrayBufferToBase64 = (buffer) => {
@@ -348,14 +337,14 @@ const arrayBufferToBase64 = (buffer) => {
     };
 
     return (
-        <div className="add-course-form-container">
+        <div className="">
             <div className="add-course-form-header" onClick={toggleFormVisibility}>
                 <h2>Edit/Remove a Course</h2>
-                <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} />
+                {/* <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} /> */}
             </div>
-            {showForm && (
+            {/* {showForm && ( */}
                 <div className='add-course-form'>
-                    {!isEditMode && (
+                    {/* {!isEditMode && (
                         <div className="form-group search-provider-group">
                             <label htmlFor="search">Search Course</label>
                             <input
@@ -370,7 +359,7 @@ const arrayBufferToBase64 = (buffer) => {
                                 <FaSearch />
                             </button>
                         </div>
-                    )}
+                    )} */}
                     {searchError && <p className="error-message">{searchError}</p>}
                     {courseData && (
                         <form className="add-course-form" onSubmit={handleSubmit}>
@@ -668,39 +657,7 @@ const arrayBufferToBase64 = (buffer) => {
                                     </div>
                                 ))}
                             </div>
-                            {/* Course Images */}
-                            {/* <div className="form-group">
-                                <div className='btn-grpp'>
-                                    <label>Course Images<span style={{ fontSize: '.8rem', color: 'grey' }}> [ size: 1280 X 1028 ]</span>:</label>
-                                    <button type="button" className="add-time-slot-btn" onClick={addImage} disabled={!isEditMode}>
-                                        Add Images
-                                    </button>
-                                </div>
-
-                                {formData.images.map((img, index) => (
-
-                                    <div key={index} className="time-slot">
-                                        <input
-                                            type="file"
-                                            name={`academyImg-${index}`}
-                                            onChange={(e) => handleImageChange(index, e)}
-                                            accept=".png, .jpg, .jpeg"
-                                            disabled={!isEditMode}
-                                            required={index === 0} // Require at least one image
-                                        />
-                                        {index > 0 && (
-                                            <button
-                                                type="button"
-                                                className="rem-button"
-                                                onClick={() => removeImage(index)}
-                                                disabled={!isEditMode}
-                                            >
-                                                <FaTrash />
-                                            </button>
-                                        )}
-                                    </div>
-                                ))}
-                            </div> */}
+                            
                             {/* Display Saved Images or Text if None */}
                             <div className="saved-images-display">
                 <label>Saved Course Images:</label>
@@ -778,7 +735,7 @@ const arrayBufferToBase64 = (buffer) => {
                         </form>
                     )}
                 </div>
-            )}
+            {/* )} */}
             {showConfirmPopup && (
                 <div className="confirm-popup">
                     <div className="confirm-popup-content">

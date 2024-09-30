@@ -351,7 +351,7 @@ const handleChange = (e) => {
                   </>
                 ) : (
                   <>
-                    <button type="submit">Save</button>
+                    <button type="submit" className='save-btn'>Save</button>
                   </>
                 )}
               </div>

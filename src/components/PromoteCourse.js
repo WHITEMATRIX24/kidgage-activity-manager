@@ -1,37 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import './AddCourseForm.css'; // Reuse the same CSS file for styling
-import { FaChevronDown, FaEdit, FaTrash, FaSearch, FaTimes, FaPlus } from 'react-icons/fa';
+import { FaChevronDown, FaPlus, FaTimes } from 'react-icons/fa';
+import axios from 'axios';
 
 const PromoteCourse = () => {
     const [showForm, setShowForm] = useState(true);
-    const [searchQuery, setSearchQuery] = useState('');
-    const [provider, setProvider] = useState(null);
-    const [courses, setCourses] = useState([]);
+    const [providers, setProviders] = useState([]);
+    const [courses, setCourses] = useState({});
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [promoteMode, setPromoteMode] = useState(true);
 
-    const handleSearch = async () => {
-        try {
-            const response = await axios.get(`https://kidgage-admin-rdld.onrender.com/api/promoted/search?email=${searchQuery}`);
-            setProvider(response.data);
-            fetchCourses(response.data._id);
-        } catch (error) {
-            console.error('Error fetching provider:', error);
-            setProvider(null);
-            setCourses([]);
-        }
+    const toggleFormVisibility = () => {
+        setShowForm(!showForm);
     };
 
-    const fetchCourses = async (providerId) => {
-        try {
-            const response = await axios.get(`https://kidgage-admin-rdld.onrender.com/api/promoted/courses/${providerId}`);
-            setCourses(response.data);
-        } catch (error) {
-            console.error('Error fetching courses:', error);
+    useEffect(() => {
+        const fetchProviders = async () => {
+            try {
+                const response = await axios.get('http://localhost:5001/api/users/all'); // Adjust the URL as needed
+                setProviders(response.data);
+            } catch (error) {
+                console.error('Error fetching providers:', error);
+            }
+        };
+
+        fetchProviders();
+    }, []);
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            const providerIds = providers.map(provider => provider._id);
+            try {
+                const response = await axios.get('http://localhost:5001/api/courses/by-providers', {
+                    params: { providerIds }
+                });
+                const coursesByProvider = response.data.reduce((acc, course) => {
+                    const providerId = course.providerId;
+                    if (!acc[providerId]) {
+                        acc[providerId] = [];
+                    }
+                    acc[providerId].push(course);
+                    return acc;
+                }, {});
+                setCourses(coursesByProvider);
+            } catch (error) {
+                console.error('Error fetching courses:', error);
+            }
+        };
+
+        if (providers.length > 0) {
+            fetchCourses();
         }
-    };
+    }, [providers]);
 
     const handlePromoteClick = (course, promote) => {
         setSelectedCourse(course);
@@ -43,8 +64,14 @@ const PromoteCourse = () => {
         if (!selectedCourse) return;
 
         try {
-            await axios.post(`https://kidgage-admin-rdld.onrender.com/api/promoted/promote/${selectedCourse._id}`, { promote: promoteMode });
-            fetchCourses(provider._id); // Refresh the courses list
+            await axios.post(`http://localhost:5001/api/promoted/promote/${selectedCourse._id}`, { promote: promoteMode });
+            // Refresh the courses list
+            setCourses((prevCourses) => ({
+                ...prevCourses,
+                [selectedCourse.providerId]: prevCourses[selectedCourse.providerId].map(course =>
+                    course._id === selectedCourse._id ? { ...course, promoted: promoteMode } : course
+                )
+            }));
             setShowConfirmPopup(false);
             setSelectedCourse(null);
         } catch (error) {
@@ -57,10 +84,6 @@ const PromoteCourse = () => {
         setSelectedCourse(null);
     };
 
-    const toggleFormVisibility = () => {
-        setShowForm(!showForm);
-    };
-
     return (
         <div className="add-course-form-container">
             <div className="add-course-form-header" onClick={toggleFormVisibility}>
@@ -69,39 +92,24 @@ const PromoteCourse = () => {
             </div>
             {showForm && (
                 <div className='add-course-form'>
-                    <div className="form-group search-provider-group">
-                        <label htmlFor="search">Search Course</label>
-                        <input
-                            type="text"
-                            id="search"
-                            name="search"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Enter providers email..."
-                        />
-                        <button type="button" className="search-provider-button" onClick={handleSearch}>
-                            <FaSearch />
-                        </button>
-                    </div>
-                    {provider && (
-                        <div className="search-result">
-                            <h3>Provider: {provider.username}</h3>
+                    <h2>Total providers registered: {providers.length}</h2>
+                    {providers.map((provider) => (
+                        <div key={provider._id} className="provider-section">
+                            <h3>{provider.username}</h3>
+                            <div className="courses-item">
+                                {courses[provider._id] && courses[provider._id].map((course) => (
+                                    <div key={course._id} className="course-item">
+                                        <span>{course.name}</span>
+                                        {course.promoted ? (
+                                            <button onClick={() => handlePromoteClick(course, false)}>Remove from Promoted</button>
+                                        ) : (
+                                            <button onClick={() => handlePromoteClick(course, true)}>Promote</button>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    )}
-                    {courses.length > 0 && (
-                        <div className="courses-item">
-                            {courses.map((course) => (
-                                <div key={course._id} className="course-item">
-                                    <span>{course.name}</span>
-                                    {course.promoted ? (
-                                        <button onClick={() => handlePromoteClick(course, false)}>Remove from Promoted</button>
-                                    ) : (
-                                        <button onClick={() => handlePromoteClick(course, true)}>Promote</button>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                    ))}
                 </div>
             )}
             {showConfirmPopup && (
@@ -118,4 +126,3 @@ const PromoteCourse = () => {
 };
 
 export default PromoteCourse;
-

@@ -15,7 +15,7 @@ router.post('/signup', upload.fields([
   { name: 'idCard', maxCount: 1 },
   { name: 'academyImg', maxCount: 1 }
 ]), async (req, res) => {
-  const { username, email, phoneNumber, password, firstName, lastName, licenseNo, description, location, agreeTerms, academyType } = req.body;
+  const { username, email, phoneNumber, password, firstName, lastName, licenseNo, description, location, agreeTerms } = req.body;
 
   const files = req.files;
   const fileBase64 = {};
@@ -51,8 +51,7 @@ router.post('/signup', upload.fields([
       description,
       location,
       agreeTerms,
-      academyType,
-    });
+      });
 
     await newUser.save();
     res.status(201).json({ message: 'User registered successfully!' });
@@ -116,25 +115,13 @@ router.get('/search', async (req, res) => {
 // New route to get all users
 router.get('/all', async (req, res) => {
   try {
-    const users = await User.find({}, 'username logo'); // Fetch only the username and logo fields
+    const users = await User.find({}, 'username logo email'); // Fetch only the username and logo fields
     res.status(200).json(users);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
 
-// Route to get providers by academyType
-router.get('/all/:category', async (req, res) => {
-  const { category } = req.params;
-
-  try {
-    const providers = await User.find({ academyType: category });
-    res.status(200).json(providers);
-  } catch (error) {
-    console.error('Error fetching providers:', error);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
 
 router.get('/provider/:id', async (req, res) => {
   try {
@@ -151,12 +138,12 @@ router.get('/provider/:id', async (req, res) => {
 //Route to update academy by id
 router.put('/academy/:id', async (req, res) => {
   const { id } = req.params;
-  const { username, email, phoneNumber, firstName, lastName, licenseNo, description, location, agreeTerms, academyType } = req.body;
+  const { username, email, phoneNumber, firstName, lastName, licenseNo, description, location, agreeTerms } = req.body;
 
   try {
     const updatedAcademy = await User.findByIdAndUpdate(
       id,
-      { username, email, phoneNumber, firstName, lastName, licenseNo, description, location, agreeTerms, academyType },
+      { username, email, phoneNumber, firstName, lastName, licenseNo, description, location, agreeTerms },
       { new: true }
     );
 

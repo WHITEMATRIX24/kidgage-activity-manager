@@ -4,7 +4,7 @@ import { FaChevronDown } from "react-icons/fa";
 import axios from 'axios';
 
 const AddAcademyForm = ({ handleNavigation }) => {
-    const [showForm, setShowForm] = useState(true);
+    const [showForm, setShowForm] = useState(false);
     const [academyTypes, setAcademyTypes] = useState([]);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -97,12 +97,11 @@ const AddAcademyForm = ({ handleNavigation }) => {
 
    
 return (
-    <div className="add-course-form-container">
-        <div className="add-course-form-header" onClick={toggleFormVisibility}>
+    <div className="">
+        {/* <div className="add-course-form-header" onClick={toggleFormVisibility}>
             <h2>Add Academy</h2>
             <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} />
-        </div>
-        {showForm && (
+        </div> */}
             <form className="add-course-form" onSubmit={handleSubmit}>
                 <input
                     type="text"
@@ -248,7 +247,6 @@ return (
                 {error && <p className="error-message">{error}</p>}
                 {success && <p className="success-message">{success}</p>}
             </form>
-        )}
     </div>
   );
 }

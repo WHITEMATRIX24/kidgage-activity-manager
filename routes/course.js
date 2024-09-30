@@ -67,26 +67,46 @@ router.post('/addcourse', upload.array('academyImg', 10), async (req, res) => {
   }
 });
 
-
-
-
-// Route to search for a course by name
-router.get('/search', async (req, res) => {
+router.get('/course/:id', async (req, res) => {
   try {
-    const { name } = req.query;
-
-    // Find course by name (case-insensitive search)
-    const course = await Course.findOne({ name: { $regex: new RegExp(name, 'i') } });
-
-    if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
-    }
-
-    res.status(200).json(course);
+      const course = await Course.findById(req.params.id);
+      if (!course) {
+          return res.status(404).json({ message: 'Course not found' });
+      }
+      res.status(200).json(course);
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
+      res.status(500).json({ message: 'Server error', error });
   }
 });
+
+// Route to search for a course by ID
+router.get('/search', async (req, res) => {
+  try {
+      const { id } = req.query; // Get the ID from the query parameters
+
+      // Validate ID
+      if (!id) {
+          return res.status(400).json({ message: 'ID is required' });
+      }
+
+      console.log('Received ID:', id); // Log the received ID
+
+      // Use findById to search directly by ID
+      const course = await Course.findById(id);
+      
+      // Check if the course exists
+      if (!course) {
+          return res.status(404).json({ message: 'Course not found' });
+      }
+
+      console.log('Fetched Course:', course); // Log the fetched course
+      res.status(200).json(course); // Send the course back as a response
+  } catch (error) {
+      console.error('Error fetching course:', error); // Log the error for debugging
+      res.status(500).json({ message: 'Server error', error });
+  }
+});
+
 
 // Update a course
 // router.put('/update/:id', async (req, res) => {
@@ -152,16 +172,16 @@ router.get('/by-providers', async (req, res) => {
   }
 });
 
-router.get('/course/:id', async (req, res) => {
-  try {
-    const course = await Course.findById(req.params.id);
-    if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
-    }
-    res.status(200).json(course);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error', error });
-  }
-});
+// router.get('/course/:id', async (req, res) => {
+//   try {
+//     const course = await Course.findById(req.params.id);
+//     if (!course) {
+//       return res.status(404).json({ message: 'Course not found' });
+//     }
+//     res.status(200).json(course);
+//   } catch (error) {
+//     res.status(500).json({ message: 'Server error', error });
+//   }
+// });
 
 module.exports = router;

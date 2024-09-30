@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
   description : {type : String},
   location : {type : String},
   agreeTerms: { type: Boolean, required: true, default:true },
-  academyType: { type: String, required: true } // New field
+  // academyType: { type: String, required: true } // New field
 });
 
 

@@ -735,9 +735,9 @@ padding: 10px;
     display: flex;
     justify-content: space-between; /* This pushes the button to the right */
     align-items: center;
-    padding: 10px;
+    padding: 5px;
     border-bottom: 1px solid #ccc;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .course-name {
@@ -747,8 +747,9 @@ padding: 10px;
 
 .add-course-form .course-item button{
     border-radius: 30px;
-    padding: 10px;
-    width: 200px;
+    padding: 5px;
+    width: 180px;
+    font-size: smaller;
     background-color: #387CB8;
 }
 .add-course-form .course-item:hover,.add .course-item::selection{
@@ -771,4 +772,8 @@ padding: 10px;
     background-color: #f9f9f9;
     border-radius: 4px;
     align-items: center;
+}
+
+.save-btn{
+    align-self: flex-end;
 }

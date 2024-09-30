@@ -16,6 +16,7 @@ import EditCourseCategoryForm from './EditCourseCategoryForm';
 import EditParentForm from './EditParentForm';
 import EditStudentForm from './EditStudentForm';
 import EditAcademyForm from './EditAcademyForm';
+
 import AddAdvertisement from './AddAdvertisement1';
 import AddAdvertisement2 from './AddAdvertisement2';
 import EditAdvertisementForm from './EditAdvertisement';
@@ -25,6 +26,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRedoAlt, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import ChangePasswordForm from './ChangePasswordForm';
 import Logo from './assets/images/logo2.png';
+import ViewAcademy from './ViewAcademy';
+import ViewCourses from './ViewCourses';
 
 const Dashboard = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -104,15 +107,16 @@ const Dashboard = () => {
                 <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
                 <div className={`dashboard-content ${sidebarOpen ? 'expanded' : ''}`}>
                     <section id="courses" className="db-section">
-                        <AddCourseForm />
+                        <ViewCourses/>
+                        {/* <AddCourseForm /> */}
                         <PromoteCourse />
-                        <EditCourseForm />
-
+                        {/* <EditCourseForm /> */}
                     </section>
 
                     <section id="academies" className="db-section">
-                        <AddAcademyForm />
-                        <EditAcademyForm />
+                    <ViewAcademy/>
+                        {/* <AddAcademyForm /> */}
+                        {/* <EditAcademyForm /> */}
                     </section>
                     <section id="parents" className="db-section">
                         <AddParentForm />
