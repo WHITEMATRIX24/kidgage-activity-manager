@@ -17,7 +17,7 @@ const EditBannerForm = () => {
 
     const fetchBanners = async () => {
         try {
-            const response = await axios.get('https://kidgage-admin-rdld.onrender.com/api/banners');
+            const response = await axios.get('https://kidgage-admin-cxde.onrender.com/api/banners');
             setBanners(response.data);
         } catch (error) {
             console.error('Error fetching banners:', error);
@@ -57,7 +57,7 @@ const EditBannerForm = () => {
                 formData.append('image', editingBanner.image);
             }
 
-            await axios.put(`https://kidgage-admin-rdld.onrender.com/api/banners/${editingBanner._id}`, formData);
+            await axios.put(`https://kidgage-admin-cxde.onrender.com/api/banners/${editingBanner._id}`, formData);
             fetchBanners();
             setEditingBanner(null);
             setFileName('No file chosen');
@@ -68,7 +68,7 @@ const EditBannerForm = () => {
 
     const confirmDelete = async () => {
         try {
-            await axios.delete(`https://kidgage-admin-rdld.onrender.com/api/banners/${deletingBannerId}`);
+            await axios.delete(`https://kidgage-admin-cxde.onrender.com/api/banners/${deletingBannerId}`);
             fetchBanners();
             setShowDeleteModal(false);
             setDeletingBannerId(null);

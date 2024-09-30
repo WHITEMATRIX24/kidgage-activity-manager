@@ -61,9 +61,9 @@ const Dashboard = () => {
         if (itemToDelete) {
             try {
                 if (deleteType === 'poster') {
-                    await axios.delete(`https://kidgage-admin-rdld.onrender.com/api/posters/${itemToDelete._id}`);
+                    await axios.delete(`https://kidgage-admin-cxde.onrender.com/api/posters/${itemToDelete._id}`);
                 } else if (deleteType === 'student') {
-                    await axios.delete(`https://kidgage-admin-rdld.onrender.com/api/student/delete/${itemToDelete._id}`);
+                    await axios.delete(`https://kidgage-admin-cxde.onrender.com/api/student/delete/${itemToDelete._id}`);
                 }
                 setItemToDelete(null);
                 setDeleteType('');
