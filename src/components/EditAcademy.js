@@ -37,7 +37,7 @@ const EditAcademyForm = ({ email }) => {
 
   const handleSearch = async (query) => {
     try {
-      const response = await axios.get('https://kidgage-admin-cxde.onrender.com/api/users/search', {
+      const response = await axios.get('https://kidgage-admin-eyau.onrender.com/api/users/search', {
         params: { query }
       });
       if (response.data) {
@@ -129,7 +129,7 @@ const handleSubmit = async (e) => {
   const handleConfirmDelete = async () => {
     try {
 
-      await axios.delete(`https://kidgage-admin-cxde.onrender.com/api/users/academy/${academyData._id}`);
+      await axios.delete(`https://kidgage-admin-eyau.onrender.com/api/users/academy/${academyData._id}`);
       setAcademyData(null);
       setFormData({
         username: '',

@@ -13,7 +13,7 @@ const ChangePasswordForm = ({ adminId }) => {
 
     try {
       const response = await axios.post(
-        `https://kidgage-admin-cxde.onrender.com/api/admin/change-password/${adminId}`,
+        `https://kidgage-admin-eyau.onrender.com/api/admin/change-password/${adminId}`,
         {
           currentPassword,
           newPassword,

@@ -26,7 +26,7 @@ const AdminSignIn = () => {
     setSuccess('');
 
     try {
-      const response = await axios.post('https://kidgage-admin-cxde.onrender.com/api/admin/signin', formData);
+      const response = await axios.post('https://kidgage-admin-eyau.onrender.com/api/admin/signin', formData);
       console.log('Sign-in successful:', response.data);
       setSuccess('Sign-in successful');
       setFormData({
