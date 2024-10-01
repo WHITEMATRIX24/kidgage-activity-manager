@@ -94,22 +94,25 @@ const handleChange = (e) => {
   setFormData(prevState => ({ ...prevState, [name]: value }));
 };
 
+
 const handleSubmit = async (e) => {
   e.preventDefault();
-  if (isEditMode) {
-    try {
 
-      const response = await axios.put(`https://kidgage-admin-eyau.onrender.com/api/users/academy/${academyData._id}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-      setSuccess('Academy updated successfully!');
-      setError('');
-      setIsEditMode(false);
-    } catch (error) {
-      console.error('Error updating academy:', error);
+  // Assuming formData already contains all the fields and files
+  try {
+    const response = await axios.put(`https://kidgage-admin-eyau.onrender.com/api/users/update/${academyData._id}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    setSuccess('Academy updated successfully!');
+          setError('');
+          setIsEditMode(false);
+    console.log('Response from server:', response.data);
+  } catch (error) {
+    console.error('Error updating academy:', error);
       setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
       setSuccess('');
-    }
   }
 };
 
