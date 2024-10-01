@@ -132,32 +132,7 @@ router.get('/search', async (req, res) => {
 //     res.status(500).json({ message: err.message });
 //   }
 // });
-// router.put('/update/:id', async (req, res) => {
-//   try {
-//     // Find the course by ID
-//     let course = await Course.findById(req.params.id);
-//     if (!course) {
-//       return res.status(404).json({ message: 'Course not found' });
-//     }
-
-//     // Merge existing course with the fields to be updated
-//     Object.keys(req.body).forEach((key) => {
-//       if (req.body[key] !== undefined && req.body[key] !== null) {
-//         course[key] = req.body[key]; // Update only fields that are provided and not null/undefined
-//       }
-//     });
-
-//     // Save the updated course
-//     const updatedCourse = await course.save();
-
-//     res.json(updatedCourse);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// });
-
-
-router.put('/update/:id', upload.array('academyImg', 10), async (req, res) => {
+router.put('/update/:id', async (req, res) => {
   try {
     // Find the course by ID
     let course = await Course.findById(req.params.id);
@@ -165,28 +140,18 @@ router.put('/update/:id', upload.array('academyImg', 10), async (req, res) => {
       return res.status(404).json({ message: 'Course not found' });
     }
 
-    // Merge existing course with fields to be updated from req.body
+    // Merge existing course with the fields to be updated
     Object.keys(req.body).forEach((key) => {
       if (req.body[key] !== undefined && req.body[key] !== null) {
-        course[key] = req.body[key]; // Update only fields provided and not null/undefined
+        course[key] = req.body[key]; // Update only fields that are provided and not null/undefined
       }
     });
-
-    // Handle uploaded images if any
-    if (req.files && req.files.length > 0) {
-      const newImages = req.files.map((file) => file.buffer.toString('base64'));
-      course.images = [...course.images, ...newImages]; // Append new images to existing ones
-    }
 
     // Save the updated course
     const updatedCourse = await course.save();
 
-    res.json({
-      message: 'Course updated successfully',
-      data: updatedCourse,
-    });
+    res.json(updatedCourse);
   } catch (err) {
-    console.error('Error updating course:', err);
     res.status(500).json({ message: err.message });
   }
 });

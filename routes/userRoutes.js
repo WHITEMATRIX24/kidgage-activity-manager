@@ -136,7 +136,7 @@ router.get('/provider/:id', async (req, res) => {
 });
 
 //Route to update academy by id
-router.put('/academy/:id', async (req, res) => {
+router.put('/update/:id', async (req, res) => {
   const { id } = req.params;
   const { username, email, phoneNumber, firstName, lastName, licenseNo, description, location, agreeTerms } = req.body;
 
