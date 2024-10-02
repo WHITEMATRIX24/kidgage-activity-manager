@@ -47,6 +47,7 @@
 
   }
   .course-card {
+    margin: 0 10px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -54,20 +55,41 @@
     border-bottom: 1px solid #ccc;
     /* border-radius: 8px; */
     padding:  0 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
     text-align: center;
     transition: transform 0.3s ease;
     justify-content: space-between;
 
   }
+  .course-card button{
+    border-radius: 30px;
+    padding: 5px;
+    width: 100px;
+    font-size: smaller;
+    border: 2px solid #387CB8;
+    background: transparent;
+    color: #387CB8;
+  }
+  .course-card button:hover{
+    color: #fff;
+  }
+  .course-card p{
+    margin: 10px;
+  }
+  .add-image-button{
+    margin: 15px;
+    width: 150px;
+  }
   .see-courses-button{
     align-self: flex-end;
+    width: 150px;
+    margin: 15px;
   }
   .user-card:hover {
     transform: translateY(-5px); /* Adds a hover effect */
   }
   .course-card:hover{
-    transform: translateY(-2px); /* Adds a hover effect */
+    transform: translateY(-1px); /* Adds a hover effect */
 
   }
   .user-logo {
@@ -80,7 +102,7 @@
     width: auto;
     height: 50px;
     object-fit: cover;
-    margin-bottom: 10px;
+    margin: 15px 15px 10px 10px;
   }
   .user-name {
     font-size: small;
@@ -88,11 +110,16 @@
     margin-top: 10px;
   }
   .users-name {
-    font-size: small;
+    text-align: center;
+    font-size: large;
     font-weight: bold;
     margin-top: 10px;
     width: 100%;
   }
+  .no-of-course{
+    margin-left: 15px;
+  }
+
   .vbutton-container {
     display: flex;
     justify-content: center;

@@ -747,7 +747,9 @@ padding: 10px;
     border-bottom: 1px solid #ccc;
     margin-bottom: 5px;
 }
-
+.course-item p{
+    text-align: right;
+}
 .course-name {
     font-size: 16px;
     font-weight: bold;
@@ -760,9 +762,14 @@ padding: 10px;
     font-size: smaller;
     background-color: #387CB8;
 }
-.add-course-form .course-item:hover,.add .course-item::selection{
-    background-color: #2a5f8e;
+@media (min-width:1500px) {
+    .add-course-form .course-item button{
+        width: 25%;
+    }
 }
+/* .add-course-form .course-item:hover,.add .course-item::selection{
+    background-color: #2a5f8e;
+} */
 
 .saved-images-display {
     margin-top: 20px;

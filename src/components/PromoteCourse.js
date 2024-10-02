@@ -99,7 +99,10 @@ const PromoteCourse = () => {
                             <div className="courses-item">
                                 {courses[provider._id] && courses[provider._id].map((course) => (
                                     <div key={course._id} className="course-item">
+                                        <div style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent: 'space-between', width:'60%'}}>
                                         <span>{course.name}</span>
+                                        <p style={{ color: 'green', marginRight:'5px'}}>{course.courseType}</p>
+                                            </div>
                                         {course.promoted ? (
                                             <button onClick={() => handlePromoteClick(course, false)}>Remove from Promoted</button>
                                         ) : (

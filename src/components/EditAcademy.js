@@ -96,37 +96,20 @@ const handleChange = (e) => {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+  if (isEditMode) {
+    try {
 
-  // Check academyData._id
-  console.log('Academy ID:', academyData._id);
-
-  if (!academyData._id) {
-    setError('Invalid academy data. Please try again.');
-    return;
-  }
-
-  try {
-    const response = await axios.put(
-      `https://kidgage-admin-eyau.onrender.com/api/users/update/${academyData._id}`,
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    );
-    setSuccess('Academy updated successfully!');
-    setError('');
-    setIsEditMode(false);
-    console.log('Response from server:', response.data);
-  } catch (error) {
-    console.error('Error updating academy:', error);
-    setError(
-      error.response
-        ? error.response.data.message
-        : 'An error occurred. Please try again later.'
-    );
-    setSuccess('');
+      const response = await axios.put(`https://kidgage-admin-eyau.onrender.com/api/users/academy/${academyData._id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      setSuccess('Academy updated successfully!');
+      setError('');
+      setIsEditMode(false);
+    } catch (error) {
+      console.error('Error updating academy:', error);
+      setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
+      setSuccess('');
+    }
   }
 };
 

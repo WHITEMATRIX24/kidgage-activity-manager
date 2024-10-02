@@ -74,7 +74,7 @@ const ViewAcademy = ({ handleSubmit }) => {
                                 <button
                                     type="button"
                                     onClick={handleAddAcademyClick}
-                                    className="add-image-button"
+                                    className="add-img-button"
                                     title="Add Academy"
                                     style={{ background: 'transparent', border: '1px solid #ccc' }}
                                 >

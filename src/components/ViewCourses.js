@@ -85,6 +85,7 @@ const ViewCourses = ({ handleSubmit }) => {
             [providerId]: !prevVisibleCourses[providerId]
         }));
     };
+    const totalCourses = Object.values(courses).reduce((acc, courseList) => acc + courseList.length, 0);
 
     return (
         <div className="add-course-form-container">
@@ -96,12 +97,14 @@ const ViewCourses = ({ handleSubmit }) => {
                     </div>
                     {showForm && (
                         <form className="add-course-form">
-                            <h2>Total academies registered: {providers.length}</h2>
+                            <h3 style={{color:'green',marginTop:'0px'}}>Total {totalCourses} Activities registered under {providers.length} Academies</h3>
+                            {/* <h2>Total courses/activities listed: {totalCourses}</h2> */}
+
                             <div className="users-contain">
                                 {providers.map((provider) => (
                                     <div className="use-card" key={provider.username}>
                                         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'flex-start' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '50%' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '60%' }}>
                                                 <img src={`data:image/jpeg;base64,${provider.logo}`} alt={`${provider.username}'s logo`} className="use-logo" />
                                                 <p className="users-name">{provider.username}</p>
                                             </div>
@@ -115,8 +118,8 @@ const ViewCourses = ({ handleSubmit }) => {
                                                 <p>Add a new course</p><FaPlus style={{ marginLeft: '10px', fontSize: '16px', color: '#387CB8' }} />
                                             </button>
                                         </div>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'flex-start' }}>
-                                            <h4 style={{alignSelf:'flex-start'}}>Courses/Activities listed: {courses[provider._id] ? courses[provider._id].length : 0}</h4>
+                                        <div className="see-courses" style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'flex-start' }}>
+                                            <h4  className="no-of-course" style={{alignSelf:'flex-start'}}>Courses/Activities listed: {courses[provider._id] ? courses[provider._id].length : 0}</h4>
                                             <button
                                                 type="button"
                                                 onClick={() => toggleCourseVisibility(provider._id)}
@@ -129,8 +132,11 @@ const ViewCourses = ({ handleSubmit }) => {
                                             <div className="courses-container" style={{ width: '100%' }}>
                                                 {courses[provider._id].map((course) => (
                                                     <div key={course._id} className="course-card" onClick={() => handleEditCourseClick(course)}>
+                                                     <div style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent: 'space-between', width:'60%'}}>
                                                         <p style={{ color: 'darkblue' }}>{course.name}</p>
                                                         <p style={{ color: 'green' }}>{course.courseType}</p>
+                                                        </div>
+                                                        <button>view</button>
                                                     </div>
                                                 ))}
                                             </div>
