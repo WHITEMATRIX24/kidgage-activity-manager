@@ -42,7 +42,7 @@ function AddCourseCategoryForm() {
         formData.append('image', course.image);
 
         try {
-            const response = await axios.post('https://kidgage-admin-eyau.onrender.com/api/course-category/add', formData, {
+            const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/course-category/add', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

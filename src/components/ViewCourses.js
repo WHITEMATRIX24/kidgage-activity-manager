@@ -21,7 +21,7 @@ const ViewCourses = ({ handleSubmit }) => {
     };
 
     useEffect(() => {
-        axios.get('https://kidgage-admin-eyau.onrender.com/api/users/all')
+        axios.get('https://kidgage-adminbackend.onrender.com/api/users/all')
             .then((response) => {
                 setProviders(response.data);
             })
@@ -34,7 +34,7 @@ const ViewCourses = ({ handleSubmit }) => {
         const fetchCourses = async () => {
             const providerIds = providers.map(provider => provider._id);
             try {
-                const response = await axios.get('https://kidgage-admin-eyau.onrender.com/api/courses/by-providers', {
+                const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/courses/by-providers', {
                     params: { providerIds }
                 });
                 const coursesByProvider = response.data.reduce((acc, course) => {

@@ -57,7 +57,7 @@ function AddStudentForm() {
         }
 
         try {
-            const response = await axios.post('https://kidgage-admin-eyau.onrender.com/api/student/add', {
+            const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/student/add', {
                 parent: searchResult._id,
                 firstName: student.firstName,
                 lastName: student.lastName,
@@ -84,7 +84,7 @@ function AddStudentForm() {
 
     const handleSearch = async () => {
         try {
-            const response = await axios.get('https://kidgage-admin-eyau.onrender.com/api/personal/search', {
+            const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/personal/search', {
                 params: { query: student.parent }
             });
             setSearchResult(response.data);

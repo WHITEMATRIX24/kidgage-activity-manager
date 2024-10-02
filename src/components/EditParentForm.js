@@ -22,7 +22,7 @@ const EditParentForm = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get('https://kidgage-admin-eyau.onrender.com/api/personal/search', {
+      const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/personal/search', {
         params: { query }
       });
       if (response.data) {
@@ -68,7 +68,7 @@ const EditParentForm = () => {
     e.preventDefault();
     if (isEditMode) {
       try {
-        const response = await axios.put(`https://kidgage-admin-eyau.onrender.com/api/personal/parent/${parentData._id}`, formData);
+        const response = await axios.put(`https://kidgage-adminbackend.onrender.com/api/personal/parent/${parentData._id}`, formData);
         setSuccess('Parent updated successfully!');
         setError('');
         setIsEditMode(false); // Exit edit mode after updating
@@ -94,7 +94,7 @@ const EditParentForm = () => {
 
   const handleConfirmDelete = async () => {
     try {
-      await axios.delete(`https://kidgage-admin-eyau.onrender.com/api/personal/parent/${parentData._id}`);
+      await axios.delete(`https://kidgage-adminbackend.onrender.com/api/personal/parent/${parentData._id}`);
       setParentData(null);
       setFormData({
         username: '',
