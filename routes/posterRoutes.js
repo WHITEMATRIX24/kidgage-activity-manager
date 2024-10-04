@@ -57,22 +57,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Route to fetch a specific poster by ID
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const poster = await Poster.findById(id);
-    if (!poster) {
-      return res.status(404).json({ message: 'Poster not found' });
-    }
-    res.status(200).json(poster);
-  } catch (error) {
-    console.error('Error fetching poster:', error);
-    res.status(500).json({ message: 'Internal server error. Please try again later.' });
-  }
-});
-
 // Route to update a specific poster by ID
 router.put('/:id', upload.single('image'), async (req, res) => {
   const { id } = req.params;
@@ -140,5 +124,19 @@ router.put('/:id/wishlist', async (req, res) => {
   }
 });
 
+// Route to fetch a specific poster by ID
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
 
+  try {
+    const poster = await Poster.findById(id);
+    if (!poster) {
+      return res.status(404).json({ message: 'Poster not found' });
+    }
+    res.status(200).json(poster);
+  } catch (error) {
+    console.error('Error fetching poster:', error);
+    res.status(500).json({ message: 'Internal server error. Please try again later.' });
+  }
+});
 module.exports = router;

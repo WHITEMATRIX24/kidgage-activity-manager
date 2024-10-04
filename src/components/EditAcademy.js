@@ -162,10 +162,10 @@ const handleSubmit = async (e) => {
 
   return (
     <div className="">
-      <div className="add-course-form-header" onClick={toggleFormVisibility}>
+      {/* <div className="add-course-form-header" onClick={toggleFormVisibility}>
         <h2>Edit/Remove a Academy</h2>
-        {/* <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} /> */}
-      </div>
+        <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} />
+      </div> */}
       {/* {showForm && ( */}
         <div className='add-course-form'>
           {searchError && <p className="error-message">{searchError}</p>}

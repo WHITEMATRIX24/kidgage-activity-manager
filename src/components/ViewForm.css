@@ -143,3 +143,14 @@
     font-size: 10px;
     margin: 5px;
 }
+.form-header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin:  0 5%;
+}
+
+.form-header button{
+  background-color: transparent;
+  border: none;
+}

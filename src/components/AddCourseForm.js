@@ -224,10 +224,10 @@ const removeImage = (index) => {
 
     return (
         <div className="">
-            <div className="add-course-form-header" onClick={toggleFormVisibility}>
+            {/* <div className="add-course-form-header" onClick={toggleFormVisibility}>
                 <h2>Add Course</h2>
-                {/* <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} /> */}
-            </div>
+                <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} />
+            </div> */}
             {/* {showForm && ( */}
                 <form className="add-course-form" onSubmit={handleSubmit}>
                     {/* <div className="form-group search-provider-group">

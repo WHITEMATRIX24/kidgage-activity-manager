@@ -152,7 +152,7 @@ const ViewCourses = ({ handleSubmit }) => {
             {showAForm && (
                 <div className="add-academy-form-container">
                     <div className="form-header">
-                        <h3>Add New Academy</h3>
+                        <h3>Add New Course</h3>
                         <button className="close-form-button" onClick={handleCloseForm}>
                             <FaTimes style={{ fontSize: '24px', color: 'red' }} />
                         </button>
@@ -165,7 +165,7 @@ const ViewCourses = ({ handleSubmit }) => {
             {selectedCourse && (
                 <div className="edit-course-form-container">
                     <div className="form-header">
-                        <h3>Edit Course</h3>
+                        <h3>Edit/ Remove Course</h3>
                         <button className="close-form-button" onClick={handleCloseEditForm}>
                             <FaTimes style={{ fontSize: '24px', color: 'red' }} />
                         </button>

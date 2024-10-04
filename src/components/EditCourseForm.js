@@ -338,10 +338,10 @@ const arrayBufferToBase64 = (buffer) => {
 
     return (
         <div className="">
-            <div className="add-course-form-header" onClick={toggleFormVisibility}>
+            {/* <div className="add-course-form-header" onClick={toggleFormVisibility}>
                 <h2>Edit/Remove a Course</h2>
-                {/* <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} /> */}
-            </div>
+                <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} />
+            </div> */}
             {/* {showForm && ( */}
                 <div className='add-course-form'>
                     {/* {!isEditMode && (

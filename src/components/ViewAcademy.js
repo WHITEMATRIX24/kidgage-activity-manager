@@ -103,7 +103,7 @@ const ViewAcademy = ({ handleSubmit }) => {
             {selectedAcademy && (
                 <div className="edit-academy-form-container">
                     <div className="form-header">
-                        <h3>Edit Academy</h3>
+                        <h3>Edit/Remove Academy</h3>
                         <button className="close-form-button" onClick={handleCloseEditForm}>
                             <FaTimes style={{ fontSize: '24px', color: 'red' }} />
                         </button>
