@@ -48,8 +48,50 @@ const ViewAcademy = ({ handleSubmit }) => {
         setShowForm(true);         // Show the academies list again
     };
 
+
+    const [verificationRequests, setVerificationRequests] = useState([]);
+
+useEffect(() => {
+  const fetchRequests = async () => {
+    try {
+      const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/verify-requests');
+      setVerificationRequests(response.data);
+    } catch (error) {
+      console.error('Error fetching verification requests:', error);
+    }
+  };
+
+  fetchRequests();
+}, []);
+
+const handleVerify = async (requestId) => {
+  try {
+    // Call API to mark the account as verified
+    await axios.post(`https://kidgage-adminbackend.onrender.com/api/verify-account/${requestId}`);
+    setVerificationRequests(prevState =>
+      prevState.map(req => req._id === requestId ? { ...req, status: 'Verified' } : req)
+    );
+  } catch (error) {
+    console.error('Error verifying account:', error);
+  }
+};
+
+
     return (
         <div className="add-course-form-container">
+              <div>
+    <h2>Account Verification Requests</h2>
+    <ul>
+      {verificationRequests.map(request => (
+        <li key={request._id}>
+          <p>{request.username} - {request.status}</p>
+          {request.status === 'Pending' && (
+            <button onClick={() => handleVerify(request._id)}>Verify</button>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
             {!showAForm && (
                 <>
                     <div className="add-course-form-header" onClick={toggleFormVisibility}>

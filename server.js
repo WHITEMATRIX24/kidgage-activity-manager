@@ -1,8 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const http = require('http');
-const { Server } = require('socket.io');
+
 // Import routes
 const userRoutes = require('./routes/userRoutes'); // Existing routes for business sign-up
 const personalRoutes = require('./routes/personalRoutes'); // New routes for personal sign-up
@@ -15,12 +14,12 @@ const bookingRoutes = require('./routes/bookingRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const advertisementRoutes = require('./routes/advertisementRoutes');
 const promotedRoutes = require('./routes/promotedRoute');
+const VerificationRequest = require('../models/VerificationRequest');
 
 
 const app = express();
 const PORT = process.env.PORT || 5001;
-const server = http.createServer(app);
-const io = new Server(server);
+
 app.use(cors());
 app.use(express.json()); // To parse JSON bodies
 
@@ -43,17 +42,38 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/advertisement', advertisementRoutes);
 app.use('/api/promoted', promotedRoutes);
 
-io.on('connection', (socket) => {
-    console.log('New client connected');
+// Route to get all verification requests
+app.get('/api/verify-requests', async (req, res) => {
+    try {
+      // Fetch all verification requests from the database
+      const verificationRequests = await VerificationRequest.find();
+      res.status(200).json(verificationRequests);
+    } catch (error) {
+      console.error('Error fetching verification requests:', error);
+      res.status(500).json({ success: false, message: 'Failed to fetch verification requests.' });
+    }
+  });
+  // Route to verify a specific account (update the status)
+app.post('/api/verify-account/:requestId', async (req, res) => {
+    try {
+      const { requestId } = req.params;
   
-    socket.on('businessSignUp', (data) => {
-      console.log('Received data:', data);
-      // Process the data (e.g., save it to the database)
-    });
+      // Find the request by ID and update the status to 'Verified'
+      const updatedRequest = await VerificationRequest.findByIdAndUpdate(
+        requestId,
+        { status: 'Verified' },
+        { new: true } // This returns the updated document
+      );
   
-    socket.on('disconnect', () => {
-      console.log('Client disconnected');
-    });
+      if (!updatedRequest) {
+        return res.status(404).json({ success: false, message: 'Verification request not found.' });
+      }
+  
+      res.status(200).json({ success: true, message: 'Account successfully verified!', updatedRequest });
+    } catch (error) {
+      console.error('Error verifying account:', error);
+      res.status(500).json({ success: false, message: 'Failed to verify account.' });
+    }
   });
   
 app.use((err, req, res, next) => {
