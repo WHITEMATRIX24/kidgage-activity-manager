@@ -14,7 +14,7 @@ const bookingRoutes = require('./routes/bookingRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const advertisementRoutes = require('./routes/advertisementRoutes');
 const promotedRoutes = require('./routes/promotedRoute');
-const VerificationRequest = require('../models/VerificationRequest');
+const VerificationRequest = require('./models/VerificationRequest');
 
 
 const app = express();
