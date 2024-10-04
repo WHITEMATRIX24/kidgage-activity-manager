@@ -1,7 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
+const http = require('http');
+const { Server } = require('socket.io');
 // Import routes
 const userRoutes = require('./routes/userRoutes'); // Existing routes for business sign-up
 const personalRoutes = require('./routes/personalRoutes'); // New routes for personal sign-up
@@ -18,7 +19,8 @@ const promotedRoutes = require('./routes/promotedRoute');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
-
+const server = http.createServer(app);
+const io = new Server(server);
 app.use(cors());
 app.use(express.json()); // To parse JSON bodies
 
@@ -41,7 +43,19 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/advertisement', advertisementRoutes);
 app.use('/api/promoted', promotedRoutes);
 
-
+io.on('connection', (socket) => {
+    console.log('New client connected');
+  
+    socket.on('businessSignUp', (data) => {
+      console.log('Received data:', data);
+      // Process the data (e.g., save it to the database)
+    });
+  
+    socket.on('disconnect', () => {
+      console.log('Client disconnected');
+    });
+  });
+  
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: 'Something went wrong!' });
