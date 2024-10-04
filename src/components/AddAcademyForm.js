@@ -41,6 +41,7 @@ const AddAcademyForm = ({ handleNavigation }) => {
     };
 
     const [formData, setFormData] = useState(initialFormState);
+    const [fileError, setFileError] = useState('');
 
     const handleChange = (e) => {
         const { name, value, type, files } = e.target;
@@ -56,7 +57,32 @@ const AddAcademyForm = ({ handleNavigation }) => {
             }));
         }
     };
-    
+    const handleFileChange = (e) => {
+        const { name, value, type, files } = e.target;
+
+        // Handle file upload and check file size
+        if (files) {
+            const file = files[0];
+            if (file && file.size > 1024 * 1024) { // 1MB in bytes
+                setFileError(`The file size of ${file.name} exceeds 1MB.`);
+                setFormData(prevState => ({
+                    ...prevState,
+                    [name]: []
+                }));
+            } else {
+                setFileError(''); // Clear error if file size is valid
+                setFormData(prevState => ({
+                    ...prevState,
+                    [name]: Array.from(files)
+                }));
+            }
+        } else {
+            setFormData(prevState => ({
+                ...prevState,
+                [name]: value
+            }));
+        }
+    };
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('button clicked!')
@@ -111,21 +137,6 @@ return (
                     placeholder="Academy Name"
                     required
                 />
-  
-                <select
-                    id="academyType"
-                    name="academyType"
-                    value={formData.academyType}
-                    onChange={handleChange}
-                    required
-                >
-                <option value="">Select Academy Type</option>
-                    {academyTypes.map((type) => (
-                <option key={type._id} value={type.name}>
-                    {type.name}
-                </option>
-                ))}
-                </select>
     
                 <input
                     type="email"
@@ -191,7 +202,7 @@ return (
                         type="text"
                         name="licenseNo"
                         value={formData.licenseNo}
-                        onChange={handleChange}
+                        onChange={handleFileChange}
                         placeholder="License number"
                         required
                     />
@@ -204,7 +215,7 @@ return (
                     <input
                         type="file"
                         name="crFile"
-                        onChange={handleChange}
+                        onChange={handleFileChange}
                         accept=".pdf"
                         className="hidden-input"
 
@@ -245,6 +256,7 @@ return (
                 </div>
                 <button type="submit">Create Academy</button>
                 {error && <p className="error-message">{error}</p>}
+                {fileError && <p className="error-message">{fileError}</p>}
                 {success && <p className="success-message">{success}</p>}
             </form>
     </div>

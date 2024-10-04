@@ -112,7 +112,6 @@ const Dashboard = () => {
                         <PromoteCourse />
                         {/* <EditCourseForm /> */}
                     </section>
-
                     <section id="academies" className="db-section">
                     <ViewAcademy/>
                         {/* <AddAcademyForm /> */}
