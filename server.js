@@ -14,7 +14,6 @@ const bookingRoutes = require('./routes/bookingRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const advertisementRoutes = require('./routes/advertisementRoutes');
 const promotedRoutes = require('./routes/promotedRoute');
-const VerificationRequest = require('./models/VerificationRequest');
 
 
 const app = express();
@@ -42,69 +41,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/advertisement', advertisementRoutes);
 app.use('/api/promoted', promotedRoutes);
 
-// Route to get all verification requests
-app.get('/api/verify-requests', async (req, res) => {
-    try {
-      // Fetch all verification requests from the database
-      const verificationRequests = await VerificationRequest.find();
-      res.status(200).json(verificationRequests);
-    } catch (error) {
-      console.error('Error fetching verification requests:', error);
-      res.status(500).json({ success: false, message: 'Failed to fetch verification requests.' });
-    }
-  });
-  // Route to verify a specific account (update the status)
-app.post('/api/verify-account/:requestId', async (req, res) => {
-    try {
-      const { requestId } = req.params;
-  
-      // Find the request by ID and update the status to 'Verified'
-      const updatedRequest = await VerificationRequest.findByIdAndUpdate(
-        requestId,
-        { status: 'Verified' },
-        { new: true } // This returns the updated document
-      );
-  
-      if (!updatedRequest) {
-        return res.status(404).json({ success: false, message: 'Verification request not found.' });
-      }
-  
-      res.status(200).json({ success: true, message: 'Account successfully verified!', updatedRequest });
-    } catch (error) {
-      console.error('Error verifying account:', error);
-      res.status(500).json({ success: false, message: 'Failed to verify account.' });
-    }
-  });
-  
-// Endpoint to handle verification requests
-app.post('/api/verify-account', async (req, res) => {
-    try {
-      // Extract form data from request body
-      const { username, email, phoneNumber, description, location, fullName, designation, agreeTerms } = req.body;
-      const crFile = req.files ? req.files.crFile : null; // Handle file if present
-  
-      // Create a new verification request
-      const newRequest = new VerificationRequest({
-        username,
-        email,
-        phoneNumber,
-        description,
-        location,
-        fullName,
-        designation,
-        agreeTerms,
-        crFile,
-        status: 'Pending', // Initially set status as 'Pending'
-      });
-  
-      await newRequest.save();
-      res.status(201).json({ success: true, message: 'Account verification request submitted!' });
-    } catch (error) {
-      console.error('Error submitting verification request:', error);
-      res.status(500).json({ success: false, message: 'Failed to submit verification request.' });
-    }
-  });
-  
+
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: 'Something went wrong!' });
