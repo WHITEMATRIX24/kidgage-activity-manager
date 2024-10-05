@@ -91,7 +91,7 @@ function AddPosterForm() {
         formData.append('image', file);
 
         try {
-            const response = await axios.post('https://main.d3781xttwrodcq.amplifyapp.com/api/posters/add', formData, {
+            const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/posters/add', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

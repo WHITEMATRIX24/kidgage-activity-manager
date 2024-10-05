@@ -19,7 +19,7 @@ const EditCourseCategoryForm = () => {
 
     const fetchCourses = async () => {
         try {
-            const response = await axios.get('https://main.d3781xttwrodcq.amplifyapp.com/api/course-category/categories');
+            const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/course-category/categories');
             setCourses(response.data);
         } catch (error) {
             console.error('Error fetching courses:', error);
@@ -48,7 +48,7 @@ const EditCourseCategoryForm = () => {
 
     const handleConfirmDelete = async () => {
         try {
-            await axios.delete(`https://main.d3781xttwrodcq.amplifyapp.com/api/course-category/delete/${bannerToDelete._id}`);
+            await axios.delete(`https://kidgage-adminbackend.onrender.com/api/course-category/delete/${bannerToDelete._id}`);
             setSelectedBanner(null);
             setEditMode(false);
             setShowConfirmPopup(false);
@@ -78,7 +78,7 @@ const EditCourseCategoryForm = () => {
         }
 
         try {
-            await axios.put(`https://main.d3781xttwrodcq.amplifyapp.com/api/course-category/update/${selectedBanner._id}`, formData);
+            await axios.put(`https://kidgage-adminbackend.onrender.com/api/course-category/update/${selectedBanner._id}`, formData);
             setEditMode(false);
             setSelectedBanner(null);
             setFileName('No file chosen');

@@ -18,7 +18,7 @@ const PromoteCourse = () => {
     useEffect(() => {
         const fetchProviders = async () => {
             try {
-                const response = await axios.get('https://main.d3781xttwrodcq.amplifyapp.com/api/users/all'); // Adjust the URL as needed
+                const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/users/all'); // Adjust the URL as needed
                 setProviders(response.data);
             } catch (error) {
                 console.error('Error fetching providers:', error);
@@ -32,7 +32,7 @@ const PromoteCourse = () => {
         const fetchCourses = async () => {
             const providerIds = providers.map(provider => provider._id);
             try {
-                const response = await axios.get('https://main.d3781xttwrodcq.amplifyapp.com/api/courses/by-providers', {
+                const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/courses/by-providers', {
                     params: { providerIds }
                 });
                 const coursesByProvider = response.data.reduce((acc, course) => {
@@ -64,7 +64,7 @@ const PromoteCourse = () => {
         if (!selectedCourse) return;
 
         try {
-            await axios.post(`https://main.d3781xttwrodcq.amplifyapp.com/api/promoted/promote/${selectedCourse._id}`, { promote: promoteMode });
+            await axios.post(`https://kidgage-adminbackend.onrender.com/api/promoted/promote/${selectedCourse._id}`, { promote: promoteMode });
             // Refresh the courses list
             setCourses((prevCourses) => ({
                 ...prevCourses,

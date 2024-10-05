@@ -40,7 +40,7 @@ function AddBannerForm() {
         formData.append('bookingLink', banner.bookingLink);
 
         try {
-            const response = await axios.post('https://main.d3781xttwrodcq.amplifyapp.com/api/banners/addbanner', formData, {
+            const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/banners/addbanner', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data' // Set the content type to multipart/form-data
                 }

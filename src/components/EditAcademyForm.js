@@ -32,7 +32,7 @@ const EditAcademyForm = () => {
   useEffect(() => {
     const fetchAcademyTypes = async () => {
       try {
-        const response = await axios.get('https://main.d3781xttwrodcq.amplifyapp.com/api/course-category/categories');
+        const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/course-category/categories');
         setAcademyTypes(response.data);
       } catch (error) {
         console.error('Error fetching academy types', error);
@@ -44,7 +44,7 @@ const EditAcademyForm = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get('https://main.d3781xttwrodcq.amplifyapp.com/api/users/search', {
+      const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/users/search', {
         params: { query }
       });
       if (response.data) {
@@ -117,7 +117,7 @@ const handleChange = (e) => {
   if (isEditMode) {
     try {
 
-      const response = await axios.put(`https://main.d3781xttwrodcq.amplifyapp.com/api/users/academy/${academyData._id}`, formData, {
+      const response = await axios.put(`https://kidgage-adminbackend.onrender.com/api/users/academy/${academyData._id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setSuccess('Academy updated successfully!');
@@ -146,7 +146,7 @@ const handleChange = (e) => {
 
   const handleConfirmDelete = async () => {
     try {
-      await axios.delete(`https://main.d3781xttwrodcq.amplifyapp.com/api/users/academy/${academyData._id}`);
+      await axios.delete(`https://kidgage-adminbackend.onrender.com/api/users/academy/${academyData._id}`);
       setAcademyData(null);
       setFormData({
         username: '',

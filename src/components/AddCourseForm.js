@@ -38,7 +38,7 @@ function AddCourseForm({providerId}) {
     useEffect(() => {
         const fetchCourseTypes = async () => {
             try {
-                const response = await axios.get('https://main.d3781xttwrodcq.amplifyapp.com/api/course-category/categories');
+                const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/course-category/categories');
                 setCourseTypes(response.data);
             } catch (error) {
                 console.error('Error fetching course types', error);
@@ -177,7 +177,7 @@ const removeImage = (index) => {
             });
 
 
-            const response = await axios.post('https://main.d3781xttwrodcq.amplifyapp.com/api/courses/addcourse', formData, {
+            const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/courses/addcourse', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
@@ -212,7 +212,7 @@ const removeImage = (index) => {
 
     const handleSearch = async () => {
         try {
-            const response = await axios.get(`https://main.d3781xttwrodcq.amplifyapp.com/api/users/search?query=${searchQuery}`);
+            const response = await axios.get(`https://kidgage-adminbackend.onrender.com/api/users/search?query=${searchQuery}`);
             setSearchResult(response.data);
             setSearchError('');
             setCourse((prev) => ({ ...prev, providerId: response.data._id }));

@@ -42,7 +42,7 @@ function AddCourseCategoryForm() {
         formData.append('image', course.image);
 
         try {
-            const response = await axios.post('https://main.d3781xttwrodcq.amplifyapp.com/api/course-category/add', formData, {
+            const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/course-category/add', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

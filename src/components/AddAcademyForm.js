@@ -12,7 +12,7 @@ const AddAcademyForm = ({ handleNavigation }) => {
     useEffect(() => {
         const fetchAcademyTypes = async () => {
           try {
-            const response = await axios.get('https://main.d3781xttwrodcq.amplifyapp.com/api/course-category/categories');
+            const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/course-category/categories');
             setAcademyTypes(response.data);
           } catch (error) {
             console.error('Error fetching academy types', error);
@@ -107,7 +107,7 @@ const AddAcademyForm = ({ handleNavigation }) => {
         });
     
         try {
-            const response = await axios.post('https://main.d3781xttwrodcq.amplifyapp.com/api/users/signup', data);
+            const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/users/signup', data);
             setSuccess('Academy added Successfully!');
             setFormData({ ...initialFormState }); // Reset form fields
         } catch (error) {
