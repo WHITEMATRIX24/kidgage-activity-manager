@@ -18,7 +18,7 @@ const EditPosterForm = ({ onDelete }) => {
 
     const fetchPosters = async () => {
         try {
-            const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/posters');
+            const response = await axios.get('https://main.d3781xttwrodcq.amplifyapp.com/api/posters');
             setPosters(response.data);
         } catch (error) {
             console.error('Error fetching posters:', error);
@@ -98,7 +98,7 @@ const EditPosterForm = ({ onDelete }) => {
         }
 
         try {
-            await axios.put(`https://kidgage-adminbackend.onrender.com/api/posters/${selectedPoster._id}`, formData);
+            await axios.put(`https://main.d3781xttwrodcq.amplifyapp.com/api/posters/${selectedPoster._id}`, formData);
             setEditMode(false);
             setSelectedPoster(null);
             setFileName('No file chosen');
