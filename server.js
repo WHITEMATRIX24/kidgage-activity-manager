@@ -76,6 +76,35 @@ app.post('/api/verify-account/:requestId', async (req, res) => {
     }
   });
   
+// Endpoint to handle verification requests
+app.post('/api/verify-account', async (req, res) => {
+    try {
+      // Extract form data from request body
+      const { username, email, phoneNumber, description, location, fullName, designation, agreeTerms } = req.body;
+      const crFile = req.files ? req.files.crFile : null; // Handle file if present
+  
+      // Create a new verification request
+      const newRequest = new VerificationRequest({
+        username,
+        email,
+        phoneNumber,
+        description,
+        location,
+        fullName,
+        designation,
+        agreeTerms,
+        crFile,
+        status: 'Pending', // Initially set status as 'Pending'
+      });
+  
+      await newRequest.save();
+      res.status(201).json({ success: true, message: 'Account verification request submitted!' });
+    } catch (error) {
+      console.error('Error submitting verification request:', error);
+      res.status(500).json({ success: false, message: 'Failed to submit verification request.' });
+    }
+  });
+  
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: 'Something went wrong!' });
