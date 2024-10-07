@@ -77,7 +77,13 @@ const charLimit = 500;
       setSearchError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
     }
   };
-    
+  const downloadFile = () => {
+    const base64String = academyData.crFile; // Assuming this is the Base64 string
+    const link = document.createElement('a');
+    link.href = `data:application/pdf;base64,${base64String}`; // Change mime type if needed
+    link.download = 'CRFile.pdf'; // Provide a default name
+    link.click();
+  };
 const handleChange = (e) => {
   const { name, value, type, files } = e.target;
   let formData = new FormData();
@@ -203,6 +209,13 @@ const handleSubmit = async (e) => {
           {searchError && <p className="error-message">{searchError}</p>}
           {academyData && (
             <form className="add-course-form" onSubmit={handleSubmit}>
+              <div style={{width:'100%', display:'flex',justifyContent:'flex-end', marginBottom:'10px'}}>
+              {academyData.crFile && (
+              <button type="button" onClick={downloadFile} style={{borderRadius:'20px'}}>
+                Download CR File
+              </button>
+            )}
+              </div>
               <input
                 type="text"
                 name="username"
