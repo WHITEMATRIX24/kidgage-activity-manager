@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import './AddCourseForm.css';
-import { FaChevronDown } from "react-icons/fa";
 import axios from 'axios';
 
 const AddAcademyForm = ({ handleNavigation }) => {
@@ -133,7 +132,7 @@ return (
                     placeholder="Academy Name"
                     required
                 />
-                    <label className='sign-in-label'>Academy Bio</label>
+                <label className='sign-in-label'>Academy Bio</label>
                 <textarea
                     name="description"
                     value={formData.description}
@@ -213,7 +212,7 @@ return (
                         type="text"
                         name="licenseNo"
                         value={formData.licenseNo}
-                        onChange={handleFileChange}
+                        onChange={handleChange}
                         placeholder="License number"
                         required
                     />
@@ -222,6 +221,7 @@ return (
                     <label className='sign-in-label' htmlFor="crFile">CR</label>
                     <label className='sign-in-label' htmlFor="academyImg">Academy Image</label>
                 </div>
+                {fileError && <p className="error-message">{fileError}</p>}
                 <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
                     <input
                         type="file"
@@ -259,7 +259,6 @@ return (
                 </div>
                 <button type="submit">Create Academy</button>
                 {error && <p className="error-message">{error}</p>}
-                {fileError && <p className="error-message">{fileError}</p>}
                 {success && <p className="success-message">{success}</p>}
             </form>
     </div>
