@@ -161,7 +161,7 @@ return (
                     required
                 />
                 <div className="phone-number-container" style={{ position: 'relative', width: '100%' }}>
-            <span className="country-code" style={{ position: 'absolute', left: '10px', top: '16px', transform: 'translateY(-50%)', fontSize: 'small', color: '#555' }}>
+            <span className="country-code" style={{ position: 'absolute', left: '10px', top: '21px', transform: 'translateY(-50%)', fontSize: 'small', color: '#555' }}>
               +974
             </span>
             <input
