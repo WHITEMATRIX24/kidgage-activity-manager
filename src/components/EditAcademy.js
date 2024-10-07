@@ -135,7 +135,7 @@ const handleSubmit = async (e) => {
   if (isEditMode) {
     try {
 
-      const response = await axios.put(`https://kidgage-adminbackend.onrender.com/api/users/academy/${academyData._id}`, formData, {
+      const response = await axios.put(`https://kidgage-adminbackend.onrender.com/api/users/update/${academyData._id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setSuccess('Academy updated successfully!');
