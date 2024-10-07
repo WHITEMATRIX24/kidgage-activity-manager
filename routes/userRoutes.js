@@ -182,7 +182,6 @@ router.get('/provider/:id', async (req, res) => {
 // Route to update academy data
 router.put('/academy/:id', upload.fields([{ name: 'logo' }, { name: 'crFile' }, { name: 'academyImg' }]), async (req, res) => {
   const academyId = req.params.id;
-
   try {
       const updatedData = {
           username: req.body.username,
