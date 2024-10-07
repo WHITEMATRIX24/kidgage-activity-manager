@@ -9,13 +9,62 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+// router.post('/signup', upload.fields([
+//   { name: 'logo', maxCount: 1 },
+//   { name: 'crFile', maxCount: 1 },
+//   { name: 'academyImg', maxCount: 1 }
+// ]), async (req, res) => {
+//   const { username, email, phoneNumber, password, fullName, designation, licenseNo, description, location, agreeTerms } = req.body;
+
+//   const files = req.files;
+//   const fileBase64 = {};
+
+//   if (files) {
+//     if (files.logo) fileBase64.logo = files.logo[0].buffer.toString('base64');
+//     if (files.crFile) fileBase64.crFile = files.crFile[0].buffer.toString('base64');
+//     if (files.academyImg) fileBase64.academyImg = files.academyImg[0].buffer.toString('base64');
+//   }
+
+//   try {
+//     const existingUser = await User.findOne({ $or: [{ email }, { phoneNumber }] });
+//     if (existingUser) {
+//       return res.status(400).json({ message: 'User with this email or phone number already exists.' });
+//     }
+
+//     const saltRounds = 10;
+//     const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+//     const newUser = new User({
+//       username,
+//       email,
+//       phoneNumber,
+//       password: hashedPassword,
+//       fullName,
+//       designation,
+//       logo: fileBase64.logo,
+//       crFile: fileBase64.crFile,
+//       licenseNo,
+//       academyImg: fileBase64.academyImg,
+//       description,
+//       location,
+//       agreeTerms,
+//       });
+
+//     await newUser.save();
+//     res.status(201).json({ message: 'User registered successfully!' });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server error.' });
+//   }
+// });
+
+
 router.post('/signup', upload.fields([
   { name: 'logo', maxCount: 1 },
   { name: 'crFile', maxCount: 1 },
-  { name: 'idCard', maxCount: 1 },
   { name: 'academyImg', maxCount: 1 }
 ]), async (req, res) => {
-  const { username, email, phoneNumber, password, firstName, lastName, licenseNo, description, location, agreeTerms } = req.body;
+  const { username, email, phoneNumber, fullName, designation, description, location, website, instaId, agreeTerms } = req.body;
 
   const files = req.files;
   const fileBase64 = {};
@@ -23,7 +72,6 @@ router.post('/signup', upload.fields([
   if (files) {
     if (files.logo) fileBase64.logo = files.logo[0].buffer.toString('base64');
     if (files.crFile) fileBase64.crFile = files.crFile[0].buffer.toString('base64');
-    if (files.idCard) fileBase64.idCard = files.idCard[0].buffer.toString('base64');
     if (files.academyImg) fileBase64.academyImg = files.academyImg[0].buffer.toString('base64');
   }
 
@@ -33,25 +81,22 @@ router.post('/signup', upload.fields([
       return res.status(400).json({ message: 'User with this email or phone number already exists.' });
     }
 
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
+    // Construct the new user object based on the updated schema
     const newUser = new User({
       username,
       email,
       phoneNumber,
-      password: hashedPassword,
-      firstName,
-      lastName,
-      logo: fileBase64.logo,
-      crFile: fileBase64.crFile,
-      idCard: fileBase64.idCard,
-      licenseNo,
-      academyImg: fileBase64.academyImg,
+      fullName,
+      designation,
       description,
       location,
-      agreeTerms,
-      });
+      website: website || null, // Optional
+      instaId: instaId || null, // Optional
+      logo: fileBase64.logo,
+      crFile: fileBase64.crFile,
+      academyImg: fileBase64.academyImg,
+      agreeTerms: agreeTerms === 'true', // Ensure agreeTerms is parsed as a Boolean
+    });
 
     await newUser.save();
     res.status(201).json({ message: 'User registered successfully!' });
@@ -60,8 +105,6 @@ router.post('/signup', upload.fields([
     res.status(500).json({ message: 'Server error.' });
   }
 });
-
-
 // Sign-In Route
 router.post('/signin', async (req, res) => {
   const { emailOrPhone, password } = req.body;
@@ -138,12 +181,12 @@ router.get('/provider/:id', async (req, res) => {
 //Route to update academy by id
 router.put('/update/:id', async (req, res) => {
   const { id } = req.params;
-  const { username, email, phoneNumber, firstName, lastName, licenseNo, description, location, agreeTerms } = req.body;
+  const { username, email, phoneNumber, fullName, designation, licenseNo, description, location, agreeTerms } = req.body;
 
   try {
     const updatedAcademy = await User.findByIdAndUpdate(
       id,
-      { username, email, phoneNumber, firstName, lastName, licenseNo, description, location, agreeTerms },
+      { username, email, phoneNumber, fullName, designation, licenseNo, description, location, agreeTerms },
       { new: true }
     );
 
