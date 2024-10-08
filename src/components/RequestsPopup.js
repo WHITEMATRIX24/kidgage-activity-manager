@@ -15,7 +15,7 @@ const RequestsPopup = ({ show, closeRequests }) => {
         if (show) {
             const fetchPendingUsers = async () => {
                 try {
-                    const response = await axios.get('http://localhost:5001/api/users/pending');
+                    const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/users/pending');
                     setPendingUsers(response.data); // Set the users data
                 } catch (error) {
                     console.error('Error fetching pending users:', error);
@@ -44,7 +44,7 @@ const RequestsPopup = ({ show, closeRequests }) => {
     // Function to handle verification
     const handleVerify = async (userId) => {
         try {
-            await axios.post(`http://localhost:5001/api/users/verify/${userId}`);
+            await axios.post(`https://kidgage-adminbackend.onrender.com/api/users/verify/${userId}`);
             setPendingUsers(pendingUsers.filter(user => user._id !== userId)); // Remove user from list after verifying
             setSelectedUser(null); // Reset selected user
         } catch (error) {
@@ -55,7 +55,7 @@ const RequestsPopup = ({ show, closeRequests }) => {
     // Function to handle rejection
     const handleReject = async (userId) => {
         try {
-            await axios.post(`http://localhost:5001/api/users/reject/${userId}`);
+            await axios.post(`https://kidgage-adminbackend.onrender.com/api/users/reject/${userId}`);
             setPendingUsers(pendingUsers.filter(user => user._id !== userId)); // Remove user from list after rejecting
             setSelectedUser(null); // Reset selected user
         } catch (error) {
@@ -83,6 +83,11 @@ const RequestsPopup = ({ show, closeRequests }) => {
                         <h4>{selectedUser.username}</h4>
                         <p>Email: {selectedUser.email}</p>
                         <p>Status: {selectedUser.verificationStatus}</p>
+                        <p>Location: {selectedUser.location}</p>
+                        <p>Description: {selectedUser.description}</p>
+                        <p>Full Name: {selectedUser.fullName}</p>
+                        <p>Designation: {selectedUser.designation}</p>
+
                         {/* Buttons for verify and reject */}
                         <button onClick={() => handleVerify(selectedUser._id)}>Verify</button>
                         <button onClick={() => handleReject(selectedUser._id)}>Reject</button>
