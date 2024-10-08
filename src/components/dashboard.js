@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import { faEnvelope, faTimes } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import Sidebar from './sidebar'; // Ensure correct path
@@ -7,6 +6,7 @@ import './dashboard.css'; // Ensure correct path
 import AddCourseForm from './AddCourseForm';
 import EditCourseForm from './EditCourseForm';
 import AddAcademyForm from './AddAcademyForm';
+import ManageCourses from './ManageCourses';
 import AddParentForm from './AddParentForm';
 import AddStudentForm from './AddStudentForm';
 import AddBannerForm from './AddBannerForm';
@@ -17,7 +17,7 @@ import AddCourseCategoryForm from './AddCourseCategory';
 import EditCourseCategoryForm from './EditCourseCategoryForm';
 import EditParentForm from './EditParentForm';
 import EditStudentForm from './EditStudentForm';
-import EditAcademyForm from './EditAcademyForm';
+import ManageAcademy from './ManageAcademy';
 import RequestsPopup from './RequestsPopup';
 import AddAdvertisement from './AddAdvertisement1';
 import AddAdvertisement2 from './AddAdvertisement2';
@@ -32,21 +32,45 @@ import ViewAcademy from './ViewAcademy';
 import ViewCourses from './ViewCourses';
 
 const Dashboard = () => {
-    const location = useLocation();
-    const { id, role } = location.state || {};
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [itemToDelete, setItemToDelete] = useState(null);
     const [deleteType, setDeleteType] = useState(''); // 'poster' or 'student'
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [showChangePasswordForm, setShowChangePasswordForm] = useState(false); // New state
-    const adminId = id; // The ID for the admin
+    const [adminId, setAdminId] = useState('');
+    const [adminRole, setAdminRole] = useState('');
+    const [Name, setName] = useState('');
+    const [email, setEmail] = useState('');
 
 
+    useEffect(() => {
+        // Retrieve adminId and adminRole from sessionStorage
+        const storedId = sessionStorage.getItem('adminId');
+        const storedRole = sessionStorage.getItem('adminRole');
+        const storedName = sessionStorage.getItem('Name');
+        const storedEmail = sessionStorage.getItem('email');
+
+
+        if (storedId && storedRole) {
+          setAdminId(storedId);
+          setAdminRole(storedRole);
+          setName(storedName);
+          setEmail(storedEmail);
+
+
+        }
+      }, []);
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
     };
     const handleSignOut = () => {
+        // Clear sessionStorage values for adminId, adminRole, and Name
+        sessionStorage.removeItem('adminId');
+        sessionStorage.removeItem('adminRole');
+        sessionStorage.removeItem('Name');
+        
+        // Redirect to the homepage
         window.location.replace('/');
     };
 
@@ -116,6 +140,9 @@ const Dashboard = () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [requestsRef]);
+    if (!adminRole) {
+        return <div className="no-access">You do not have access to the dashboard.</div>;
+    }
     return (
         <div className="dashboard-body">
             <div className="hamburger-menu" onClick={toggleSidebar}>
@@ -127,12 +154,16 @@ const Dashboard = () => {
                 <img className='dash-logo' src={Logo}></img>
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
                     <h1>Activity Manager</h1>
+                    {adminRole === 'admin' && (
+                    <>
                     <div style={{ alignSelf: 'flex-end', marginRight: '10%', fontSize: 'x-large', fontWeight: 'bold', color: 'black', cursor: 'pointer' }} onClick={toggleRequests}>
                         <FontAwesomeIcon icon={faEnvelope} /> Requests
                     </div>
+                    </>
+                    )}
                     {showRequests && (
                         <RequestsPopup show={showRequests} closeRequests={closeRequests} />
-                )}
+                    )}
                 </div>
                 
             </div>
@@ -140,6 +171,8 @@ const Dashboard = () => {
 
                 <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
                 <div className={`dashboard-content ${sidebarOpen ? 'expanded' : ''}`}>
+                {adminRole === 'admin' && (
+                    <>
                     <section id="courses" className="db-section">
                         <ViewCourses/>
                         {/* <AddCourseForm /> */}
@@ -190,6 +223,36 @@ const Dashboard = () => {
                             </button>
                         </div>
                     </section>
+                    </>
+                    )}
+                {adminRole === 'provider' && (
+                    <>
+                    <section id="courses" className="db-section">
+                        <ManageCourses/>
+                        {/* <AddCourseForm /> */}
+                        <PromoteCourse />
+                        {/* <EditCourseForm /> */}
+                    </section>
+                    <section id="academies" className="db-section">
+                        {/* <ViewAcademy/> */}
+                        {/* <AddAcademyForm /> */}
+                        <ManageAcademy/>
+                    </section>
+                    <section id="settings" className="db-section">
+                        <div className="settings-content">
+                            <button className="sidebar-heading-button" onClick={handleChangePassword}>
+                                <FontAwesomeIcon icon={faRedoAlt} className="icon" />
+                                Change Password
+                            </button>
+                            <Divider style={{ margin: '10px 0' }} />
+                            <button className="sidebar-heading-button" onClick={handleSignOut}>
+                                <FontAwesomeIcon icon={faSignOutAlt} className="icon" />
+                                Sign Out
+                            </button>
+                        </div>
+                    </section>
+                    </>
+                    )}
                     {showChangePasswordForm && (
                         <div className="change-password-overlay">
                             <div className="change-password-container">
@@ -201,6 +264,7 @@ const Dashboard = () => {
                         </div>
                     )}
                 </div>
+                
                 {showPopup && (
                     <>
                         <div className="confirm-popup-overlay" onClick={togglePopup}></div>

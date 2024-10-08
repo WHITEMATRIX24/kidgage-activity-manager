@@ -7,7 +7,23 @@ import './dashboard.css';
 const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) => {
     const [activeItem, setActiveItem] = useState('courses');
     const sectionRefs = useRef({});
+    const [adminId, setAdminId] = useState('');
+    const [adminRole, setAdminRole] = useState('');
+    const [Name, setName] = useState('');
 
+    useEffect(() => {
+        // Retrieve adminId and adminRole from sessionStorage
+        const storedId = sessionStorage.getItem('adminId');
+        const storedRole = sessionStorage.getItem('adminRole');
+        const storedName = sessionStorage.getItem('Name');
+
+        
+        if (storedId && storedRole) {
+          setAdminId(storedId);
+          setName(storedName);
+          setAdminRole(storedRole.charAt(0).toUpperCase() + storedRole.slice(1).toLowerCase());
+        }
+      }, []);
     useEffect(() => {
         const sections = ['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'advertisements', 'course-categories', 'settings'];
 
@@ -69,20 +85,26 @@ const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) =>
         }
     };
     
+    const allowedSectionsByRole = {
+        admin: ['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'advertisements', 'course-categories', 'settings'],
+        provider: ['academies','courses',  'settings'],
+    };
+    const allowedSections = allowedSectionsByRole[adminRole.toLowerCase()] || [];
 
     return (
         <div className={`sidebar ${sidebarOpen ? 'show' : ''}`}>
             <div className="profile-section">
                 <img src={profileImage} alt="Profile" />
                 <div className="profile-info">
-                    <h3>ADMIN_777</h3>
-                    <p>Admin</p>
+                    <h4 style={{marginBottom:'0'}}>{Name}</h4>
+                    <p>{adminRole}</p>
+                    
                 </div>
             </div>
             {/* <h1 className="sidebar-heading">Dashboard</h1> */}
             <nav>
                 <ul>
-                    {['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'advertisements', 'course-categories', 'settings'].map(section => (
+                    {allowedSections.map(section => (
                         <li key={section} className={activeItem === section ? 'active' : ''} onClick={() => handleItemClick(section)}>
                             <a href={`#${section}`}>
                                 <FontAwesomeIcon icon={icons[section]} className="icon" />

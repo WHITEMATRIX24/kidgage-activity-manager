@@ -1,18 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState ,useEffect} from 'react';
 import axios from 'axios';
 import './AddCourseForm.css'; 
-import { FaEdit, FaTrash } from 'react-icons/fa';
+import { FaChevronDown, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
 
-const EditAcademyForm = ({ email }) => {
+const EditAcademyForm = () => {
   const [showForm, setShowForm] = useState(true);
+  const [query, setQuery] = useState('');
   const [academyData, setAcademyData] = useState(null);
-  const cities = [
-    "Doha", "Al Wakrah", "Al Khor", "Al Rayyan", 
-    "Al Shamal", "Al Shahaniya", "Al Daayen", 
-    "Umm Salal", "Dukhan", "Mesaieed"
-  ];
-  const [charCount, setCharCount] = useState(0);
-const charLimit = 500;
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -33,20 +27,37 @@ const charLimit = 500;
   const [searchError, setSearchError] = useState('');
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false); // Edit mode state
+  const [email, setEmail] = useState('');
+  const cities = [
+    "Doha", "Al Wakrah", "Al Khor", "Al Rayyan", 
+    "Al Shamal", "Al Shahaniya", "Al Daayen", 
+    "Umm Salal", "Dukhan", "Mesaieed"
+  ];
+  useEffect(() => {
+    const storedEmail = sessionStorage.getItem('email');
+    setEmail(storedEmail);
+  }, []);
 
-  // Automatically trigger the handleSearch when the component mounts
   useEffect(() => {
     if (email) {
-        console.log(email);
-      handleSearch(email);
+      console.log(email);
+      handleSearch(email); // Pass the email to handleSearch
     }
   }, [email]);
+  const [adminId, setAdminId] = useState('');
 
-  const handleSearch = async (query) => {
+  useEffect(() => {
+    // Retrieve the adminId from sessionStorage
+    const storedAdminId = sessionStorage.getItem('adminId');
+    if (storedAdminId) {
+      setAdminId(storedAdminId);
+      handleSearch(storedAdminId); // Trigger search with the retrieved adminId
+    }
+  }, []);
+
+  const handleSearch = async (searchQuery) => { // Accept searchQuery parameter
     try {
-      const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/users/search', {
-        params: { query }
-      });
+      const response = await axios.get(`https://kidgage-adminbackend.onrender.com/api/users/provider/${searchQuery}`); // Use ID to fetch data
       if (response.data) {
         setAcademyData(response.data);
         setFormData({
@@ -77,71 +88,47 @@ const charLimit = 500;
       setSearchError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
     }
   };
-  const downloadFile = () => {
-    const base64String = academyData.crFile; // Assuming this is the Base64 string
-    const link = document.createElement('a');
-    link.href = `data:application/pdf;base64,${base64String}`; // Change mime type if needed
-    link.download = 'CRFile.pdf'; // Provide a default name
-    link.click();
-  };
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        setSuccess('');
+      }, 5000); // Hide success message after 5 seconds
+
+      return () => clearTimeout(timer); // Cleanup the timer on component unmount
+    }
+  }, [success]);
+
+  
 const handleChange = (e) => {
-  const { name, value, type, files } = e.target;
-  let formData = new FormData();
-  if (name === 'description') {
-    setCharCount(value.length);
-  }
-  if (files) {
-    // Handle file inputs
-    Object.keys(files).forEach(key => {
-      const file = files[key];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        formData.append(name, reader.result);
-      };
-      reader.readAsDataURL(file);
-    });
-  } else {
-    // Handle text inputs
-    formData.append(name, value);
-  }
-
-  // Update the state with the FormData object
-  setFormData(prevState => ({ ...prevState, [name]: value }));
-};
-const [fileError, setFileError] = useState('');
-
-const handleFileChange = (e) => {
-  const { name, value, type, files } = e.target;
-
-  // Handle file upload and check file size
-  if (files) {
-      const file = files[0];
-      if (file && file.size > 1024 * 1024) { // 1MB in bytes
-          setFileError(`The file size of ${file.name} exceeds 1MB.`);
-          setFormData(prevState => ({
-              ...prevState,
-              [name]: []
-          }));
-      } else {
-          setFileError(''); // Clear error if file size is valid
-          setFormData(prevState => ({
-              ...prevState,
-              [name]: Array.from(files)
-          }));
-      }
-  } else {
-      setFormData(prevState => ({
-          ...prevState,
-          [name]: value
-      }));
-  }
-};
-const handleSubmit = async (e) => {
+    const { name, value, type, files } = e.target;
+    let formData = new FormData();
+  
+    if (files) {
+      // Handle file inputs
+      Object.keys(files).forEach(key => {
+        const file = files[key];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          formData.append(name, reader.result);
+        };
+        reader.readAsDataURL(file);
+      });
+    } else {
+      // Handle text inputs
+      formData.append(name, value);
+    }
+  
+    // Update the state with the FormData object
+    setFormData(prevState => ({ ...prevState, [name]: value }));
+  };
+  
+  
+  const handleSubmit = async (e) => {
   e.preventDefault();
   if (isEditMode) {
     try {
 
-      const response = await axios.put(`https://kidgage-adminbackend.onrender.com/api/users/update/${academyData._id}`, formData, {
+      const response = await axios.put(`https://kidgage-adminbackend.onrender.com/api/users/academy/${academyData._id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       setSuccess('Academy updated successfully!');
@@ -170,22 +157,23 @@ const handleSubmit = async (e) => {
 
   const handleConfirmDelete = async () => {
     try {
-
       await axios.delete(`https://kidgage-adminbackend.onrender.com/api/users/academy/${academyData._id}`);
       setAcademyData(null);
       setFormData({
         username: '',
         email: '',
         phoneNumber: '',
+        password: '',
+        confirmPassword: '',
         fullName: '',
         designation: '',
-        website: '',
-        instaId: '',
         logo: [],
         crFile: [],
+        idCard: [],
         licenseNo: '',
         academyImg: [],
         description: '',
+        academyType: '',
         location: '',
       });
       setShowConfirmPopup(false);
@@ -202,13 +190,24 @@ const handleSubmit = async (e) => {
   const handleCancelDelete = () => {
     setShowConfirmPopup(false);
   };
-
+  const downloadFile = () => {
+    const base64String = academyData.crFile; // Assuming this is the Base64 string
+    const link = document.createElement('a');
+    link.href = `data:application/pdf;base64,${base64String}`; // Change mime type if needed
+    link.download = 'CRFile.pdf'; // Provide a default name
+    link.click();
+  };
+  const [charCount, setCharCount] = useState(0);
+  const charLimit = 500;
   return (
-    <div className="">
+    <div className="add-course-form-container">
+      <div className="add-course-form-header">
+        <h2>Manage academy Info</h2>
+      </div>
+      {showForm && (
         <div className='add-course-form'>
-          {searchError && <p className="error-message">{searchError}</p>}
           {academyData && (
-            <form className="add-course-form" onSubmit={handleSubmit}>
+           <form className="add-course-form" onSubmit={handleSubmit}>
               <div style={{width:'100%', display:'flex',justifyContent:'flex-end', marginBottom:'10px'}}>
               {academyData.crFile && (
               <button type="button" onClick={downloadFile} style={{borderRadius:'20px'}}>
@@ -311,19 +310,9 @@ const handleSubmit = async (e) => {
                     />
                 </div>
                 <div className='add-upload-label-group'>
-                    <label className='sign-in-label' htmlFor="crFile">CR</label>
                     <label className='sign-in-label' htmlFor="academyImg">Academy Image</label>
                 </div>
-                {fileError && <p className="error-message">{fileError}</p>}
                 <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
-                    <input
-                        type="file"
-                        name="crFile"
-                        onChange={handleFileChange}
-                        accept=".pdf"
-                        className="hidden-input"
-                        disabled={!isEditMode}
-                    />
                     <input 
                         type="file" 
                         name="academyImg" 
@@ -349,40 +338,37 @@ const handleSubmit = async (e) => {
                     ))}
                     </select>
                 </div>
-
-              <div style={{display:'flex' ,justifyContent: 'flex-start'}} className="button-group">
-                {isEditMode &&(
+            <div className="button-container">
+                {!isEditMode ? (
                   <>
-                  <button style={{alignSelf:'flex-end'}} type="submit" className="submit-btn">Save</button>
-
+                  <></>
+                    <button type="button" onClick={handleEdit}><FaEdit /> Edit</button>
+                    <button type="button" className='delete-course-button' onClick={handleDelete}>
+                      <FaTrash /> Delete
+                    </button>
                   </>
-                )
-                }
-                {!isEditMode&&(
+                ) : (
                   <>
-                  
-                  <button style={{marginRight:'10px'}} type="button" className="edit-btn"  onClick={handleEdit}>
-                  <FaEdit /> Edit
-                </button>
-              
-                <button type="button" className="delete-btn" onClick={handleDelete}>
-                  <FaTrash /> Delete
-                </button></>
-                  )}
+                    <button type="submit" className='save-btn'>Save</button>
+                  </>
+                )}
               </div>
               {error && <p className="error-message">{error}</p>}
               {success && <p className="success-message">{success}</p>}
-            </form>
-          )}
-          {showConfirmPopup && (
-            <div className="confirm-popup">
-              <p>Are you sure you want to delete this academy?</p>
-              <button onClick={handleConfirmDelete}>Yes</button>
-              <button onClick={handleCancelDelete}>No</button>
-            </div>
+        </form>
           )}
         </div>
-      {/* )} */}
+      )}
+
+      {showConfirmPopup && (
+        <div className="confirm-popup">
+          <div className="confirm-popup-content">
+            <p>Are you sure you want to delete this academy?</p>
+            <button onClick={handleConfirmDelete}>Yes</button>
+            <button onClick={handleCancelDelete}>No</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
