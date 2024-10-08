@@ -19,8 +19,7 @@ router.post('/signin', async (req, res) => {
       return res.status(401).json({ message: 'Invalid username or password' });
     }
 
-    // Return the admin's id and role along with the success message
-    res.status(200).json({ message: 'Sign-in successful', admin: { id: admin._id, role: admin.role } });
+    res.status(200).json({ message: 'Sign-in successful', admin });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }

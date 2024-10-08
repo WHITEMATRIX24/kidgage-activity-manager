@@ -153,7 +153,7 @@ const Dashboard = () => {
             <div className='header-dash'>
                 <img className='dash-logo' src={Logo}></img>
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
-                    <h1>Activity Manager{adminId}{adminRole}{Name}</h1>
+                    <h1>Activity Manager</h1>
                     {adminRole === 'admin' && (
                     <>
                     <div style={{ alignSelf: 'flex-end', marginRight: '10%', fontSize: 'x-large', fontWeight: 'bold', color: 'black', cursor: 'pointer' }} onClick={toggleRequests}>
