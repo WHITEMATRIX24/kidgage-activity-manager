@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { faEnvelope, faTimes } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import Sidebar from './sidebar'; // Ensure correct path
@@ -31,13 +32,15 @@ import ViewAcademy from './ViewAcademy';
 import ViewCourses from './ViewCourses';
 
 const Dashboard = () => {
+    const location = useLocation();
+    const { id, role } = location.state || {};
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
     const [itemToDelete, setItemToDelete] = useState(null);
     const [deleteType, setDeleteType] = useState(''); // 'poster' or 'student'
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [showChangePasswordForm, setShowChangePasswordForm] = useState(false); // New state
-    const adminId = '66b22d7ec73e3b8a02fda241'; // The ID for the admin
+    const adminId = id; // The ID for the admin
 
 
     const toggleSidebar = () => {

@@ -28,19 +28,20 @@ const AdminSignIn = () => {
     try {
       const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/admin/signin', formData);
       console.log('Sign-in successful:', response.data);
+      const { id, role } = response.data.admin;
       setSuccess('Sign-in successful');
       setFormData({
         name: '',
         password: ''
       });
-      // Navigate to another page or perform additional actions
-      navigate('/dashboard');
+      
+      // Pass id and role to the dashboard
+      navigate('/dashboard', { state: { id, role } });
     } catch (error) {
       console.error('Sign-in error:', error.response ? error.response.data : error.message);
       setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
     }
   };
-
   return (
     <div className='asign-form-body'>
       <div className='asignup-form'>
