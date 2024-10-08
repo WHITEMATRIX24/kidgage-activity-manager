@@ -133,7 +133,26 @@ router.post('/signin', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+router.get('/pending', async (req, res) => {
+  try {
+    const pendingUsers = await User.find({ verificationStatus: 'pending' });
+    console.log('Fetched Pending Users:', pendingUsers); // Debugging log
+    res.status(200).json(pendingUsers);
+  } catch (error) {
+    console.error('Error fetching pending users:', error.message); // Debugging log for errors
+    res.status(400).json({ message: error.message });
+  }
+});
 
+// Route to verify a user
+router.post('/verify/:id', async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.id, { verificationStatus: 'accepted' }, { new: true });
+    res.status(200).json({ message: 'User verified successfully', user });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
 // Search Route
 router.get('/search', async (req, res) => {
   const { query } = req.query;

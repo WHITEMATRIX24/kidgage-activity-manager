@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { faEnvelope, faTimes } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import Sidebar from './sidebar'; // Ensure correct path
 import './dashboard.css'; // Ensure correct path
@@ -16,7 +17,7 @@ import EditCourseCategoryForm from './EditCourseCategoryForm';
 import EditParentForm from './EditParentForm';
 import EditStudentForm from './EditStudentForm';
 import EditAcademyForm from './EditAcademyForm';
-
+import RequestsPopup from './RequestsPopup';
 import AddAdvertisement from './AddAdvertisement1';
 import AddAdvertisement2 from './AddAdvertisement2';
 import EditAdvertisementForm from './EditAdvertisement';
@@ -90,7 +91,28 @@ const Dashboard = () => {
         setDeleteType('student');
         togglePopup();
     };
+    const [showRequests, setShowRequests] = useState(false); // Track requests list visibility
+    const requestsRef = useRef(null); // Create a reference for the requests list
+    const popupRef = useRef(null); // Reference for the popup window
 
+    const toggleRequests = () => {
+        setShowRequests(!showRequests); // Toggle requests list visibility
+    };
+
+    const closeRequests = () => {
+        setShowRequests(false); // Close the requests list
+    };
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (requestsRef.current && !requestsRef.current.contains(event.target)) {
+                setShowRequests(false); // Close if click is outside of requests container
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [requestsRef]);
     return (
         <div className="dashboard-body">
             <div className="hamburger-menu" onClick={toggleSidebar}>
@@ -100,7 +122,16 @@ const Dashboard = () => {
             </div>
             <div className='header-dash'>
                 <img className='dash-logo' src={Logo}></img>
-                <h1>Activity Manager</h1>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
+                    <h1>Activity Manager</h1>
+                    <div style={{ alignSelf: 'flex-end', marginRight: '10%', fontSize: 'x-large', fontWeight: 'bold', color: 'black', cursor: 'pointer' }} onClick={toggleRequests}>
+                        <FontAwesomeIcon icon={faEnvelope} /> Requests
+                    </div>
+                    {showRequests && (
+                        <RequestsPopup show={showRequests} closeRequests={closeRequests} />
+                )}
+                </div>
+                
             </div>
             <div className={`dashboard-card ${sidebarOpen ? 'expanded' : ''}`}>
 
