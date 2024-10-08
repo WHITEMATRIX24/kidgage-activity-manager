@@ -144,6 +144,17 @@ router.get('/pending', async (req, res) => {
   }
 });
 
+router.get('/accepted', async (req, res) => {
+  try {
+    const acceptedUsers = await User.find({ verificationStatus: 'accepted' });
+    console.log('Fetched Accepted Users:', acceptedUsers); // Debugging log
+    res.status(200).json(acceptedUsers);
+  } catch (error) {
+    console.error('Error fetching accepted users:', error.message); // Debugging log for errors
+    res.status(400).json({ message: error.message });
+  }
+});
+
 // Route to verify a user
 router.post('/verify/:id', async (req, res) => {
   try {
