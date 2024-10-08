@@ -229,13 +229,8 @@ const Dashboard = () => {
                     <>
                     <section id="courses" className="db-section">
                         <ManageCourses/>
-                        {/* <AddCourseForm /> */}
-                        <PromoteCourse />
-                        {/* <EditCourseForm /> */}
                     </section>
                     <section id="academies" className="db-section">
-                        {/* <ViewAcademy/> */}
-                        {/* <AddAcademyForm /> */}
                         <ManageAcademy/>
                     </section>
                     <section id="settings" className="db-section">

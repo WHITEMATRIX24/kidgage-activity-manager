@@ -1,8 +1,8 @@
 const express = require('express');
 const multer = require('multer');
 const bcrypt = require('bcrypt');
-const User = require('../models/User'); // Adjust the path as necessary
 const nodemailer = require('nodemailer');
+const User = require('../models/User'); // Adjust the path as necessary
 
 const router = express.Router();
 
@@ -65,7 +65,7 @@ router.post('/signup', upload.fields([
   { name: 'crFile', maxCount: 1 },
   { name: 'academyImg', maxCount: 1 }
 ]), async (req, res) => {
-  const { username, email, phoneNumber, fullName, designation, description, location, website,licenseNo, instaId, agreeTerms } = req.body;
+  const { username, email, phoneNumber, fullName, designation, description, location, website, licenseNo, instaId, agreeTerms } = req.body;
 
   const files = req.files;
   const fileBase64 = {};
@@ -166,6 +166,7 @@ router.post('/verify/:id', async (req, res) => {
   }
 });
 
+
 // Rejection endpoint
 router.post('/reject/:id', async (req, res) => {
   const { username, email, fullName, reason } = req.body;
@@ -219,6 +220,8 @@ Team Kidgage`};
   }
 });
 
+
+
 // Search Route
 router.get('/search', async (req, res) => {
   const { query } = req.query;
@@ -268,30 +271,30 @@ router.get('/provider/:id', async (req, res) => {
 router.put('/update/:id', upload.fields([{ name: 'logo' }, { name: 'crFile' }, { name: 'academyImg' }]), async (req, res) => {
   const academyId = req.params.id;
   try {
-      const updatedData = {
-          username: req.body.username,
-          email: req.body.email,
-          phoneNumber: req.body.phoneNumber,
-          fullName: req.body.fullName,
-          designation: req.body.designation,
-          website: req.body.website,
-          instaId: req.body.instaId,
-          logo: req.files['logo'] ? req.files['logo'][0].path : undefined,
-          crFile: req.files['crFile'] ? req.files['crFile'][0].path : undefined,
-          licenseNo: req.body.licenseNo,
-          academyImg: req.files['academyImg'] ? req.files['academyImg'][0].path : undefined,
-          description: req.body.description,
-          location: req.body.location,
-      };
+    const updatedData = {
+      username: req.body.username,
+      email: req.body.email,
+      phoneNumber: req.body.phoneNumber,
+      fullName: req.body.fullName,
+      designation: req.body.designation,
+      website: req.body.website,
+      instaId: req.body.instaId,
+      logo: req.files['logo'] ? req.files['logo'][0].path : undefined,
+      crFile: req.files['crFile'] ? req.files['crFile'][0].path : undefined,
+      licenseNo: req.body.licenseNo,
+      academyImg: req.files['academyImg'] ? req.files['academyImg'][0].path : undefined,
+      description: req.body.description,
+      location: req.body.location,
+    };
 
-      const academy = await User.findByIdAndUpdate(academyId, updatedData, { new: true });
-      if (!academy) {
-          return res.status(404).json({ message: 'Academy not found.' });
-      }
-      res.status(200).json(academy);
+    const academy = await User.findByIdAndUpdate(academyId, updatedData, { new: true });
+    if (!academy) {
+      return res.status(404).json({ message: 'Academy not found.' });
+    }
+    res.status(200).json(academy);
   } catch (error) {
-      console.error('Error updating academy:', error);
-      res.status(500).json({ message: 'An error occurred. Please try again later.' });
+    console.error('Error updating academy:', error);
+    res.status(500).json({ message: 'An error occurred. Please try again later.' });
   }
 });
 

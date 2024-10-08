@@ -78,7 +78,7 @@ const RequestsPopup = ({ show, closeRequests }) => {
     const handleReject = async (userId, userDetails) => {
         console.log('Rejecting user with ID:', userId); // Log the user ID
         try {
-            await axios.post(`https://kidgage-adminbackend.onrender.com/api/users/reject/${userId}`, userDetails);
+            await axios.post(`http://localhost:5001/api/users/reject/${userId}`, userDetails);
             setPendingUsers(pendingUsers.filter(user => user._id !== userId)); // Remove user from list after rejecting
             setSelectedUser(null); // Reset selected user
         } catch (error) {
