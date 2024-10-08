@@ -164,6 +164,28 @@ router.post('/verify/:id', async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+
+// Example Express route for rejection
+router.post('/api/users/reject/:id', async (req, res) => {
+  const userId = req.params.id;
+  const { reason } = req.body; // You may still want to keep the reason for logging or auditing purposes
+
+  try {
+      // Optionally, you can log the rejection reason here
+      console.log(`User with ID: ${userId} rejected. Reason: ${reason}`);
+
+      // Delete the user from the database
+      await User.findByIdAndDelete(userId);
+
+      res.status(200).send({ message: 'User rejected and deleted successfully.' });
+  } catch (error) {
+      console.error('Error rejecting user:', error);
+      res.status(500).send({ message: 'Server error.' });
+  }
+});
+
+
+
 // Search Route
 router.get('/search', async (req, res) => {
   const { query } = req.query;

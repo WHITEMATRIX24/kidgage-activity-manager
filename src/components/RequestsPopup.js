@@ -2,6 +2,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import ConfirmationPopup from './ConfirmationPopup'; // Import the confirmation popup
+import RejectionReasonPopup from './RejectionReasonPopup';
 import './requestsPopup.css'; // Create a new CSS file for popup-specific styles
 
 const RequestsPopup = ({ show, closeRequests }) => {
@@ -11,6 +13,8 @@ const RequestsPopup = ({ show, closeRequests }) => {
     const [loading, setLoading] = useState(true); // Loading state
     const [selectedUser, setSelectedUser] = useState(null); // State to store selected user
     const [activeTab, setActiveTab] = useState('pending'); // State for tab management ('pending' or 'accepted')
+    const [showConfirmation, setShowConfirmation] = useState(false); // State to manage confirmation popup
+    const [showRejectionPopup, setShowRejectionPopup] = useState(false); // State to manage rejection reason popup
 
     // Fetch users from the backend when the popup opens or tab changes
     useEffect(() => {
@@ -48,30 +52,32 @@ const RequestsPopup = ({ show, closeRequests }) => {
         };
     }, [popupRef, closeRequests]);
 
-    // Function to handle verification
-    const handleVerify = async (userId) => {
-        try {
-            await axios.post(`https://kidgage-adminbackend.onrender.com/api/users/verify/${userId}`);
-            setPendingUsers(pendingUsers.filter(user => user._id !== userId)); // Remove user from list after verifying
-            setSelectedUser(null); // Reset selected user
-        } catch (error) {
-            console.error('Error verifying user:', error);
+    // Function to handle verification confirmation
+    const handleVerify = async () => {
+        if (selectedUser) {
+            try {
+                await axios.post(`https://kidgage-adminbackend.onrender.com/api/users/verify/${selectedUser._id}`);
+                setPendingUsers(pendingUsers.filter(user => user._id !== selectedUser._id)); // Remove user from list after verifying
+                setSelectedUser(null); // Reset selected user
+            } catch (error) {
+                console.error('Error verifying user:', error);
+            }
+            setShowConfirmation(false); // Close the confirmation popup after verifying
         }
     };
 
-    // Function to download a file
+
     const downloadFile = () => {
         const base64String = selectedUser.crFile; // Assuming this is the Base64 string
         const link = document.createElement('a');
         link.href = `data:application/pdf;base64,${base64String}`; // Change mime type if needed
         link.download = 'CRFile.pdf'; // Provide a default name
         link.click();
-    };
-
-    // Function to handle rejection
-    const handleReject = async (userId) => {
+      };
+      
+      const handleReject = async (userId, reason) => {
         try {
-            await axios.post(`https://kidgage-adminbackend.onrender.com/api/users/reject/${userId}`);
+            await axios.post(`https://kidgage-adminbackend.onrender.com/api/users/reject/${userId}`, { reason }); // Send rejection reason
             setPendingUsers(pendingUsers.filter(user => user._id !== userId)); // Remove user from list after rejecting
             setSelectedUser(null); // Reset selected user
         } catch (error) {
@@ -133,13 +139,16 @@ const RequestsPopup = ({ show, closeRequests }) => {
                         <p><strong>Designation:</strong> {selectedUser.designation}</p>
                         {activeTab === 'pending' && (
                             <>
-                                <button style={{ marginRight: '10px' }} onClick={() => handleVerify(selectedUser._id)}>Verify</button>
-                                <button onClick={() => handleReject(selectedUser._id)}>Reject</button>
+                                <button style={{ marginRight: '10px' }} onClick={() => setShowConfirmation(true)}>Verify</button>
+                                <button onClick={() => setShowRejectionPopup(true)}>Reject</button>
                             </>
                         )}
                     </div>
                 ) : (
                     <ul>
+                        {activeTab === 'accepted' && (
+                            <p style={{color:'grey', fontSize:'small'}}>These requests are accepted by the admin but filling the profile has not yet completed by the provider. It will reach its verification status once provider completed his profile.</p>
+                        )}
                         {(activeTab === 'pending' ? pendingUsers : acceptedUsers).length > 0 ? (
                             (activeTab === 'pending' ? pendingUsers : acceptedUsers).map((user) => (
                                 <li key={user._id} onClick={() => setSelectedUser(user)}>
@@ -151,6 +160,21 @@ const RequestsPopup = ({ show, closeRequests }) => {
                         )}
                     </ul>
                 )}
+
+                {/* Confirmation Popup for verifying user */}
+                <ConfirmationPopup
+                    show={showConfirmation}
+                    onConfirm={handleVerify}
+                    onCancel={() => setShowConfirmation(false)}
+                />
+                <RejectionReasonPopup
+                    show={showRejectionPopup}
+                    onConfirm={(reason) => {
+                        handleReject(selectedUser._id, reason);
+                        setShowRejectionPopup(false); // Close the rejection popup after confirming
+                    }}
+                    onCancel={() => setShowRejectionPopup(false)} // Close the popup when canceled
+                />
             </div>
         </>
     );

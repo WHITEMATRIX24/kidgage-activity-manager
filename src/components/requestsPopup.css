@@ -110,3 +110,90 @@
     color: #387CB8;
     border-bottom: 2px solid #387CB8;
 }
+/* confirmationPopup.css */
+.confirmation-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.confirmation-window {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    width: 300px;
+}
+
+.confirmation-buttons {
+    margin-top: 20px;
+}
+
+.confirmation-buttons button {
+    margin: 0 10px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+.confirmation-buttons button:nth-child(1){
+    background-color: #387CB8;
+}
+.confirmation-buttons button:nth-child(2){
+    background-color: red;
+}
+/* rejectionReasonPopup.css */
+.rejection-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.rejection-window {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+    width: 400px;
+}
+
+.rejection-buttons {
+    margin-top: 20px;
+}
+
+.rejection-buttons button {
+    margin: 0 10px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+.rejection-buttons button:nth-child(1){
+    background-color: #387CB8;
+}
+.rejection-buttons button:nth-child(2){
+    background-color: red;
+}
+
+.rejection-window textarea{
+    border: 1px solid #387CB8;
+    width: 90%;
+    border-radius: 5px;
+    outline: none;
+    
+}
+.rejection-window textarea:active{
+    border: 1px solid #387CB8;
+}
