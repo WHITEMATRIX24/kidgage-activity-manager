@@ -183,7 +183,7 @@ router.post('/verify/:id', async (req, res) => {
     // Save the new Admin account
     await admin.save();
     console.log('Admin saved successfully:', admin);
-
+    const url= "https://main.d3781xttwrodcq.amplifyapp.com/";
     // Update the user verification status
     const user = await User.findByIdAndUpdate(
       req.params.id,
@@ -196,7 +196,8 @@ router.post('/verify/:id', async (req, res) => {
     Dear ${fullName},
     
     We are happy to inform you that your account has been verified by KidGage.
-    To get started, please login using the following credentials:
+    To get started, please login using the following credentials: 
+    Link to Activity Manager:${url}
     Username: ${email}
     Password: ${phone}
     
