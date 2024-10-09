@@ -42,6 +42,8 @@ const Dashboard = () => {
     const [adminRole, setAdminRole] = useState('');
     const [Name, setName] = useState('');
     const [email, setEmail] = useState('');
+    const [user, setUser] = useState('');
+
 
 
     useEffect(() => {
@@ -50,6 +52,7 @@ const Dashboard = () => {
         const storedRole = sessionStorage.getItem('adminRole');
         const storedName = sessionStorage.getItem('Name');
         const storedEmail = sessionStorage.getItem('email');
+        const storedUser = sessionStorage.getItem('userid');
 
 
         if (storedId && storedRole) {
@@ -57,6 +60,7 @@ const Dashboard = () => {
           setAdminRole(storedRole);
           setName(storedName);
           setEmail(storedEmail);
+          setUser(storedUser);
 
 
         }
@@ -153,7 +157,7 @@ const Dashboard = () => {
             <div className='header-dash'>
                 <img className='dash-logo' src={Logo}></img>
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
-                    <h1>Activity Manager{email}</h1>
+                    <h1>Activity Manager</h1>
                     {adminRole === 'admin' && (
                     <>
                     <div style={{ alignSelf: 'flex-end', marginRight: '10%', fontSize: 'x-large', fontWeight: 'bold', color: 'black', cursor: 'pointer' }} onClick={toggleRequests}>

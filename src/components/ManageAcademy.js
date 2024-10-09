@@ -7,14 +7,14 @@ const ManageAcademy = () => {
 
   useEffect(() => {
     const fetchUserDetails = async () => {
-      const adminId = sessionStorage.getItem('adminId');
-      if (!adminId) {
+      const userId = sessionStorage.getItem('userid');
+      if (!userId) {
         setError('No admin ID found in session storage.');
         return;
       }
 
       try {
-        const response = await fetch(`http://localhost:5001/api/users/user/${adminId}`); // Adjust the API endpoint as necessary
+        const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/user/${userId}`); // Adjust the API endpoint as necessary
         if (!response.ok) {
           throw new Error('Failed to fetch user details.');
         }
