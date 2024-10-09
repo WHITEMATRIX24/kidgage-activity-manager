@@ -14,7 +14,7 @@ const ManageAcademy = () => {
       }
 
       try {
-        const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/user/${adminId}`); // Adjust the API endpoint as necessary
+        const response = await fetch(`http://localhost:5001/api/users/user/${adminId}`); // Adjust the API endpoint as necessary
         if (!response.ok) {
           throw new Error('Failed to fetch user details.');
         }

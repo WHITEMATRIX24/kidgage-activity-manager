@@ -1,207 +1,49 @@
-import React, { useEffect, useState } from "react";
-import './AddCourseForm.css';
-import './ViewForm.css';
-import { FaPlus, FaTimes } from "react-icons/fa";
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import AddCourseForm from './AddCourseForm';
-import EditCourseForm from './EditCourseForm';
 
-const ManageCourses = ({ handleSubmit }) => {
-    const [showForm, setShowForm] = useState(true);
-    const [showAForm, setShowAForm] = useState(false);
-    const [providers, setProviders] = useState([]);
-    const [courses, setCourses] = useState({});
-    const [selectedCourse, setSelectedCourse] = useState(null); 
-    const [selectedProviderId, setSelectedProviderId] = useState(null); 
-    const [adminId, setAdminId] = useState('');
-    const [adminRole, setAdminRole] = useState('');
-    const [Name, setName] = useState('');
-    const [email, setEmail] = useState('');
+const ManageCourse = () => {
+    const [provider, setProvider] = useState(null);
 
     useEffect(() => {
-        // Retrieve adminId and adminRole from sessionStorage
-        const storedId = sessionStorage.getItem('adminId');
-        const storedRole = sessionStorage.getItem('adminRole');
-        const storedName = sessionStorage.getItem('Name');
-        const storedEmail = sessionStorage.getItem('email');
+        const fetchCourseData = async () => {
+            try {
+                const email = sessionStorage.getItem('email'); // Fetch the email from localStorage
+                if (!email) {
+                    throw new Error('No email found in localStorage.');
+                }
 
-        if (storedId && storedRole) {
-            setAdminId(storedId);
-            setAdminRole(storedRole);
-            setName(storedName);
-            setEmail(storedEmail);
-        }
+                console.log('Email:', email);
+                const providerResponse = await axios.get(`http://localhost:5001/api/users/email/${email}`);
+                console.log('Provider Response:', providerResponse.data); // Log response data for debugging
+
+                setProvider(providerResponse.data);
+            } catch (error) {
+                if (error.response && error.response.status === 404) {
+                    console.error('Provider not found.');
+                } else {
+                    console.error('Error fetching provider data:', error.message || error);
+                }
+            }
+        };
+
+        fetchCourseData();
     }, []);
 
-    const [visibleCourses, setVisibleCourses] = useState({});
-
-    const toggleFormVisibility = () => {
-        setShowForm(!showForm);
-    };
-
-    // Fetch providers using the adminId
-    useEffect(() => {
-        const fetchProviders = async () => {
-            try {
-                const response = await axios.get(`https://kidgage-adminbackend.onrender.com/api/users/by-admin/${adminId}`);
-                setProviders(response.data);
-            } catch (error) {
-                console.error('There was an error fetching the users!', error);
-            }
-        };
-
-        if (adminId) {
-            fetchProviders();
-        }
-    }, [adminId]);
-
-    // Fetch courses based on the retrieved providers
-    useEffect(() => {
-        const fetchCourses = async () => {
-            const providerIds = providers.map(provider => provider._id);
-            try {
-                const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/courses/by-providers', {
-                    params: { providerIds }
-                });
-                const coursesByProvider = response.data.reduce((acc, course) => {
-                    const providerId = course.providerId;
-                    if (!acc[providerId]) {
-                        acc[providerId] = [];
-                    }
-                    acc[providerId].push(course);
-                    return acc;
-                }, {});
-                setCourses(coursesByProvider);
-            } catch (error) {
-                console.error('Error fetching courses:', error);
-            }
-        };
-
-        if (providers.length > 0) {
-            fetchCourses();
-        }
-    }, [providers]);
-
-    const handleAddAcademyClick = (providerId) => {
-        setShowAForm(true);
-        setShowForm(false);
-        setSelectedProviderId(providerId);
-    };
-
-    const handleCloseForm = () => {
-        setShowAForm(false);
-        setShowForm(true);
-    };
-
-    const handleEditCourseClick = (course) => {
-        setSelectedCourse(course);
-        setShowForm(false);
-    };
-
-    const handleCloseEditForm = () => {
-        setSelectedCourse(null);
-        setShowForm(true);
-    };
-
-    const toggleCourseVisibility = (providerId) => {
-        setVisibleCourses(prevVisibleCourses => ({
-            ...prevVisibleCourses,
-            [providerId]: !prevVisibleCourses[providerId]
-        }));
-    };
-
-    const totalCourses = Object.values(courses).reduce((acc, courseList) => acc + courseList.length, 0);
+    if (!provider) {
+        return <div>Loading...</div>;
+    }
 
     return (
-        <div className="add-course-form-container">
-            {!showAForm && (
-                <>
-                    <div className="add-course-form-header" onClick={toggleFormVisibility}>
-                        <h2>Courses/Activities</h2>
-                    </div>
-                    {showForm && (
-                        <form className="add-course-form">
-                            <h3 style={{ color: 'green', marginTop: '0px' }}>Total {totalCourses} Activities registered under {providers.length} Academies</h3>
-
-                            <div className="users-contain">
-                                {providers.map((provider) => (
-                                    <div className="use-card" key={provider.username}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'flex-start' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', width: '60%' }}>
-                                                <img src={`data:image/jpeg;base64,${provider.logo}`} alt={`${provider.username}'s logo`} className="use-logo" />
-                                                <p className="users-name">{provider.username}</p>
-                                            </div>
-                                            <button
-                                                type="button"
-                                                onClick={() => handleAddAcademyClick(provider._id)}
-                                                className="add-image-button"
-                                                title="Add Academy"
-                                                style={{ color: 'black', display: 'flex', alignItems: 'center', padding: ' 0 5px', background: 'transparent', border: '1px solid #ccc' }}
-                                            >
-                                                <p>Add a new course</p><FaPlus style={{ marginLeft: '10px', fontSize: '16px', color: '#387CB8' }} />
-                                            </button>
-                                        </div>
-                                        <div className="see-courses" style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'flex-start' }}>
-                                            <h4 className="no-of-course" style={{ alignSelf: 'flex-start' }}>Courses/Activities listed: {courses[provider._id] ? courses[provider._id].length : 0}</h4>
-                                            <button
-                                                type="button"
-                                                onClick={() => toggleCourseVisibility(provider._id)}
-                                                className="see-courses-button"
-                                            >
-                                                {visibleCourses[provider._id] ? 'Hide Courses' : 'See Courses'}
-                                            </button>
-                                        </div>
-                                        {visibleCourses[provider._id] && courses[provider._id] && courses[provider._id].length > 0 && (
-                                            <div className="courses-container" style={{ width: '100%' }}>
-                                                {courses[provider._id].map((course) => (
-                                                    <div key={course._id} className="course-card" onClick={() => handleEditCourseClick(course)}>
-                                                        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '60%' }}>
-                                                            <p style={{ color: 'darkblue' }}>{course.name}</p>
-                                                            <p style={{ color: 'green' }}>{course.courseType}</p>
-                                                        </div>
-                                                        <button>view</button>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        </form>
-                    )}
-                </>
-            )}
-
-            {showAForm && (
-                <div className="add-academy-form-container">
-                    <div className="form-header">
-                        <h3>Add New Course</h3>
-                        <button className="close-form-button" onClick={handleCloseForm}>
-                            <FaTimes style={{ fontSize: '24px', color: 'red' }} />
-                        </button>
-                    </div>
-                    <AddCourseForm handleSubmit={handleCloseForm} providerId={selectedProviderId} />
-                </div>
-            )}
-
-            {/* Show EditCourseForm when a course is selected */}
-            {selectedCourse && (
-                <div className="edit-course-form-container">
-                    <div className="form-header">
-                        <h3>Edit/ Remove Course</h3>
-                        <button className="close-form-button" onClick={handleCloseEditForm}>
-                            <FaTimes style={{ fontSize: '24px', color: 'red' }} />
-                        </button>
-                    </div>
-                    <EditCourseForm
-                        course={selectedCourse}
-                        id={selectedCourse._id}
-                        handleSubmit={handleCloseEditForm}
-                    />
-                </div>
-            )}
+        <div className="activity-info-container">
+            <div className="activity-info-provider">
+                <h2>Activity provided by</h2>
+                <p>{provider.username || 'N/A'}</p>
+                <p>{provider.email || 'N/A'}</p>
+                <p>{provider.phoneNumber || 'N/A'}</p>
+                {/* Add other fields as needed */}
+            </div>
         </div>
     );
 };
 
-export default ManageCourses;
+export default ManageCourse;

@@ -399,4 +399,19 @@ router.get('/user/:id', async (req, res) => {
   }
 });
 
+router.get('/email/:email', async (req, res) => {
+  const { email } = req.params;
+  try {
+      const provider = await User.findOne({ email: email }); // Check for email field match
+      if (!provider) {
+          return res.status(404).json({ message: 'Provider not found' });
+      }
+      res.json(provider);
+  } catch (error) {
+      res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+
 module.exports = router;
