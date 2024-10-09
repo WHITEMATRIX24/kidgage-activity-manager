@@ -32,7 +32,7 @@ const AdminSignIn = () => {
       setSuccess('Sign-in successful');
       setFormData({
         name: '',
-        password: ''
+        password: '',
       });
           // Store id and role in sessionStorage
         sessionStorage.setItem('adminId', _id);

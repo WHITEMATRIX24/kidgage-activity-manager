@@ -412,20 +412,29 @@ router.get('/email/:email', async (req, res) => {
       res.status(500).json({ message: 'Server error' });
   }
 });
-router.post('/complete/:userId', async (req, res) => {
+router.post('/complete/:userId', upload.fields([{ name: 'academyImg' }, { name: 'logo' }]), async (req, res) => {
   const { userId } = req.params;
-  const { licenseNo, academyImg, logo } = req.body;
-
+  const { licenseNo } = req.body;
+  
   try {
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Update the user fields
+    // Update the license number
     user.licenseNo = licenseNo;
-    user.academyImg = academyImg;
-    user.logo = logo;
+
+    // Convert files to Base64 and update the user record
+    if (req.files) {
+      if (req.files.academyImg && req.files.academyImg[0]) {
+        user.academyImg = req.files.academyImg[0].buffer.toString('base64'); // Convert Academy Image to Base64
+      }
+
+      if (req.files.logo && req.files.logo[0]) {
+        user.logo = req.files.logo[0].buffer.toString('base64'); // Convert Logo to Base64
+      }
+    }
 
     await user.save();
 

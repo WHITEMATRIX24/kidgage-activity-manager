@@ -110,7 +110,7 @@ const ManageAcademy = () => {
             <div>
               <label>Academy Image URL:</label>
               <input
-                type="text"
+                type="file"
                 name="academyImg"
                 value={formData.academyImg}
                 onChange={handleInputChange}
@@ -120,7 +120,7 @@ const ManageAcademy = () => {
             <div>
               <label>Logo URL:</label>
               <input
-                type="text"
+                type="file"
                 name="logo"
                 value={formData.logo}
                 onChange={handleInputChange}
