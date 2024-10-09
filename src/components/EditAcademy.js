@@ -155,8 +155,9 @@ const handleSubmit = async (e) => {
     if (formData.logo) {
       updatedFormData.append('logo', formData.logo); // Append Logo file
     }
-      await axios.put(`https://kidgage-adminbackend.onrender.com/api/users/update/${academyData._id}`, updatedFormData, {
-        headers: { 'Content-Type': 'application/json' }
+    const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/update/${academyData._id}`, {
+        method: 'POST',
+        body: updatedFormData, // Use FormData for file uploads
       });
 
       setSuccess('Academy updated successfully!');
