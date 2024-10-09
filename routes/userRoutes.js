@@ -382,6 +382,7 @@ router.put('/update/:id', upload.fields([
   { name: 'academyImg', maxCount: 1 }
 ]), async (req, res) => {
   const academyId = req.params.id;
+  const { licenseNo } = req.body;
 
   try {
     // Fetch the current academy data from the database
@@ -389,40 +390,28 @@ router.put('/update/:id', upload.fields([
     if (!currentAcademy) {
       return res.status(404).json({ message: 'Academy not found.' });
     }
+    currentAcademy.licenseNo = licenseNo;
+
 
     // Process the uploaded files and convert them to base64
-    const files = req.files || {};
-    const fileBase64 = {
-      logo: files.logo ? files.logo[0].buffer.toString('base64') : currentAcademy.logo,
-      crFile: files.crFile ? files.crFile[0].buffer.toString('base64') : currentAcademy.crFile,
-      academyImg: files.academyImg ? files.academyImg[0].buffer.toString('base64') : currentAcademy.academyImg,
-    };
+    if (req.files) {
+      if (req.files.academyImg && req.files.academyImg[0]) {
+        currentAcademy.academyImg = req.files.academyImg[0].buffer.toString('base64'); // Convert Academy Image to Base64
+      }
 
-    // Prepare the updated data object
-    const updatedData = {
-      username: req.body.username || currentAcademy.username,
-      email: req.body.email || currentAcademy.email,
-      phoneNumber: req.body.phoneNumber || currentAcademy.phoneNumber,
-      fullName: req.body.fullName || currentAcademy.fullName,
-      designation: req.body.designation || currentAcademy.designation,
-      website: req.body.website || currentAcademy.website,
-      instaId: req.body.instaId || currentAcademy.instaId,
-      logo: fileBase64.logo, // Updated logo in base64 format
-      crFile: fileBase64.crFile, // Updated crFile in base64 format
-      academyImg: fileBase64.academyImg, // Updated academyImg in base64 format
-      licenseNo: req.body.licenseNo || currentAcademy.licenseNo,
-      description: req.body.description || currentAcademy.description,
-      location: req.body.location || currentAcademy.location,
-    };
+      if (req.files.logo && req.files.logo[0]) {
+        currentAcademy.logo = req.files.logo[0].buffer.toString('base64'); // Convert Logo to Base64
+      }
 
-    // Update the academy details in the database
-    const updatedAcademy = await User.findByIdAndUpdate(academyId, updatedData, { new: true });
-    if (!updatedAcademy) {
-      return res.status(404).json({ message: 'Academy not found.' });
+      if (req.files.crFile && req.files.crFile[0]) {
+        currentAcademy.crFile = req.files.crFile[0].buffer.toString('base64'); // Convert Logo to Base64
+      }
     }
 
+    await currentAcademy.save();
+
+
     // Send the updated data back as the response
-    res.status(200).json(updatedAcademy);
   } catch (error) {
     console.error('Error updating academy:', error);
     res.status(500).json({ message: 'An error occurred while updating the academy. Please try again later.' });

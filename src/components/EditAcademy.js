@@ -142,13 +142,19 @@ const handleSubmit = async (e) => {
 
   if (isEditMode) {
     try {
-      const updatedFormData = {
-        ...formData,
-        logo: formData.logo, // base64 encoded logo
-        crFile: formData.crFile, // base64 encoded crFile
-        academyImg: formData.academyImg // base64 encoded academyImg
-      };
+      const updatedFormData = new FormData();
+      updatedFormData.append('licenseNo', formData.licenseNo);
 
+    if (formData.academyImg) {
+      updatedFormData.append('academyImg', formData.academyImg); // Append Academy Image file
+    }
+    if (formData.crFile) {
+      updatedFormData.append('logo', formData.crFile); // Append Logo file
+    }
+
+    if (formData.logo) {
+      updatedFormData.append('logo', formData.logo); // Append Logo file
+    }
       await axios.put(`https://kidgage-adminbackend.onrender.com/api/users/update/${academyData._id}`, updatedFormData, {
         headers: { 'Content-Type': 'application/json' }
       });
