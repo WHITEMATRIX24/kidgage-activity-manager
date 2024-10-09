@@ -73,6 +73,8 @@ const Dashboard = () => {
         sessionStorage.removeItem('adminId');
         sessionStorage.removeItem('adminRole');
         sessionStorage.removeItem('Name');
+        sessionStorage.removeItem('email');
+
         
         // Redirect to the homepage
         window.location.replace('/');
