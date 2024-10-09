@@ -149,7 +149,7 @@ const handleSubmit = async (e) => {
         academyImg: formData.academyImg // base64 encoded academyImg
       };
 
-      await axios.put(`http://localhost:5001/api/users/update/${academyData._id}`, updatedFormData, {
+      await axios.put(`https://kidgage-adminbackend.onrender.com/api/users/update/${academyData._id}`, updatedFormData, {
         headers: { 'Content-Type': 'application/json' }
       });
 
