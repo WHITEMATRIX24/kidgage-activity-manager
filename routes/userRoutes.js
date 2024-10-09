@@ -311,16 +311,26 @@ router.get('/search', async (req, res) => {
 });
 
 // New route to get all users
+// router.get('/all', async (req, res) => {
+//   try {
+//     const users = await User.find({}, 'username logo email'); // Fetch only the username and logo fields
+//     res.status(200).json(users);
+//   } catch (error) {
+//     res.status(400).json({ message: error.message });
+//   }
+// });
+
 router.get('/all', async (req, res) => {
   try {
-    const users = await User.find({}, 'username logo email'); // Fetch only the username and logo fields
+    // Fetch only verified users with the specified fields (username, logo)
+    const users = await User.find({ verificationStatus: 'verified' }, 'username logo email');
+    console.log('Fetched Users:', users); // Debugging log
     res.status(200).json(users);
   } catch (error) {
+    console.error('Error fetching users:', error.message); // Debugging log for errors
     res.status(400).json({ message: error.message });
   }
 });
-
-
 router.get('/provider/:id', async (req, res) => {
   try {
     const provider = await User.findById(req.params.id);
