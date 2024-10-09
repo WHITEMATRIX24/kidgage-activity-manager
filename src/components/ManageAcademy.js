@@ -1,9 +1,14 @@
-// UserDetails.js
 import React, { useEffect, useState } from 'react';
-
+import './ManageAcademy.css';
 const ManageAcademy = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    licenseNo: '',
+    academyImg: '',
+    logo: ''
+  });
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -14,12 +19,17 @@ const ManageAcademy = () => {
       }
 
       try {
-        const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/user/${userId}`); // Adjust the API endpoint as necessary
+        const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/user/${userId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch user details.');
         }
         const userData = await response.json();
         setUser(userData);
+
+        // If verificationStatus is accepted, show the form to update license, academy image, and logo
+        if (userData.verificationStatus === 'accepted') {
+          setShowForm(true);
+        }
       } catch (err) {
         setError(err.message);
       }
@@ -27,6 +37,38 @@ const ManageAcademy = () => {
 
     fetchUserDetails();
   }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const userId = sessionStorage.getItem('userid');
+    
+    try {
+      const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/complete/${userId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update user details.');
+      }
+
+      alert('Profile updated successfully!');
+      setShowForm(false);
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -40,16 +82,56 @@ const ManageAcademy = () => {
     <div>
       <h1>User Details</h1>
       <p><strong>Username:</strong> {user.username}</p>
+      <p><strong>Description:</strong> {user.description}</p>
       <p><strong>Email:</strong> {user.email}</p>
       <p><strong>Phone Number:</strong> {user.phoneNumber}</p>
       <p><strong>Full Name:</strong> {user.fullName}</p>
       <p><strong>Designation:</strong> {user.designation}</p>
-      <p><strong>Description:</strong> {user.description}</p>
       <p><strong>Location:</strong> {user.location}</p>
       <p><strong>Website:</strong> {user.website || 'N/A'}</p>
       <p><strong>Instagram ID:</strong> {user.instaId || 'N/A'}</p>
       <p><strong>CR File:</strong> {user.crFile || 'N/A'}</p>
-      <p><strong>License No:</strong> {user.licenseNo || 'N/A'}</p>
+
+      {showForm && (
+        <div className="editmodal">
+          <div className='editmodal-container'>
+          <h2>Update Academy Details</h2>
+          <form onSubmit={handleSubmit}>
+            <div>
+              <label>License No:</label>
+              <input
+                type="text"
+                name="licenseNo"
+                value={formData.licenseNo}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div>
+              <label>Academy Image URL:</label>
+              <input
+                type="text"
+                name="academyImg"
+                value={formData.academyImg}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div>
+              <label>Logo URL:</label>
+              <input
+                type="text"
+                name="logo"
+                value={formData.logo}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <button type="submit">Save</button>
+          </form>
+        </div>
+        </div>
+      )}
     </div>
   );
 };

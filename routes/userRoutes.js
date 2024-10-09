@@ -412,7 +412,28 @@ router.get('/email/:email', async (req, res) => {
       res.status(500).json({ message: 'Server error' });
   }
 });
+router.post('/complete/:userId', async (req, res) => {
+  const { userId } = req.params;
+  const { licenseNo, academyImg, logo } = req.body;
 
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update the user fields
+    user.licenseNo = licenseNo;
+    user.academyImg = academyImg;
+    user.logo = logo;
+
+    await user.save();
+
+    res.json({ message: 'User details updated successfully!' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 
 module.exports = router;
