@@ -3,6 +3,7 @@ const multer = require('multer');
 const bcrypt = require('bcrypt');
 const User = require('../models/User'); // Adjust the path as necessary
 const nodemailer = require('nodemailer');
+const Admin = require('../models/adminModel');
 
 const router = express.Router();
 
@@ -155,16 +156,49 @@ router.get('/accepted', async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-
-// Route to verify a user
 router.post('/verify/:id', async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, { verificationStatus: 'accepted' }, { new: true });
-    res.status(200).json({ message: 'User verified successfully', user });
+    const { email, phone, fullName, role } = req.body;
+
+    // Check if the admin with this email already exists
+    const existingAdmin = await Admin.findOne({ name: email });
+    if (existingAdmin) {
+      console.log('Admin with this email already exists');
+      return res.status(400).json({ message: 'Admin with this email already exists' });
+    }
+
+    // Hash the phone number to use as password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(phone, salt);
+
+    // Create a new Admin account using the provided user data
+    const admin = new Admin({
+      name: email,
+      password: hashedPassword,
+      fullName: fullName,
+      role: role,
+    });
+
+    // Save the new Admin account
+    await admin.save();
+    console.log('Admin saved successfully:', admin);
+
+    // Update the user verification status
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { verificationStatus: 'accepted' },
+      { new: true }
+    );
+
+    console.log('User verification status updated:', user);
+
+    res.status(200).json({ message: 'User verified and admin account created successfully', user });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error('Error in verify route:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
+
 
 // Rejection endpoint
 router.post('/reject/:id', async (req, res) => {

@@ -52,12 +52,22 @@ const RequestsPopup = ({ show, closeRequests }) => {
         };
     }, [popupRef, closeRequests]);
 
-    // Function to handle verification confirmation
     const handleVerify = async () => {
         if (selectedUser) {
             try {
-                await axios.post(`https://kidgage-adminbackend.onrender.com/api/users/verify/${selectedUser._id}`);
-                setPendingUsers(pendingUsers.filter(user => user._id !== selectedUser._id)); // Remove user from list after verifying
+                // Include the user's data in the request body
+                const userData = {
+                    email: selectedUser.email,
+                    phone: selectedUser.phoneNumber,
+                    fullName: selectedUser.fullName,
+                    role: 'provider'  // This role can be dynamically assigned based on the user's status
+                };
+                console.log(userData);
+                // Send POST request to verify and create an admin account
+                await axios.post(`https://kidgage-adminbackend.onrender.com/api/users/verify/${selectedUser._id}`, userData);
+    
+                // Remove user from the pending list after successful verification
+                setPendingUsers(pendingUsers.filter(user => user._id !== selectedUser._id));
                 setSelectedUser(null); // Reset selected user
             } catch (error) {
                 console.error('Error verifying user:', error);
@@ -65,7 +75,7 @@ const RequestsPopup = ({ show, closeRequests }) => {
             setShowConfirmation(false); // Close the confirmation popup after verifying
         }
     };
-
+    
 
     const downloadFile = () => {
         const base64String = selectedUser.crFile; // Assuming this is the Base64 string
@@ -134,6 +144,7 @@ const RequestsPopup = ({ show, closeRequests }) => {
                         </div>
                         <h4>{selectedUser.username}</h4>
                         <p><strong>Email:</strong> {selectedUser.email}</p>
+                        <p><strong>Phone:</strong> {selectedUser.phoneNumber}</p>
                         <p><strong>Status:</strong> {selectedUser.verificationStatus}</p>
                         <p><strong>Location:</strong> {selectedUser.location}</p>
                         <p><strong>Description: </strong>{selectedUser.description}</p>
