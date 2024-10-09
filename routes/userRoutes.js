@@ -156,6 +156,7 @@ router.get('/accepted', async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+
 router.post('/verify/:id', async (req, res) => {
   try {
     const { email, phone, fullName, role } = req.body;
@@ -191,8 +192,40 @@ router.post('/verify/:id', async (req, res) => {
     );
 
     console.log('User verification status updated:', user);
+    const welcomeMessage = `
+    Dear ${fullName},
+    
+    We are happy to inform you that your account has been verified by KidGage.
+    To get started, please login using the following credentials:
+    Username: ${email}
+    Password: ${phone}
+    
+    Please complete your profile after logging in.
+    
+    Welcome to KidGage Team!
+  `;
+  const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: 'whitematrix2024@gmail.com',
+      pass: 'tkxj mgpk cewx crni'
+    }
+  });
 
-    res.status(200).json({ message: 'User verified and admin account created successfully', user });
+  // Set up email data
+  const mailOptions = {
+    from: 'whitematrix2024@gmail.com', // sender address
+    to: email, // recipient email address
+    subject: 'Welcome to KidGage!', // Subject of the email
+    text: welcomeMessage, // Plain text body
+  };
+
+  // Send email
+  await transporter.sendMail(mailOptions);
+  console.log('Welcome email sent successfully to:', email);
+
+  // Send a response back to the client
+  res.status(200).json({ message: 'User verified and admin account created successfully', user });
   } catch (error) {
     console.error('Error in verify route:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
