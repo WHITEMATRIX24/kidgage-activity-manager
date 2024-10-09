@@ -3,6 +3,7 @@ const multer = require('multer');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const User = require('../models/User'); // Adjust the path as necessary
+const Admin = require('../models/adminModel');
 
 const router = express.Router();
 
@@ -157,15 +158,39 @@ router.get('/accepted', async (req, res) => {
 });
 
 // Route to verify a user
+// router.post('/verify/:id', async (req, res) => {
+//   try {
+//     const user = await User.findByIdAndUpdate(req.params.id, { verificationStatus: 'accepted' }, { new: true });
+//     res.status(200).json({ message: 'User verified successfully', user });
+//   } catch (error) {
+//     res.status(400).json({ message: error.message });
+//   }
+// });
+
+// Route to verify user and create an admin account
 router.post('/verify/:id', async (req, res) => {
   try {
+    // Update the user's verification status to 'accepted'
     const user = await User.findByIdAndUpdate(req.params.id, { verificationStatus: 'accepted' }, { new: true });
-    res.status(200).json({ message: 'User verified successfully', user });
+    if (user) {
+        // Create a new Admin account
+        const admin = new Admin({
+          name: user.email,         // Use the user's email for the admin name
+          password: user.phone,     // Use the user's phone number as password
+          fullName: user.fullName,  // Use the user's full name
+          role: 'provider'          // Set the role to 'provider'
+        });
+        // Save the new Admin account
+        await admin.save();
+
+      res.status(200).json({ message: 'User verified and admin account created successfully', user });
+    } else {
+      res.status(404).json({ message: 'User not found' });
+    }
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 });
-
 
 // Rejection endpoint
 router.post('/reject/:id', async (req, res) => {
