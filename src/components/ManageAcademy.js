@@ -1,6 +1,5 @@
-// ManageAcademy.js
+// UserDetails.js
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 
 const ManageAcademy = () => {
   const [user, setUser] = useState(null);
@@ -8,18 +7,21 @@ const ManageAcademy = () => {
 
   useEffect(() => {
     const fetchUserDetails = async () => {
-      const adminId = sessionStorage.getItem('adminId'); // Ensure this returns a valid ID
+      const adminId = sessionStorage.getItem('adminId');
       if (!adminId) {
         setError('No admin ID found in session storage.');
         return;
       }
 
       try {
-        const response = await axios.get(`/api/users/user/${adminId}`); // Use the correct API endpoint
-        setUser(response.data);
+        const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/user/${adminId}`); // Adjust the API endpoint as necessary
+        if (!response.ok) {
+          throw new Error('Failed to fetch user details.');
+        }
+        const userData = await response.json();
+        setUser(userData);
       } catch (err) {
-        console.error('There was an error fetching the users!', err);
-        setError('Error fetching user details.'); // Update error state
+        setError(err.message);
       }
     };
 
@@ -37,7 +39,17 @@ const ManageAcademy = () => {
   return (
     <div>
       <h1>User Details</h1>
-      {/* Render user details */}
+      <p><strong>Username:</strong> {user.username}</p>
+      <p><strong>Email:</strong> {user.email}</p>
+      <p><strong>Phone Number:</strong> {user.phoneNumber}</p>
+      <p><strong>Full Name:</strong> {user.fullName}</p>
+      <p><strong>Designation:</strong> {user.designation}</p>
+      <p><strong>Description:</strong> {user.description}</p>
+      <p><strong>Location:</strong> {user.location}</p>
+      <p><strong>Website:</strong> {user.website || 'N/A'}</p>
+      <p><strong>Instagram ID:</strong> {user.instaId || 'N/A'}</p>
+      <p><strong>CR File:</strong> {user.crFile || 'N/A'}</p>
+      <p><strong>License No:</strong> {user.licenseNo || 'N/A'}</p>
     </div>
   );
 };

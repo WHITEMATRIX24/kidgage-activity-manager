@@ -380,6 +380,7 @@ router.delete('/academy/:id', async (req, res) => {
     res.status(500).json({ message: 'Internal server error. Please try again later.' });
   }
 });
+
 router.get('/user/:id', async (req, res) => {
   try {
     const userId = req.params.id;
