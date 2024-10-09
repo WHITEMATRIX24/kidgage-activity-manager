@@ -412,18 +412,20 @@ router.get('/email/:email', async (req, res) => {
       res.status(500).json({ message: 'Server error' });
   }
 });
+
 router.post('/complete/:userId', upload.fields([{ name: 'academyImg' }, { name: 'logo' }]), async (req, res) => {
   const { userId } = req.params;
   const { licenseNo } = req.body;
-  
+
   try {
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Update the license number
+    // Update the license number and verification status
     user.licenseNo = licenseNo;
+    user.verificationStatus = 'verified'; // Set the verification status to 'verified'
 
     // Convert files to Base64 and update the user record
     if (req.files) {
@@ -443,6 +445,5 @@ router.post('/complete/:userId', upload.fields([{ name: 'academyImg' }, { name: 
     res.status(500).json({ message: error.message });
   }
 });
-
 
 module.exports = router;
