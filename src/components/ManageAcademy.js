@@ -45,34 +45,42 @@ const ManageAcademy = () => {
       [name]: value
     }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const userId = sessionStorage.getItem('userid');
+
+    // Create a new FormData object to send both text fields and file uploads
+    const formData = new FormData();
+    formData.append('licenseNo', formData.licenseNo);
     
-    try {
-      const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/complete/${userId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update user details.');
-      }
-
-      alert('Profile updated successfully!');
-      setShowForm(false);
-    } catch (error) {
-      setError(error.message);
+    if (formData.academyImgFile) {
+        formData.append('academyImg', formData.academyImgFile);  // Append the Academy Image file
     }
-  };
+    
+    if (formData.logoFile) {
+        formData.append('logo', formData.logoFile);  // Append the Logo file
+    }
 
-  if (error) {
+    try {
+        const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/complete/${userId}`, {
+            method: 'POST',
+            body: formData,  // Use FormData instead of JSON.stringify for file uploads
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update user details.');
+        }
+
+        alert('Profile updated successfully!');
+        setShowForm(false);  // Hide the form after successful update
+    } catch (error) {
+        setError(error.message);
+    }
+};
+
+if (error) {
     return <div>Error: {error}</div>;
-  }
+}
 
   if (!user) {
     return <div>Loading...</div>;
