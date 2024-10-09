@@ -343,36 +343,92 @@ router.get('/provider/:id', async (req, res) => {
   }
 });
 
-// Route to update academy data
-router.put('/update/:id', upload.fields([{ name: 'logo' }, { name: 'crFile' }, { name: 'academyImg' }]), async (req, res) => {
-  const academyId = req.params.id;
-  try {
-      const updatedData = {
-          username: req.body.username,
-          email: req.body.email,
-          phoneNumber: req.body.phoneNumber,
-          fullName: req.body.fullName,
-          designation: req.body.designation,
-          website: req.body.website,
-          instaId: req.body.instaId,
-          logo: req.files['logo'] ? req.files['logo'][0].path : undefined,
-          crFile: req.files['crFile'] ? req.files['crFile'][0].path : undefined,
-          licenseNo: req.body.licenseNo,
-          academyImg: req.files['academyImg'] ? req.files['academyImg'][0].path : undefined,
-          description: req.body.description,
-          location: req.body.location,
-      };
+// // Route to update academy data
+// router.put('/update/:id', upload.fields([{ name: 'logo' }, { name: 'crFile' }, { name: 'academyImg' }]), async (req, res) => {
+//   const academyId = req.params.id;
+//   try {
+//       const updatedData = {
+//           username: req.body.username,
+//           email: req.body.email,
+//           phoneNumber: req.body.phoneNumber,
+//           fullName: req.body.fullName,
+//           designation: req.body.designation,
+//           website: req.body.website,
+//           instaId: req.body.instaId,
+//           logo: req.files['logo'] ? req.files['logo'][0].path : undefined,
+//           crFile: req.files['crFile'] ? req.files['crFile'][0].path : undefined,
+//           licenseNo: req.body.licenseNo,
+//           academyImg: req.files['academyImg'] ? req.files['academyImg'][0].path : undefined,
+//           description: req.body.description,
+//           location: req.body.location,
+//       };
 
-      const academy = await User.findByIdAndUpdate(academyId, updatedData, { new: true });
-      if (!academy) {
-          return res.status(404).json({ message: 'Academy not found.' });
-      }
-      res.status(200).json(academy);
+//       const academy = await User.findByIdAndUpdate(academyId, updatedData, { new: true });
+//       if (!academy) {
+//           return res.status(404).json({ message: 'Academy not found.' });
+//       }
+//       res.status(200).json(academy);
+//   } catch (error) {
+//       console.error('Error updating academy:', error);
+//       res.status(500).json({ message: 'An error occurred. Please try again later.' });
+//   }
+// });
+
+
+// PUT endpoint to update academy details
+router.put('/update/:id', upload.fields([
+  { name: 'logo', maxCount: 1 },
+  { name: 'crFile', maxCount: 1 },
+  { name: 'academyImg', maxCount: 1 }
+]), async (req, res) => {
+  const academyId = req.params.id;
+
+  try {
+    // Fetch the current academy data from the database
+    const currentAcademy = await User.findById(academyId);
+    if (!currentAcademy) {
+      return res.status(404).json({ message: 'Academy not found.' });
+    }
+
+    // Process the uploaded files and convert them to base64
+    const files = req.files || {};
+    const fileBase64 = {
+      logo: files.logo ? files.logo[0].buffer.toString('base64') : currentAcademy.logo,
+      crFile: files.crFile ? files.crFile[0].buffer.toString('base64') : currentAcademy.crFile,
+      academyImg: files.academyImg ? files.academyImg[0].buffer.toString('base64') : currentAcademy.academyImg,
+    };
+
+    // Prepare the updated data object
+    const updatedData = {
+      username: req.body.username || currentAcademy.username,
+      email: req.body.email || currentAcademy.email,
+      phoneNumber: req.body.phoneNumber || currentAcademy.phoneNumber,
+      fullName: req.body.fullName || currentAcademy.fullName,
+      designation: req.body.designation || currentAcademy.designation,
+      website: req.body.website || currentAcademy.website,
+      instaId: req.body.instaId || currentAcademy.instaId,
+      logo: fileBase64.logo, // Updated logo in base64 format
+      crFile: fileBase64.crFile, // Updated crFile in base64 format
+      academyImg: fileBase64.academyImg, // Updated academyImg in base64 format
+      licenseNo: req.body.licenseNo || currentAcademy.licenseNo,
+      description: req.body.description || currentAcademy.description,
+      location: req.body.location || currentAcademy.location,
+    };
+
+    // Update the academy details in the database
+    const updatedAcademy = await User.findByIdAndUpdate(academyId, updatedData, { new: true });
+    if (!updatedAcademy) {
+      return res.status(404).json({ message: 'Academy not found.' });
+    }
+
+    // Send the updated data back as the response
+    res.status(200).json(updatedAcademy);
   } catch (error) {
-      console.error('Error updating academy:', error);
-      res.status(500).json({ message: 'An error occurred. Please try again later.' });
+    console.error('Error updating academy:', error);
+    res.status(500).json({ message: 'An error occurred while updating the academy. Please try again later.' });
   }
 });
+
 
 // New route to delete academy by id
 router.delete('/academy/:id', async (req, res) => {
