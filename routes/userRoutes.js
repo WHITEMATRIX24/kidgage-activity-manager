@@ -178,6 +178,7 @@ router.post('/verify/:id', async (req, res) => {
       password: hashedPassword,
       fullName: fullName,
       role: role,
+      userId: req.params.id 
     });
 
     // Save the new Admin account
