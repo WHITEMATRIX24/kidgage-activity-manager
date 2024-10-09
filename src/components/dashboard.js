@@ -231,7 +231,9 @@ const Dashboard = () => {
                         <ManageCourses/>
                     </section>
                     <section id="academies" className="db-section">
+                        {adminId}
                         <ManageAcademy/>
+
                     </section>
                     <section id="settings" className="db-section">
                         <div className="settings-content">
