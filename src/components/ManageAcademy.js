@@ -243,16 +243,20 @@ const handlebuttonclick=()=>{
                   required
                 />
               </div>
-              <div>
-                <label>Phone No:</label>
-                <input
-                  type="tel"
-                  name="phoneNumber"
-                  value={user.phoneNumber}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+              <div className="phone-number-container" style={{ position: 'relative', width: '100%' }}>
+            <span className="country-code" style={{ position: 'absolute', left: '10px', top: '21px', transform: 'translateY(-50%)', fontSize: 'small', color: '#555' }}>
+              +974
+            </span>
+            <input
+              type="tel"
+              name="phoneNumber"
+              value={user.phoneNumber}
+              onChange={handleChange}
+              placeholder="Phone number"
+              required
+              style={{ paddingLeft: '50px' }}
+            />
+          </div>
               <div>
                 <label>Full Name</label>
                 <input
@@ -306,6 +310,8 @@ const handlebuttonclick=()=>{
                   type="file"
                   name="academyImg"
                   onChange={handleChange} // Handle file input change
+                  accept=".png, .jpg" 
+
                 />
               </div>
               <div>
@@ -314,6 +320,8 @@ const handlebuttonclick=()=>{
                   type="file"
                   name="logo"
                   onChange={handleChange} // Handle file input change
+                  accept=".png, .jpg" 
+
                 />
               </div>
               <button type="submit">Save</button>
