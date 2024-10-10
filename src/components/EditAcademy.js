@@ -14,7 +14,7 @@ const EditAcademyForm = ({ email }) => {
   const [charCount, setCharCount] = useState(0);
 const charLimit = 500;
   const [formData, setFormData] = useState({
-    username: '',
+    formDataname: '',
     email: '',
     phoneNumber: '',
     fullName: '',
@@ -50,7 +50,7 @@ const charLimit = 500;
       if (response.data) {
         setAcademyData(response.data);
         setFormData({
-          username: response.data.username,
+          formDataname: response.data.formDataname,
           email: response.data.email,
           phoneNumber: response.data.phoneNumber,
           fullName: response.data.fullName,
@@ -165,7 +165,6 @@ const handleSubmit = async (e) => {
 };
 const handleEditSubmit = async (e) => {
   e.preventDefault();
-  const userId = sessionStorage.getItem('userid');
 
   // Create a new FormData object to send both text fields and file uploads
   const formDataToSend = new FormData();
@@ -191,13 +190,13 @@ const handleEditSubmit = async (e) => {
   }
 
   try {
-    const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/update/${academyData._id}`, {
+    const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/edits/${academyData._id}`, {
       method: 'POST',
       body: formDataToSend, // Use FormData for file uploads
     });
 
     if (!response.ok) {
-      throw new Error('Failed to update user details.');
+      throw new Error('Failed to update formData details.');
     }
 
     alert('Profile updated successfully!');
@@ -226,7 +225,7 @@ const handleEditSubmit = async (e) => {
       await axios.delete(`https://kidgage-adminbackend.onrender.com/api/users/academy/${academyData._id}`);
       setAcademyData(null);
       setFormData({
-        username: '',
+        formDataname: '',
         email: '',
         phoneNumber: '',
         fullName: '',
@@ -260,7 +259,7 @@ const handleEditSubmit = async (e) => {
         <div className='add-course-form'>
           {searchError && <p className="error-message">{searchError}</p>}
           {academyData && (
-            <form className="add-course-form" onSubmit={handleSubmit}>
+            <form className="add-course-form" onSubmit={handleEditSubmit}>
               <div style={{width:'100%', display:'flex',justifyContent:'flex-end', marginBottom:'10px'}}>
               {academyData.crFile && (
               <button type="button" onClick={downloadFile} style={{borderRadius:'20px'}}>
@@ -270,14 +269,14 @@ const handleEditSubmit = async (e) => {
               </div>
               <input
                 type="text"
-                name="username"
-                value={formData.username}
-                onChange={handleChange}
+                name="formDataname"
+                value={formData.formDataname}
                 placeholder="Academy Name"
                 required
-                disabled={!isEditMode}
+                disabled
               />
-            <label className='sign-in-label'>Academy Bio</label>
+              <div>
+              <label className='sign-in-label'>Academy Bio</label>
                 <textarea
                     name="description"
                     value={formData.description}
@@ -288,24 +287,30 @@ const handleEditSubmit = async (e) => {
                     style={{marginBottom:'0px'}}
                     maxLength={charLimit}
                     required
-                    disabled={!isEditMode}
                 />
                 <p style={{fontSize:'smaller', marginBottom:'20px',marginLeft:'10px' , color:'darkblue'}}>{charCount}/{charLimit} characters</p>
-                <div className='add-upload-label-group'>
-                    <label className='sign-in-label' htmlFor="crFile">Email ID</label>
-                    <label className='sign-in-label' htmlFor="academyImg">Phone</label>
-                </div>
-                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="E-mail ID"
-                required
-                disabled={!isEditMode}
-              />
-                  <div className="phone-number-container" style={{ position: 'relative', width: '100%' }}>
+              </div>
+              <div>
+                <label>License No:</label>
+                <input
+                  type="text"
+                  name="licenseNo"
+                  value={formData.licenseNo}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label>Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="phone-number-container" style={{ position: 'relative', width: '100%' }}>
             <span className="country-code" style={{ position: 'absolute', left: '10px', top: '21px', transform: 'translateY(-50%)', fontSize: 'small', color: '#555' }}>
               +974
             </span>
@@ -319,88 +324,80 @@ const handleEditSubmit = async (e) => {
               style={{ paddingLeft: '50px' }}
             />
           </div>
-                </div>
-                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
+              <div>
+                <label>Full Name</label>
                 <input
                   type="text"
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
-                  placeholder="Full name"
                   required
-                  disabled={!isEditMode}
                 />
+              </div>
+              <div>
+                <label>Designation</label>
                 <input
                   type="text"
                   name="designation"
                   value={formData.designation}
                   onChange={handleChange}
-                  placeholder="Designation"
                   required
-                  disabled={!isEditMode}
                 />
               </div>
-              <div className='add-upload-label-group' style={{gap:'25%'}}>
-                <label className='sign-in-label' htmlFor="logo">Academy Logo <span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 80 X 80 ]</span></label>
-                <label className='sign-in-label' htmlFor="crFile">License No.</label>
-                </div>
-                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
-                    <input
-                        type="file"
-                        name="logo"
-                        onChange={handleChange}
-                        accept=".png, .jpg, .jpeg"
-                        disabled={!isEditMode}
-                    />
-                    <input
-                        type="text"
-                        name="licenseNo"
-                        value={formData.licenseNo}
-                        onChange={handleChange}
-                        placeholder="License number"
-                        required
-                        disabled={!isEditMode}
-                    />
-                </div>
-                <div className='add-upload-label-group'>
-                    <label className='sign-in-label' htmlFor="crFile">CR</label>
-                    <label className='sign-in-label' htmlFor="academyImg">Academy Image</label>
-                </div>
-                {fileError && <p className="error-message">{fileError}</p>}
-                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
-                    <input
-                        type="file"
-                        name="crFile"
-                        onChange={handleFileChange}
-                        accept=".pdf"
-                        className="hidden-input"
-                        disabled={!isEditMode}
-                    />
-                    <input 
-                        type="file" 
-                        name="academyImg" 
-                        onChange={handleChange} 
-                        accept=".png, .jpg, .jpeg" 
-                        disabled={!isEditMode}
-                    />
-                </div>
-                <div className='add-upload-label-group'>
-                    <label className='sign-in-label' htmlFor="crFile">Website</label>
-                    <label className='sign-in-label' htmlFor="academyImg">Instagram ID</label>
-                </div>
-                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
-                <input type="url" name="website" value={formData.website} disabled={!isEditMode} onChange={handleChange} placeholder="Enter website link" />
-                <input type="text" name="instaId" value={formData.instaId} disabled={!isEditMode} onChange={handleChange} placeholder="Enter Instagram ID" />
-                </div>
-                <div className='form-group'>
+              <div className='form-group'>
                     <label htmlFor="location">Add Location</label>
-                    <select name="location" value={formData.location} disabled={!isEditMode} onChange={handleChange} required>
+                    <select name="location" value={formData.location}   onChange={handleChange} required>
                     <option value="" disabled>Select your city</option>
                     {cities.map((city) => (
                         <option key={city} value={city}>{city}</option>
                     ))}
                     </select>
                 </div>
+              <div>
+                <label>Website</label>
+                <input
+                  type="url"
+                  name="website"
+                  value={formData.website}
+                  onChange={handleChange}
+                />
+              </div><div>
+                <label>Instagram ID</label>
+                <input
+                  type="text"
+                  name="instaId"
+                  value={formData.instaId}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label>Academy Image:</label>
+                <input
+                  type="file"
+                  name="academyImg"
+                  onChange={handleChange} // Handle file input change
+                  accept=".png, .jpg" 
+
+                />
+                <input
+                        type="file"
+                        name="crFile"
+                        onChange={handleChange}
+                        accept=".pdf"
+                        className="hidden-input"
+                    />
+              </div>
+              <div>
+                <label>Logo:</label>
+                <input
+                  type="file"
+                  name="logo"
+                  onChange={handleChange} // Handle file input change
+                  accept=".png, .jpg" 
+
+                />
+              </div>
 
               <div style={{display:'flex' ,justifyContent: 'flex-start'}} className="button-group">
                 {isEditMode &&(

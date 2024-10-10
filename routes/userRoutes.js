@@ -429,7 +429,7 @@ router.get('/provider/:id', async (req, res) => {
 //   }
 // });
 
-router.post('/edit/:userId', upload.fields([{ name: 'academyImg' }, { name: 'logo' }, { name: 'crFile' }]), async (req, res) => {
+router.post('/edits/:userId', upload.fields([{ name: 'academyImg' }, { name: 'logo' }, { name: 'crFile' }]), async (req, res) => {
   const { userId } = req.params;
   const { licenseNo, fullName, designation, description, website, instaId, location, email, phoneNumber } = req.body;
 
