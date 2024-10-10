@@ -514,7 +514,7 @@ router.post('/complete/:userId', upload.fields([{ name: 'academyImg' }, { name: 
 
 router.post('/edit/:userId', upload.fields([{ name: 'academyImg' }, { name: 'logo' }]), async (req, res) => {
   const { userId } = req.params;
-  const { licenseNo } = req.body;
+  const { licenseNo, fullName, designation, description, website, instaId, location, email, phoneNumber } = req.body;
 
   try {
     const user = await User.findById(userId);
@@ -524,6 +524,15 @@ router.post('/edit/:userId', upload.fields([{ name: 'academyImg' }, { name: 'log
 
     // Update the license number and verification status
     user.licenseNo = licenseNo;
+    user.fullName = fullName;
+    user.designation = designation;
+    user.description = description;
+    user.website = website;
+    user.instaId = instaId;
+    user.location = location;
+    user.email = email;
+    user.phoneNumber = phoneNumber;
+
 
     // Convert files to Base64 and update the user record
     if (req.files) {
