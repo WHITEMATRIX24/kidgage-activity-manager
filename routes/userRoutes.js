@@ -353,41 +353,52 @@ const fileToBase64 = (filePath) => {
   }
 };
 router.put('/update/:id', upload.fields([{ name: 'logo' }, { name: 'crFile' }, { name: 'academyImg' }]), async (req, res) => {
-  const academyId = req.params.id;
+  const { id } = req.params;
+  const { username, email, phoneNumber, fullName, designation, description, location, website, instaId, licenseNo, agreeTerms } = req.body;
+
+  // Convert files to base64 if they are provided
+  let logoBase64 = null;
+  let crFileBase64 = null;
+  let academyImgBase64 = null;
+
+  if (req.files.logo) {
+    logoBase64 = req.files.logo[0].buffer.toString('base64');
+  }
+  if (req.files.crFile) {
+    crFileBase64 = req.files.crFile[0].buffer.toString('base64');
+  }
+  if (req.files.academyImg) {
+    academyImgBase64 = req.files.academyImg[0].buffer.toString('base64');
+  }
+
   try {
-      // Convert files to base64 strings if they exist
-      const logoBase64 = req.files['logo'] ? fileToBase64(req.files['logo'][0].path) : undefined;
-      const crFileBase64 = req.files['crFile'] ? fileToBase64(req.files['crFile'][0].path) : undefined;
-      const academyImgBase64 = req.files['academyImg'] ? fileToBase64(req.files['academyImg'][0].path) : undefined;
+    const updatedUser = await User.findByIdAndUpdate(id, {
+      username,
+      email,
+      phoneNumber,
+      fullName,
+      designation,
+      description,
+      location,
+      website,
+      instaId,
+      licenseNo,
+      agreeTerms,
+      logo: logoBase64 || undefined, // Only update logo if a new file is provided
+      crFile: crFileBase64 || undefined, // Only update CR file if a new file is provided
+      academyImg: academyImgBase64 || undefined // Only update academyImg if a new file is provided
+    }, { new: true });
 
-      const updatedData = {
-          username: req.body.username,
-          email: req.body.email,
-          phoneNumber: req.body.phoneNumber,
-          fullName: req.body.fullName,
-          designation: req.body.designation,
-          website: req.body.website,
-          instaId: req.body.instaId,
-          logo: logoBase64, // base64 encoded logo
-          crFile: crFileBase64, // base64 encoded crFile
-          licenseNo: req.body.licenseNo,
-          academyImg: academyImgBase64, // base64 encoded academyImg
-          description: req.body.description,
-          location: req.body.location,
-      };
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-      // Update the academy data
-      const academy = await User.findByIdAndUpdate(academyId, updatedData, { new: true });
-      if (!academy) {
-          return res.status(404).json({ message: 'Academy not found.' });
-      }
-      res.status(200).json(academy);
+    res.status(200).json(updatedUser);
   } catch (error) {
-      console.error('Error updating academy:', error);
-      res.status(500).json({ message: 'An error occurred. Please try again later.' });
+    console.error('Error updating user:', error);
+    res.status(500).json({ message: 'Internal server error. Please try again later.' });
   }
 });
-
 // // PUT endpoint to update academy details
 // router.put('/update/:id', upload.fields([
 //   { name: 'logo', maxCount: 1 },

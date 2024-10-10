@@ -136,33 +136,50 @@ const handleFileChange = (e) => {
     }
   }
 };
-
 const handleSubmit = async (e) => {
   e.preventDefault();
-  console.log(academyData);
-  if (isEditMode) {
-    try {
-      const updatedFormData = {
-        ...formData,
-        logo: formData.logo, // base64 encoded logo
-        crFile: formData.crFile, // base64 encoded crFile
-        academyImg: formData.academyImg // base64 encoded academyImg
-      };
-      console.log(updatedFormData);
-      await axios.put(`https://kidgage-adminbackend.onrender.com/api/users/update/${academyData._id}`, updatedFormData, {
-        headers: { 'Content-Type': 'application/json' }
-      });
 
-      setSuccess('Academy updated successfully!');
-      setError('');
-      setIsEditMode(false);
-    } catch (error) {
-      console.error('Error updating academy:', error);
-      setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
-      setSuccess('');
-    }
+  if (!isEditMode) return;
+
+  const formData = new FormData();
+  formData.append('username', formData.username);
+  formData.append('email', formData.email);
+  formData.append('phoneNumber', formData.phoneNumber);
+  formData.append('fullName', formData.fullName);
+  formData.append('designation', formData.designation);
+  formData.append('description', formData.description);
+  formData.append('location', formData.location);
+  formData.append('website', formData.website);
+  formData.append('instaId', formData.instaId);
+  formData.append('licenseNo', formData.licenseNo);
+  formData.append('agreeTerms', formData.agreeTerms);
+
+  // If files are provided, append them to the FormData object
+  if (formData.logo) {
+    formData.append('logo', formData.logo); // logo file
+  }
+  if (formData.crFile) {
+    formData.append('crFile', formData.crFile); // CR file
+  }
+  if (formData.academyImg) {
+    formData.append('academyImg', formData.academyImg); // Academy image
+  }
+
+  try {
+    await axios.put(`https://kidgage-adminbackend.onrender.com/api/users/update/${academyData._id}`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' } // Important for file upload
+    });
+
+    setSuccess('Academy updated successfully!');
+    setError('');
+    setIsEditMode(false);
+  } catch (error) {
+    console.error('Error updating academy:', error);
+    setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
+    setSuccess('');
   }
 };
+
 
   const handleEdit = () => {
     setIsEditMode(true);
