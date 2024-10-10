@@ -83,6 +83,11 @@ const ManageAcademy = () => {
     formDataToSend.append('licenseNo', user.licenseNo);
     formDataToSend.append('email', user.email);
     formDataToSend.append('phoneNumber', user.phoneNumber);
+    formDataToSend.append('fullName', user.fullName);
+    formDataToSend.append('designation', user.designation);
+    // formDataToSend.append('location', user.location);
+    // formDataToSend.append('description', user.description);
+
 
 
     
@@ -219,10 +224,34 @@ const handlebuttonclick=()=>{
               </div>
               <div>
                 <label>Phone No:</label>
+                <span className="country-code" style={{ position: 'absolute', left: '10px', top: '21px', transform: 'translateY(-50%)', fontSize: 'small', color: '#555' }}>
+              +974
+            </span>
+
                 <input
                   type="tel"
                   name="phoneNumber"
                   value={user.phoneNumber}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label>Full Name</label>
+                <input
+                  type="text"
+                  name="fullName"
+                  value={user.fullName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label>Designation</label>
+                <input
+                  type="text"
+                  name="designation"
+                  value={user.designaion}
                   onChange={handleChange}
                   required
                 />
