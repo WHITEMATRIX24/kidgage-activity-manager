@@ -85,6 +85,8 @@ const ManageAcademy = () => {
     formDataToSend.append('phoneNumber', user.phoneNumber);
     formDataToSend.append('fullName', user.fullName);
     formDataToSend.append('designation', user.designation);
+    formDataToSend.append('website', user.website);
+    formDataToSend.append('instaId', user.instaId);
     // formDataToSend.append('location', user.location);
     // formDataToSend.append('description', user.description);
 
@@ -244,6 +246,25 @@ const handlebuttonclick=()=>{
                   type="text"
                   name="designation"
                   value={user.designation}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label>Website</label>
+                <input
+                  type="url"
+                  name="website"
+                  value={user.website}
+                  onChange={handleChange}
+                  required
+                />
+              </div><div>
+                <label>Instagram ID</label>
+                <input
+                  type="text"
+                  name="instaId"
+                  value={user.instaId}
                   onChange={handleChange}
                   required
                 />
