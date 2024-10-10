@@ -370,7 +370,9 @@ router.put('/update/:id', upload.fields([{ name: 'logo' }, { name: 'crFile' }, {
   if (req.files.academyImg) {
     academyImgBase64 = req.files.academyImg[0].buffer.toString('base64');
   }
-
+  console.log('Received files:', req.files);
+  console.log('Received body:', req.body);
+  
   try {
     const updatedUser = await User.findByIdAndUpdate(id, {
       username,
