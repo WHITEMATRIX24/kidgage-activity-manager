@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import './ManageAcademy.css';
 
 const ManageAcademy = () => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({
+    academyImg: null, // Store the file object
+    logo: null,       // Store the file object
+  });
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
