@@ -74,7 +74,7 @@ const charLimit = 500;
     if (files) {
       setUser((prevState) => ({
         ...prevState,
-        [name]: files[0] // Store the selected file in state (for 'academyImg' and 'logo')
+        [`${name}File`]: files[0], // Store the selected file in state (for 'academyImg' and 'logo')
       }));
     } else {
       // For text inputs, handle value changes
@@ -335,7 +335,7 @@ const handlebuttonclick=()=>{
       {showForm && (
         <div className="editmodal">
           <div className='editmodal-container'>
-            <h2>Update Academy Details</h2>
+            <h3>Please Update your profile to continue</h3>
             <form onSubmit={handleSubmit}>
               <div>
                 <label>License No:</label>
