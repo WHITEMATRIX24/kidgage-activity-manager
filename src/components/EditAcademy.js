@@ -163,49 +163,7 @@ const handleSubmit = async (e) => {
     }
   }
 };
-const handleEditSubmit = async (e) => {
-  e.preventDefault();
-  // Create a new FormData object to send both text fields and file uploads
-  const formDataToSend = new FormData();
-  formDataToSend.append('licenseNo', formData.licenseNo);
-  formDataToSend.append('email', formData.email);
-  formDataToSend.append('phoneNumber', formData.phoneNumber);
-  formDataToSend.append('fullName', formData.fullName);
-  formDataToSend.append('designation', formData.designation);
-  formDataToSend.append('website', formData.website);
-  formDataToSend.append('instaId', formData.instaId);
-  formDataToSend.append('location', formData.location);
-  formDataToSend.append('description', formData.description);
-  formDataToSend.append('username', formData.username);
 
-
-  if (formData.academyImg) {
-    formDataToSend.append('academyImg', formData.academyImg); // Append Academy Image file
-  }
-  if (formData.crFile) {
-    formDataToSend.append('crFile', formData.crFile); // Append Academy Image file
-  }
-
-  if (formData.logo) {
-    formDataToSend.append('logo', formData.logo); // Append Logo file
-  }
-
-  try {
-    const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/update/${academyData._id}`, {
-      method: 'POST',
-      body: formDataToSend, // Use FormData for file uploads
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to update user details.');
-    }
-
-    alert('Profile updated successfully!');
-    setShowForm(false); // Hide form after successful update
-  } catch (error) {
-    setError(error.message);
-  }
-};
 
 
   const toggleFormVisibility = () => {
@@ -260,7 +218,7 @@ const handleEditSubmit = async (e) => {
         <div className='add-course-form'>
           {searchError && <p className="error-message">{searchError}</p>}
           {academyData && (
-            <form className="add-course-form" onSubmit={handleEditSubmit}>
+            <form className="add-course-form" onSubmit={handleSubmit}>
               <div style={{width:'100%', display:'flex',justifyContent:'flex-end', marginBottom:'10px'}}>
               {academyData.crFile && (
               <button type="button" onClick={downloadFile} style={{borderRadius:'20px'}}>
