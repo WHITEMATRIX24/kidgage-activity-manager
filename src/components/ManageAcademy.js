@@ -11,7 +11,13 @@ const ManageAcademy = () => {
     academyImgFile: null, // Store the file object
     logoFile: null,       // Store the file object
   });
-
+  const cities = [
+    "Doha", "Al Wakrah", "Al Khor", "Al Rayyan", 
+    "Al Shamal", "Al Shahaniya", "Al Daayen", 
+    "Umm Salal", "Dukhan", "Mesaieed"
+  ];
+  const [charCount, setCharCount] = useState(0);
+const charLimit = 500;
   useEffect(() => {
     const fetchUserDetails = async () => {
       const userId = sessionStorage.getItem('userid');
@@ -58,7 +64,9 @@ const ManageAcademy = () => {
   };
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-  
+    if (name === 'description') {
+      setCharCount(value.length);
+    }
     // For file inputs, handle file selection
     if (files) {
       setUser((prevState) => ({
@@ -87,8 +95,8 @@ const ManageAcademy = () => {
     formDataToSend.append('designation', user.designation);
     formDataToSend.append('website', user.website);
     formDataToSend.append('instaId', user.instaId);
-    // formDataToSend.append('location', user.location);
-    // formDataToSend.append('description', user.description);
+    formDataToSend.append('location', user.location);
+    formDataToSend.append('description', user.description);
 
     if (formData.academyImgFile) {
       formDataToSend.append('academyImg', user.academyImgFile); // Append Academy Image file
@@ -201,6 +209,21 @@ const handlebuttonclick=()=>{
                 disabled
               />
               <div>
+              <label className='sign-in-label'>Academy Bio</label>
+                <textarea
+                    name="description"
+                    value={user.description}
+                    onChange={handleChange}
+                    placeholder="Ex. You may include a brief introduction containing activities, classes you provide, age category etc.."
+                    rows="4"
+                    cols="50"
+                    style={{marginBottom:'0px'}}
+                    maxLength={charLimit}
+                    required
+                />
+                <p style={{fontSize:'smaller', marginBottom:'20px',marginLeft:'10px' , color:'darkblue'}}>{charCount}/{charLimit} characters</p>
+              </div>
+              <div>
                 <label>License No:</label>
                 <input
                   type="text"
@@ -250,6 +273,15 @@ const handlebuttonclick=()=>{
                   required
                 />
               </div>
+              <div className='form-group'>
+                    <label htmlFor="location">Add Location</label>
+                    <select name="location" value={user.location}   onChange={handleChange} required>
+                    <option value="" disabled>Select your city</option>
+                    {cities.map((city) => (
+                        <option key={city} value={city}>{city}</option>
+                    ))}
+                    </select>
+                </div>
               <div>
                 <label>Website</label>
                 <input

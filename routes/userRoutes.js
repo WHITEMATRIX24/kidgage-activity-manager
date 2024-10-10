@@ -526,8 +526,8 @@ router.post('/edit/:userId', upload.fields([{ name: 'academyImg' }, { name: 'log
     user.licenseNo = licenseNo;
     user.fullName = fullName;
     user.designation = designation;
-    // user.description = description;
-    // user.location = location;
+    user.description = description;
+    user.location = location;
     user.website = website||null;
     user.instaId = instaId|| null;
     user.email = email;
