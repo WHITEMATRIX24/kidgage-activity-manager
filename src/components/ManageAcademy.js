@@ -257,7 +257,6 @@ const handlebuttonclick=()=>{
                   name="website"
                   value={user.website}
                   onChange={handleChange}
-                  required
                 />
               </div><div>
                 <label>Instagram ID</label>
