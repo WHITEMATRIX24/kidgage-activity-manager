@@ -521,7 +521,7 @@ router.post('/edit/:userId', upload.fields([{ name: 'academyImg' }, { name: 'log
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-
+    console.log(req.files.logo);
     // Update the license number and verification status
     user.licenseNo = licenseNo;
     user.fullName = fullName;
@@ -537,11 +537,11 @@ router.post('/edit/:userId', upload.fields([{ name: 'academyImg' }, { name: 'log
     // Convert files to Base64 and update the user record
     if (req.files) {
       if (req.files.academyImg && req.files.academyImg[0]) {
-        user.academyImg = req.files.academyImg[0].buffer.toString('base64'); // Convert Academy Image to Base64
+        user.academyImg = req.files.academyImg.buffer.toString('base64'); // Convert Academy Image to Base64
       }
 
       if (req.files.logo && req.files.logo[0]) {
-        user.logo = req.files.logo[0].buffer.toString('base64'); // Convert Logo to Base64
+        user.logo = req.files.logo.buffer.toString('base64'); // Convert Logo to Base64
       }
     }
 
