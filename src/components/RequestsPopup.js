@@ -96,7 +96,6 @@ const RequestsPopup = ({ show, closeRequests }) => {
         }
     };
     
-    
 
     if (!show) return null; // If not visible, don't render
 

@@ -111,7 +111,7 @@ const ViewAcademy = ({ handleSubmit }) => {
                     </div>
                     <EditAcademyForm
                         academy={selectedAcademy} // Pass selected academy to edit
-                        email={selectedAcademy.email}  // Pass email of the selected academy
+                        id={selectedAcademy._id}  // Pass email of the selected academy
                         handleSubmit={handleCloseEditForm}  // Close form after submission
                     />
                 </div>

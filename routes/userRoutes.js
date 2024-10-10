@@ -354,7 +354,7 @@ const fileToBase64 = (filePath) => {
 };
 router.put('/update/:id', upload.fields([{ name: 'logo' }, { name: 'crFile' }, { name: 'academyImg' }]), async (req, res) => {
   const { id } = req.params;
-  const { username, email, phoneNumber, fullName, designation, description, location, website, instaId, licenseNo, agreeTerms } = req.body;
+  const { username, email, phoneNumber, fullName, designation, description, location, website, instaId, licenseNo } = req.body;
 
   // Convert files to base64 if they are provided
   let logoBase64 = null;
@@ -385,7 +385,6 @@ router.put('/update/:id', upload.fields([{ name: 'logo' }, { name: 'crFile' }, {
       website,
       instaId,
       licenseNo,
-      agreeTerms,
       logo: logoBase64 || undefined, // Only update logo if a new file is provided
       crFile: crFileBase64 || undefined, // Only update CR file if a new file is provided
       academyImg: academyImgBase64 || undefined // Only update academyImg if a new file is provided
