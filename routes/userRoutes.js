@@ -431,7 +431,7 @@ router.get('/provider/:id', async (req, res) => {
 
 router.post('/update/:userId', upload.fields([{ name: 'academyImg' }, { name: 'logo' }, { name: 'crFile' }]), async (req, res) => {
   const { userId } = req.params;
-  const { licenseNo, fullName, designation, description, website, instaId, location, email, phoneNumber } = req.body;
+  const { username,licenseNo, fullName, designation, description, website, instaId, location, email, phoneNumber } = req.body;
 
   try {
     const user = await User.findById(userId);
@@ -441,6 +441,7 @@ router.post('/update/:userId', upload.fields([{ name: 'academyImg' }, { name: 'l
     console.log(req.files.logo);
     // Update the license number and verification status
     user.licenseNo = licenseNo;
+    user.username = username;
     user.fullName = fullName;
     user.designation = designation;
     user.description = description;
