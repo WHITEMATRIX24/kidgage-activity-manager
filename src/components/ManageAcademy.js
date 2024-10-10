@@ -11,13 +11,6 @@ const ManageAcademy = () => {
     academyImgFile: null, // Store the file object
     logoFile: null,       // Store the file object
   });
-  const cities = [
-    "Doha", "Al Wakrah", "Al Khor", "Al Rayyan", 
-    "Al Shamal", "Al Shahaniya", "Al Daayen", 
-    "Umm Salal", "Dukhan", "Mesaieed"
-  ];
-  const [charCount, setCharCount] = useState(0);
-const charLimit = 500;
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -65,9 +58,7 @@ const charLimit = 500;
   };
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === 'description') {
-      setCharCount(value.length);
-    }
+  
     // For file inputs, handle file selection
     if (files) {
       setUser((prevState) => ({
@@ -82,7 +73,7 @@ const charLimit = 500;
       }));
     }
   };
-
+  
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     const userId = sessionStorage.getItem('userid');
@@ -90,16 +81,6 @@ const charLimit = 500;
     // Create a new FormData object to send both text fields and file uploads
     const formDataToSend = new FormData();
     formDataToSend.append('licenseNo', user.licenseNo);
-    formDataToSend.append('fullName', user.fullName);
-    formDataToSend.append('designation', user.designation);
-    formDataToSend.append('description', user.description);
-    formDataToSend.append('website', user.website ? user.website : null);
-    formDataToSend.append('instaId', user.instaId ? user.instaId : null);
-    formDataToSend.append('email', user.email);
-    formDataToSend.append('phoneNo', user.phoneNo);
-    formDataToSend.append('location', user.location);
-
-
 
     if (formData.academyImgFile) {
       formDataToSend.append('academyImg', user.academyImgFile); // Append Academy Image file
@@ -159,6 +140,10 @@ const charLimit = 500;
     }
   };
 
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   if (!user) {
     return <div>Loading...</div>;
   }
@@ -195,139 +180,44 @@ const handlebuttonclick=()=>{
       <p><strong>Instagram ID:</strong> {user.instaId || 'N/A'}</p>
       </div>
       {showEditForm && (
-        <div className="">
-          <div className='add-corse-form-container'>
+        <div className="editmodal">
+          <div className='editmodal-container'>
             <h2>Update Academy Details</h2>
-            <form className="add-course-form" onSubmit={handleEditSubmit}>
-              <input
+            <form onSubmit={handleEditSubmit}>
+            <input
                 type="text"
                 name="username"
                 value={user.username}
                 placeholder="Academy Name"
+                required
                 disabled
               />
-            <label className='sign-in-label'>Academy Bio</label>
-                <textarea
-                    name="description"
-                    value={user.description}
-                    onChange={handleChange}
-                    placeholder="Ex. You may include a brief introduction containing activities, classes you provide, age category etc.."
-                    rows="4"
-                    cols="50"
-                    style={{marginBottom:'0px'}}
-                    maxLength={charLimit}
-                    required
-                     
-                />
-                <p style={{fontSize:'smaller', marginBottom:'20px',marginLeft:'10px' , color:'darkblue'}}>{charCount}/{charLimit} characters</p>
-                <div className='add-upload-label-group'>
-                    <label className='sign-in-label' htmlFor="crFile">Email ID</label>
-                    <label className='sign-in-label' htmlFor="academyImg">Phone</label>
-                </div>
-                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
-              <input
-                type="email"
-                name="email"
-                value={user.email}
-                onChange={handleChange}
-                placeholder="E-mail ID"
-                required
-                 
-              />
-                  <div className="phone-number-container" style={{ position: 'relative', width: '100%' }}>
-            <span className="country-code" style={{ position: 'absolute', left: '10px', top: '21px', transform: 'translateY(-50%)', fontSize: 'small', color: '#555' }}>
-              +974
-            </span>
-            <input
-              type="tel"
-              name="phoneNumber"
-              value={user.phoneNumber}
-              onChange={handleChange}
-              placeholder="Phone number"
-              required
-              style={{ paddingLeft: '50px' }}
-            />
-          </div>
-                </div>
-                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
+              <div>
+                <label>License No:</label>
                 <input
                   type="text"
-                  name="fullName"
-                  value={user.fullName}
+                  name="licenseNo"
+                  value={user.licenseNo}
                   onChange={handleChange}
-                  placeholder="Full name"
-                  required
-                   
                 />
+              </div>
+              <div>
+                <label>Academy Image:</label>
                 <input
-                  type="text"
-                  name="designation"
-                  value={user.designation}
-                  onChange={handleChange}
-                  placeholder="Designation"
-                  required
-                   
+                  type="file"
+                  name="academyImg"
+                  onChange={handleChange} // Handle file input change
                 />
               </div>
-              <div className='add-upload-label-group' style={{gap:'25%'}}>
-                <label className='sign-in-label' htmlFor="logo">Academy Logo <span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 80 X 80 ]</span></label>
-                <label className='sign-in-label' htmlFor="crFile">License No.</label>
-                </div>
-                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
-                    <input
-                        type="file"
-                        name="logo"
-                        onChange={handleChange}
-                        accept=".png, .jpg, .jpeg"
-                         
-                    />
-                    <input
-                        type="text"
-                        name="licenseNo"
-                        value={user.licenseNo}
-                        onChange={handleChange}
-                        placeholder="License number"
-                        required
-                         
-                    />
-                </div>
-                <div className='add-upload-label-group'>
-                    <label className='sign-in-label' htmlFor="academyImg">Academy Image</label>
-                </div>
-                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
-                   
-                    <input 
-                        type="file" 
-                        name="academyImg" 
-                        onChange={handleChange} 
-                        accept=".png, .jpg, .jpeg" 
-                         
-                    />
-                </div>
-                <div className='add-upload-label-group'>
-                    <label className='sign-in-label' htmlFor="crFile">Website</label>
-                    <label className='sign-in-label' htmlFor="academyImg">Instagram ID</label>
-                </div>
-                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
-                <input type="url" name="website" value={user.website}   onChange={handleChange} placeholder="Enter website link" />
-                <input type="text" name="instaId" value={user.instaId}   onChange={handleChange} placeholder="Enter Instagram ID" />
-                </div>
-                <div className='form-group'>
-                    <label htmlFor="location">Add Location</label>
-                    <select name="location" value={user.location}   onChange={handleChange} required>
-                    <option value="" disabled>Select your city</option>
-                    {cities.map((city) => (
-                        <option key={city} value={city}>{city}</option>
-                    ))}
-                    </select>
-                </div>
-
-              <div style={{display:'flex' ,justifyContent: 'flex-start'}} className="button-group">
-            
-                  <button style={{alignSelf:'flex-end'}} type="submit" className="submit-btn">Save</button>
-
+              <div>
+                <label>Logo:</label>
+                <input
+                  type="file"
+                  name="logo"
+                  onChange={handleChange} // Handle file input change
+                />
               </div>
-              {error && <p className="error-message">{error}</p>}
+              <button type="submit">Save</button>
             </form>
           </div>
         </div>

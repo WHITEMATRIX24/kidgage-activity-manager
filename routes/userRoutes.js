@@ -524,14 +524,14 @@ router.post('/edit/:userId', upload.fields([{ name: 'academyImg' }, { name: 'log
 
     // Update the license number and verification status
     user.licenseNo = licenseNo;
-    user.fullName = fullName;
-    user.designation = designation;
-    user.description = description;
-    user.website = website;
-    user.instaId = instaId;
-    user.location = location;
-    user.email = email;
-    user.phoneNumber = phoneNumber;
+    // user.fullName = fullName;
+    // user.designation = designation;
+    // user.description = description;
+    // user.website = website;
+    // user.instaId = instaId;
+    // user.location = location;
+    // user.email = email;
+    // user.phoneNumber = phoneNumber;
 
 
     // Convert files to Base64 and update the user record
