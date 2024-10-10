@@ -528,8 +528,8 @@ router.post('/edit/:userId', upload.fields([{ name: 'academyImg' }, { name: 'log
     user.designation = designation;
     user.description = description;
     user.location = location;
-    user.website = website||null;
-    user.instaId = instaId|| null;
+    user.website = website === "" ? null : website;
+    user.instaId = website === "" ? null : instaId;
     user.email = email;
     user.phoneNumber = phoneNumber;
 
