@@ -81,6 +81,10 @@ const ManageAcademy = () => {
     // Create a new FormData object to send both text fields and file uploads
     const formDataToSend = new FormData();
     formDataToSend.append('licenseNo', user.licenseNo);
+    formDataToSend.append('email', user.email);
+    formDataToSend.append('phoneNumber', user.phoneNumber);
+
+
     
 
     if (formData.academyImgFile) {
@@ -199,6 +203,26 @@ const handlebuttonclick=()=>{
                   type="text"
                   name="licenseNo"
                   value={user.licenseNo}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label>Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={user.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label>Phone No:</label>
+                <input
+                  type="tel"
+                  name="phoneNumber"
+                  value={user.phoneNumber}
                   onChange={handleChange}
                   required
                 />
