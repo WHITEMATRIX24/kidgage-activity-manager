@@ -93,7 +93,7 @@ const charLimit = 500;
   
   const handleEditSubmit = async (e) => {
     e.preventDefault();
-    const userId = sessionStorage.getItem('userid');
+    const userId = id;
 
     // Create a new FormData object to send both text fields and file uploads
     const formDataToSend = new FormData();
@@ -226,12 +226,7 @@ const handleclose=()=>{
     {showEditForm && (
       <div className="">
         <div className=''>
-          <div style={{display:'flex',flexDirection:'row', justifyContent:'space-between'}}>
-          <h2>Update Academy Details</h2>
-          <button style={{backgroundColor:'transparent', color:'red', fontSize:'large', alignSelf:'flex-end',border:'none'}} className="a-close-button" onClick={handleclose}>
-                  <FontAwesomeIcon icon={faTimes} />
-          </button>
-          </div>
+          
           <form className="add-course-form" onSubmit={handleEditSubmit}>
           
           <input
