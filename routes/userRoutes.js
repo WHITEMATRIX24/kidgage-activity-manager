@@ -512,5 +512,46 @@ router.post('/complete/:userId', upload.fields([{ name: 'academyImg' }, { name: 
   }
 });
 
+router.post('/edit/:userId', upload.fields([{ name: 'academyImg' }, { name: 'logo' }]), async (req, res) => {
+  const { userId } = req.params;
+  const { licenseNo, fullName,designation,description,email,phoneNumber,website,instaId,location} = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update the license number and verification status
+    user.licenseNo = licenseNo;
+    user.fullName = fullName;
+    user.designation = designation;
+    user.description = description;
+    user.email = email;
+    user.website = website;
+    user.phoneNumber = phoneNumber;
+    user.instaId = instaId;
+    user.location = location;
+
+
+    // Convert files to Base64 and update the user record
+    if (req.files) {
+      if (req.files.academyImg && req.files.academyImg[0]) {
+        user.academyImg = req.files.academyImg[0].buffer.toString('base64'); // Convert Academy Image to Base64
+      }
+
+      if (req.files.logo && req.files.logo[0]) {
+        user.logo = req.files.logo[0].buffer.toString('base64'); // Convert Logo to Base64
+      }
+    }
+
+    await user.save();
+
+    res.json({ message: 'User details updated successfully!' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 
 module.exports = router;

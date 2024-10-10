@@ -5,6 +5,14 @@ const ManageAcademy = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const cities = [
+    "Doha", "Al Wakrah", "Al Khor", "Al Rayyan", 
+    "Al Shamal", "Al Shahaniya", "Al Daayen", 
+    "Umm Salal", "Dukhan", "Mesaieed"
+  ];
+  const [charCount, setCharCount] = useState(0);
+const charLimit = 500;
   const [formData, setFormData] = useState({
     licenseNo: '',
     academyImgFile: null, // Store the file object
@@ -55,6 +63,39 @@ const ManageAcademy = () => {
       }));
     }
   };
+  
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    const userId = sessionStorage.getItem('userid');
+
+    // Create a new FormData object to send both text fields and file uploads
+    const formDataToSend = new FormData();
+    formDataToSend.append('licenseNo', formData.licenseNo);
+
+    if (formData.academyImgFile) {
+      formDataToSend.append('academyImg', formData.academyImgFile); // Append Academy Image file
+    }
+
+    if (formData.logoFile) {
+      formDataToSend.append('logo', formData.logoFile); // Append Logo file
+    }
+
+    try {
+      const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/edit/${userId}`, {
+        method: 'POST',
+        body: formDataToSend, // Use FormData for file uploads
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update user details.');
+      }
+
+      alert('Profile updated successfully!');
+      setShowForm(false); // Hide form after successful update
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,6 +104,14 @@ const ManageAcademy = () => {
     // Create a new FormData object to send both text fields and file uploads
     const formDataToSend = new FormData();
     formDataToSend.append('licenseNo', formData.licenseNo);
+    formDataToSend.append('email', formData.email);
+    formDataToSend.append('phoneNumber', formData.phoneNumber);
+    formDataToSend.append('fullName', formData.fullName);
+    formDataToSend.append('description', formData.description);
+      formDataToSend.append('designation', formData.designation);
+      formDataToSend.append('website', formData.website);
+      formDataToSend.append('instaId', formData.instaId);
+      formDataToSend.append('location', formData.location);
 
     if (formData.academyImgFile) {
       formDataToSend.append('academyImg', formData.academyImgFile); // Append Academy Image file
@@ -103,7 +152,9 @@ const ManageAcademy = () => {
     link.download = 'CRFile.pdf'; // Provide a default name
     link.click();
   };
-
+const handlebuttonclick=()=>{
+  setShowEditForm(true);
+}
   return (
     <div className='add-course-form-container'>
       <div className='add-course-form'>
@@ -117,6 +168,7 @@ const ManageAcademy = () => {
       )}
       </div>
       <p> {user.description}</p>
+      <button onClick={handlebuttonclick}>edit</button>
       <p><strong>Email:</strong> {user.email}</p>
       <p><strong>Phone Number:</strong> {user.phoneNumber}</p>
       <p><strong>Full Name:</strong> {user.fullName}</p>
@@ -125,7 +177,143 @@ const ManageAcademy = () => {
       <p><strong>Website:</strong> {user.website || 'N/A'}</p>
       <p><strong>Instagram ID:</strong> {user.instaId || 'N/A'}</p>
       </div>
+      {showEditForm && (
+ 
+            <form className="add-course-form" onSubmit={handleEditSubmit}>
+              <input
+                type="text"
+                name="username"
+                value={user.username}
+                onChange={handleInputChange}
+                placeholder="Academy Name"
+                required
+              />
+            <label className='sign-in-label'>Academy Bio</label>
+                <textarea
+                    name="description"
+                    value={user.description}
+                    onChange={handleInputChange}
+                    placeholder="Ex. You may include a brief introduction containing activities, classes you provide, age category etc.."
+                    rows="4"
+                    cols="50"
+                    style={{marginBottom:'0px'}}
+                    maxLength={charLimit}
+                    required
+                     
+                />
+                <p style={{fontSize:'smaller', marginBottom:'20px',marginLeft:'10px' , color:'darkblue'}}>{charCount}/{charLimit} characters</p>
+                <div className='add-upload-label-group'>
+                    <label className='sign-in-label' htmlFor="crFile">Email ID</label>
+                    <label className='sign-in-label' htmlFor="academyImg">Phone</label>
+                </div>
+                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
+              <input
+                type="email"
+                name="email"
+                value={user.email}
+                onChange={handleInputChange}
+                placeholder="E-mail ID"
+                required
+                 
+              />
+                  <div className="phone-number-container" style={{ position: 'relative', width: '100%' }}>
+            <span className="country-code" style={{ position: 'absolute', left: '10px', top: '21px', transform: 'translateY(-50%)', fontSize: 'small', color: '#555' }}>
+              +974
+            </span>
+            <input
+              type="tel"
+              name="phoneNumber"
+              value={user.phoneNumber}
+              onChange={handleInputChange}
+              placeholder="Phone number"
+              required
+              style={{ paddingLeft: '50px' }}
+            />
+          </div>
+                </div>
+                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
+                <input
+                  type="text"
+                  name="fullName"
+                  value={user.fullName}
+                  onChange={handleInputChange}
+                  placeholder="Full name"
+                  required
+                   
+                />
+                <input
+                  type="text"
+                  name="designation"
+                  value={user.designation}
+                  onChange={handleInputChange}
+                  placeholder="Designation"
+                  required
+                   
+                />
+              </div>
+              <div className='add-upload-label-group' style={{gap:'25%'}}>
+                <label className='sign-in-label' htmlFor="logo">Academy Logo <span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 80 X 80 ]</span></label>
+                <label className='sign-in-label' htmlFor="crFile">License No.</label>
+                </div>
+                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
+                    <input
+                        type="file"
+                        name="logo"
+                        onChange={handleInputChange}
+                        accept=".png, .jpg, .jpeg"
+                         
+                    />
+                    <input
+                        type="text"
+                        name="licenseNo"
+                        value={user.licenseNo}
+                        onChange={handleInputChange}
+                        placeholder="License number"
+                        required
+                         
+                    />
+                </div>
+                <div className='add-upload-label-group'>
+                    <label className='sign-in-label' htmlFor="crFile">CR</label>
+                    <label className='sign-in-label' htmlFor="academyImg">Academy Image</label>
+                </div>
+                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
+                   
+                    <input 
+                        type="file" 
+                        name="academyImg" 
+                        onChange={handleInputChange} 
+                        accept=".png, .jpg, .jpeg" 
+                         
+                    />
+                </div>
+                <div className='add-upload-label-group'>
+                    <label className='sign-in-label' htmlFor="crFile">Website</label>
+                    <label className='sign-in-label' htmlFor="academyImg">Instagram ID</label>
+                </div>
+                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
+                <input type="url" name="website" value={user.website}   onChange={handleInputChange} placeholder="Enter website link" />
+                <input type="text" name="instaId" value={user.instaId}   onChange={handleInputChange} placeholder="Enter Instagram ID" />
+                </div>
+                <div className='form-group'>
+                    <label htmlFor="location">Add Location</label>
+                    <select name="location" value={user.location}   onChange={handleInputChange} required>
+                    <option value="" disabled>Select your city</option>
+                    {cities.map((city) => (
+                        <option key={city} value={city}>{city}</option>
+                    ))}
+                    </select>
+                </div>
 
+              <div style={{display:'flex' ,justifyContent: 'flex-start'}} className="button-group">
+            
+                  <button style={{alignSelf:'flex-end'}} type="submit" className="submit-btn">Save</button>
+
+              </div>
+              {error && <p className="error-message">{error}</p>}
+            </form>
+      
+      )}
       {showForm && (
         <div className="editmodal">
           <div className='editmodal-container'>

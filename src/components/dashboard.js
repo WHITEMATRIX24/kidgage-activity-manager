@@ -162,7 +162,7 @@ const Dashboard = () => {
                     <h1>Activity Manager</h1>
                     {adminRole === 'admin' && (
                     <>
-                    <div style={{ alignSelf: 'flex-end', marginRight: '10%', fontSize: 'x-large', fontWeight: 'bold', color: 'black', cursor: 'pointer' }} onClick={toggleRequests}>
+                    <div className='request-div' style={{ alignSelf: 'flex-end', marginRight: '10%', fontSize: 'x-large', fontWeight: 'bold', color: 'black', cursor: 'pointer' }} onClick={toggleRequests}>
                         <FontAwesomeIcon icon={faEnvelope} /> Requests
                     </div>
                     </>
