@@ -187,6 +187,7 @@ const handlebuttonclick=()=>{
                 onChange={handleInputChange}
                 placeholder="Academy Name"
                 required
+                disabled
               />
             <label className='sign-in-label'>Academy Bio</label>
                 <textarea
