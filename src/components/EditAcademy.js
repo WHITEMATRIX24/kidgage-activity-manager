@@ -139,7 +139,7 @@ const handleFileChange = (e) => {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-
+  console.log(academyData);
   if (isEditMode) {
     try {
       const updatedFormData = {
@@ -148,7 +148,7 @@ const handleSubmit = async (e) => {
         crFile: formData.crFile, // base64 encoded crFile
         academyImg: formData.academyImg // base64 encoded academyImg
       };
-
+      console.log(updatedFormData);
       await axios.put(`https://kidgage-adminbackend.onrender.com/api/users/update/${academyData._id}`, updatedFormData, {
         headers: { 'Content-Type': 'application/json' }
       });
@@ -163,12 +163,6 @@ const handleSubmit = async (e) => {
     }
   }
 };
-
-
-
-  const toggleFormVisibility = () => {
-    setShowForm(!showForm);
-  };
 
   const handleEdit = () => {
     setIsEditMode(true);
