@@ -98,12 +98,12 @@ const charLimit = 500;
     formDataToSend.append('location', user.location);
     formDataToSend.append('description', user.description);
 
-    if (formData.academyImgFile) {
-      formDataToSend.append('academyImg', user.academyImgFile); // Append Academy Image file
+    if (formData.academyImg) {
+      formDataToSend.append('academyImg', user.academyImg); // Append Academy Image file
     }
 
-    if (formData.logoFile) {
-      formDataToSend.append('logo', user.logoFile); // Append Logo file
+    if (formData.logo) {
+      formDataToSend.append('logo', user.logo); // Append Logo file
     }
 
     try {
