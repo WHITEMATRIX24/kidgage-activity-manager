@@ -29,7 +29,7 @@ const EditAcademyForm = ({ id }) => {
 const charLimit = 500;
   useEffect(() => {
     const fetchUserDetails = async () => {
-      const userId = sessionStorage.getItem('userid');
+      const userId = id;
       if (!userId) {
         setError('No admin ID found in session storage.');
         return;
