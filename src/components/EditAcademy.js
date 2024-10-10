@@ -165,7 +165,6 @@ const handleSubmit = async (e) => {
 };
 const handleEditSubmit = async (e) => {
   e.preventDefault();
-
   // Create a new FormData object to send both text fields and file uploads
   const formDataToSend = new FormData();
   formDataToSend.append('licenseNo', formData.licenseNo);
@@ -177,6 +176,8 @@ const handleEditSubmit = async (e) => {
   formDataToSend.append('instaId', formData.instaId);
   formDataToSend.append('location', formData.location);
   formDataToSend.append('description', formData.description);
+  formDataToSend.append('username', formData.username);
+
 
   if (formData.academyImg) {
     formDataToSend.append('academyImg', formData.academyImg); // Append Academy Image file
