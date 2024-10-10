@@ -6,13 +6,6 @@ const ManageAcademy = () => {
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
-  const cities = [
-    "Doha", "Al Wakrah", "Al Khor", "Al Rayyan", 
-    "Al Shamal", "Al Shahaniya", "Al Daayen", 
-    "Umm Salal", "Dukhan", "Mesaieed"
-  ];
-  const [charCount, setCharCount] = useState(0);
-const charLimit = 500;
   const [formData, setFormData] = useState({
     licenseNo: '',
     academyImgFile: null, // Store the file object
@@ -63,6 +56,23 @@ const charLimit = 500;
       }));
     }
   };
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+  
+    // For file inputs, handle file selection
+    if (files) {
+      setUser((prevState) => ({
+        ...prevState,
+        [name]: files[0] // Store the selected file in state (for 'academyImg' and 'logo')
+      }));
+    } else {
+      // For text inputs, handle value changes
+      setUser((prevState) => ({
+        ...prevState,
+        [name]: value // Update the text input value in the state
+      }));
+    }
+  };
   
   const handleEditSubmit = async (e) => {
     e.preventDefault();
@@ -70,14 +80,14 @@ const charLimit = 500;
 
     // Create a new FormData object to send both text fields and file uploads
     const formDataToSend = new FormData();
-    formDataToSend.append('licenseNo', formData.licenseNo);
+    formDataToSend.append('licenseNo', user.licenseNo);
 
     if (formData.academyImgFile) {
-      formDataToSend.append('academyImg', formData.academyImgFile); // Append Academy Image file
+      formDataToSend.append('academyImg', user.academyImgFile); // Append Academy Image file
     }
 
     if (formData.logoFile) {
-      formDataToSend.append('logo', formData.logoFile); // Append Logo file
+      formDataToSend.append('logo', user.logoFile); // Append Logo file
     }
 
     try {
@@ -104,14 +114,6 @@ const charLimit = 500;
     // Create a new FormData object to send both text fields and file uploads
     const formDataToSend = new FormData();
     formDataToSend.append('licenseNo', formData.licenseNo);
-    formDataToSend.append('email', formData.email);
-    formDataToSend.append('phoneNumber', formData.phoneNumber);
-    formDataToSend.append('fullName', formData.fullName);
-    formDataToSend.append('description', formData.description);
-      formDataToSend.append('designation', formData.designation);
-      formDataToSend.append('website', formData.website);
-      formDataToSend.append('instaId', formData.instaId);
-      formDataToSend.append('location', formData.location);
 
     if (formData.academyImgFile) {
       formDataToSend.append('academyImg', formData.academyImgFile); // Append Academy Image file
@@ -178,142 +180,39 @@ const handlebuttonclick=()=>{
       <p><strong>Instagram ID:</strong> {user.instaId || 'N/A'}</p>
       </div>
       {showEditForm && (
- 
-            <form className="add-course-form" onSubmit={handleEditSubmit}>
-              <input
-                type="text"
-                name="username"
-                value={user.username}
-                onChange={handleInputChange}
-                placeholder="Academy Name"
-                required
-                disabled
-              />
-            <label className='sign-in-label'>Academy Bio</label>
-                <textarea
-                    name="description"
-                    value={user.description}
-                    onChange={handleInputChange}
-                    placeholder="Ex. You may include a brief introduction containing activities, classes you provide, age category etc.."
-                    rows="4"
-                    cols="50"
-                    style={{marginBottom:'0px'}}
-                    maxLength={charLimit}
-                    required
-                     
-                />
-                <p style={{fontSize:'smaller', marginBottom:'20px',marginLeft:'10px' , color:'darkblue'}}>{charCount}/{charLimit} characters</p>
-                <div className='add-upload-label-group'>
-                    <label className='sign-in-label' htmlFor="crFile">Email ID</label>
-                    <label className='sign-in-label' htmlFor="academyImg">Phone</label>
-                </div>
-                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
-              <input
-                type="email"
-                name="email"
-                value={user.email}
-                onChange={handleInputChange}
-                placeholder="E-mail ID"
-                required
-                 
-              />
-                  <div className="phone-number-container" style={{ position: 'relative', width: '100%' }}>
-            <span className="country-code" style={{ position: 'absolute', left: '10px', top: '21px', transform: 'translateY(-50%)', fontSize: 'small', color: '#555' }}>
-              +974
-            </span>
-            <input
-              type="tel"
-              name="phoneNumber"
-              value={user.phoneNumber}
-              onChange={handleInputChange}
-              placeholder="Phone number"
-              required
-              style={{ paddingLeft: '50px' }}
-            />
-          </div>
-                </div>
-                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
+        <div className="editmodal">
+          <div className='editmodal-container'>
+            <h2>Update Academy Details</h2>
+            <form onSubmit={handleEditSubmit}>
+              <div>
+                <label>License No:</label>
                 <input
                   type="text"
-                  name="fullName"
-                  value={user.fullName}
-                  onChange={handleInputChange}
-                  placeholder="Full name"
-                  required
-                   
+                  name="licenseNo"
+                  value={user.licenseNo}
+                  onChange={handleChange}
                 />
+              </div>
+              <div>
+                <label>Academy Image:</label>
                 <input
-                  type="text"
-                  name="designation"
-                  value={user.designation}
-                  onChange={handleInputChange}
-                  placeholder="Designation"
-                  required
-                   
+                  type="file"
+                  name="academyImg"
+                  onChange={handleChange} // Handle file input change
                 />
               </div>
-              <div className='add-upload-label-group' style={{gap:'25%'}}>
-                <label className='sign-in-label' htmlFor="logo">Academy Logo <span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 80 X 80 ]</span></label>
-                <label className='sign-in-label' htmlFor="crFile">License No.</label>
-                </div>
-                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
-                    <input
-                        type="file"
-                        name="logo"
-                        onChange={handleInputChange}
-                        accept=".png, .jpg, .jpeg"
-                         
-                    />
-                    <input
-                        type="text"
-                        name="licenseNo"
-                        value={user.licenseNo}
-                        onChange={handleInputChange}
-                        placeholder="License number"
-                        required
-                         
-                    />
-                </div>
-                <div className='add-upload-label-group'>
-                    <label className='sign-in-label' htmlFor="crFile">CR</label>
-                    <label className='sign-in-label' htmlFor="academyImg">Academy Image</label>
-                </div>
-                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
-                   
-                    <input 
-                        type="file" 
-                        name="academyImg" 
-                        onChange={handleInputChange} 
-                        accept=".png, .jpg, .jpeg" 
-                         
-                    />
-                </div>
-                <div className='add-upload-label-group'>
-                    <label className='sign-in-label' htmlFor="crFile">Website</label>
-                    <label className='sign-in-label' htmlFor="academyImg">Instagram ID</label>
-                </div>
-                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
-                <input type="url" name="website" value={user.website}   onChange={handleInputChange} placeholder="Enter website link" />
-                <input type="text" name="instaId" value={user.instaId}   onChange={handleInputChange} placeholder="Enter Instagram ID" />
-                </div>
-                <div className='form-group'>
-                    <label htmlFor="location">Add Location</label>
-                    <select name="location" value={user.location}   onChange={handleInputChange} required>
-                    <option value="" disabled>Select your city</option>
-                    {cities.map((city) => (
-                        <option key={city} value={city}>{city}</option>
-                    ))}
-                    </select>
-                </div>
-
-              <div style={{display:'flex' ,justifyContent: 'flex-start'}} className="button-group">
-            
-                  <button style={{alignSelf:'flex-end'}} type="submit" className="submit-btn">Save</button>
-
+              <div>
+                <label>Logo:</label>
+                <input
+                  type="file"
+                  name="logo"
+                  onChange={handleChange} // Handle file input change
+                />
               </div>
-              {error && <p className="error-message">{error}</p>}
+              <button type="submit">Save</button>
             </form>
-      
+          </div>
+        </div>
       )}
       {showForm && (
         <div className="editmodal">
