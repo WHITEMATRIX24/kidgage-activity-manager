@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './ManageAcademy.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes, faEnvelope, faPhone, faUser, faBriefcase, faMapMarkerAlt, faGlobe,faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 
 const ManageAcademy = () => {
   const [user, setUser] = useState({
@@ -9,6 +12,8 @@ const ManageAcademy = () => {
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
+  const [showMainForm, setShowMainForm] = useState(true);
+
   const [formData, setFormData] = useState({
     licenseNo: '',
     academyImgFile: null, // Store the file object
@@ -120,7 +125,8 @@ const charLimit = 500;
       }
 
       alert('Profile updated successfully!');
-      setShowForm(false); // Hide form after successful update
+      setShowEditForm(false);
+      setShowMainForm(true); // Hide form after successful update
     } catch (error) {
       setError(error.message);
     }
@@ -151,17 +157,12 @@ const charLimit = 500;
       if (!response.ok) {
         throw new Error('Failed to update user details.');
       }
-
       alert('Profile updated successfully!');
       setShowForm(false); // Hide form after successful update
     } catch (error) {
       setError(error.message);
     }
   };
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
 
   if (!user) {
     return <div>Loading...</div>;
@@ -175,34 +176,63 @@ const charLimit = 500;
   };
 const handlebuttonclick=()=>{
   setShowEditForm(true);
+  setShowMainForm(false);
+}
+const handleclose=()=>{
+  setShowEditForm(false);
+  setShowMainForm(true);
 }
   return (
     <div className='add-course-form-container'>
-      <div className='add-course-form'>
-      <h1>User Profile</h1>
-      <div style={{width:'100%', display:'flex',justifyContent:'space-between', marginBottom:'10px'}}>
-      <h3 style={{marginBottom:'0',color:'#387CB8'}}>{user.username}</h3>
-      {user.crFile && (
-        <button type="button" onClick={downloadFile} style={{borderRadius:'20px',width:'150px'}}>
-          Download CR File
-        </button>
+      {showMainForm&&(
+        <div className='add-course-form'>
+        <h1>User Profile</h1>
+        <div className="user-detail" style={{width:'100%', display:'flex',justifyContent:'space-between', marginBottom:'10px'}}>
+        <h3 style={{marginBottom:'0',color:'#387CB8'}}>{user.username}</h3>
+        {user.crFile && (
+          <button type="button" onClick={downloadFile} style={{borderRadius:'20px',width:'150px'}}>
+            Download CR File
+          </button>
+        )}
+        </div>
+        <img style={{width:'50%',height:'100%'}} src={`data:image/jpeg;base64,${user.academyImg}`} alt={`${user.username}'s logo`} className="use-logo" />
+        <p> {user.description}</p>
+        <p>
+      <FontAwesomeIcon style={{marginRight:'10px'}} icon={faEnvelope} />   {user.email}
+      </p>
+      <p>
+        <FontAwesomeIcon style={{marginRight:'10px'}} icon={faPhone} /> {user.phoneNumber}
+      </p>
+      <p>
+        <FontAwesomeIcon style={{marginRight:'10px'}} icon={faUser} /> {user.fullName}
+      </p>
+      <p>
+        <FontAwesomeIcon style={{marginRight:'10px'}} icon={faBriefcase} /> {user.designation}
+      </p>
+      <p>
+        <FontAwesomeIcon style={{marginRight:'10px'}} icon={faMapMarkerAlt} /> {user.location}
+      </p>
+      <p>
+        <FontAwesomeIcon style={{marginRight:'10px'}} icon={faGlobe} /> {user.website || 'N/A'}
+      </p>
+      <p>
+        <FontAwesomeIcon style={{marginRight:'10px'}} icon={faInstagram} /> {user.instaId || 'N/A'}
+      </p>
+        <button style={{width:'100px',borderRadius:'5px'}} onClick={handlebuttonclick}><FontAwesomeIcon style={{marginRight:'0px'}} icon={faEdit} />edit</button>
+
+      </div>
       )}
-      </div>
-      <p> {user.description}</p>
-      <button onClick={handlebuttonclick}>edit</button>
-      <p><strong>Email:</strong> {user.email}</p>
-      <p><strong>Phone Number:</strong> {user.phoneNumber}</p>
-      <p><strong>Full Name:</strong> {user.fullName}</p>
-      <p><strong>Designation:</strong> {user.designation}</p>
-      <p><strong>Location:</strong> {user.location}</p>
-      <p><strong>Website:</strong> {user.website || 'N/A'}</p>
-      <p><strong>Instagram ID:</strong> {user.instaId || 'N/A'}</p>
-      </div>
       {showEditForm && (
         <div className="">
-          <div className='add-course-form-container'>
+          <div className=''>
+            <div style={{display:'flex',flexDirection:'row', justifyContent:'space-between'}}>
             <h2>Update Academy Details</h2>
+            <button style={{backgroundColor:'transparent', color:'red', fontSize:'large', alignSelf:'flex-end',border:'none'}} className="a-close-button" onClick={handleclose}>
+                    <FontAwesomeIcon icon={faTimes} />
+            </button>
+            </div>
             <form className="add-course-form" onSubmit={handleEditSubmit}>
+            
             <input
                 type="text"
                 name="username"

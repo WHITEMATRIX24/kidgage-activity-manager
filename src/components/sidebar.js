@@ -10,7 +10,10 @@ const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) =>
     const [adminId, setAdminId] = useState('');
     const [adminRole, setAdminRole] = useState('');
     const [Name, setName] = useState('');
-
+    const [user, setUser] = useState({
+        academyImg: null, // Store the file object
+        logo: null,       // Store the file object
+      });
     useEffect(() => {
         // Retrieve adminId and adminRole from sessionStorage
         const storedId = sessionStorage.getItem('adminId');
@@ -24,6 +27,34 @@ const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) =>
           setAdminRole(storedRole.charAt(0).toUpperCase() + storedRole.slice(1).toLowerCase());
         }
       }, []);
+      useEffect(() => {
+        const fetchUserDetails = async () => {
+          const userId = sessionStorage.getItem('userid');
+          try {
+            const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/user/${userId}`);
+            if (!response.ok) {
+              throw new Error('Failed to fetch user details.');
+            }
+            const userData = await response.json();
+      
+            // Update user state with the fetched data including the logo
+            setUser({
+              ...userData,
+              logo: userData.logo, // Assuming userData.logo is base64 encoded
+            });
+      
+            // Show the form if the verification status is 'accepted'
+            if (userData.verificationStatus === 'accepted') {
+              // Add logic if needed
+            }
+          } catch (err) {
+            console.log(err.message);
+          }
+        };
+      
+        fetchUserDetails();
+      }, []);
+      
     useEffect(() => {
         const sections = ['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'advertisements', 'course-categories', 'settings'];
 
@@ -94,11 +125,10 @@ const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) =>
     return (
         <div className={`sidebar ${sidebarOpen ? 'show' : ''}`}>
             <div className="profile-section">
-                <img src={profileImage} alt="Profile" />
+                {user.logo?(<img  src={`data:image/jpeg;base64,${user.logo}`} alt={`${user.username}'s logo`} className="use-logo" />):(<img src={profileImage} alt="Profile" />)}
                 <div className="profile-info">
                     <h4 style={{marginBottom:'0'}}>{Name}</h4>
                     <p>{adminRole}</p>
-                    
                 </div>
             </div>
             {/* <h1 className="sidebar-heading">Dashboard</h1> */}
