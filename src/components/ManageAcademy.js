@@ -81,9 +81,7 @@ const ManageAcademy = () => {
     // Create a new FormData object to send both text fields and file uploads
     const formDataToSend = new FormData();
     formDataToSend.append('licenseNo', user.licenseNo);
-    formDataToSend.append('emal', user.email);
-    formDataToSend.append('phoneNumber', user.phoneNumber);
-
+    
 
     if (formData.academyImgFile) {
       formDataToSend.append('academyImg', user.academyImgFile); // Append Academy Image file
@@ -205,35 +203,6 @@ const handlebuttonclick=()=>{
                   required
                 />
               </div>
-              <div className='add-upload-label-group'>
-              <label className='sign-in-label' htmlFor="crFile">Email ID</label>
-                    <label className='sign-in-label' htmlFor="academyImg">Phone</label>
-                </div>
-                <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
-              <input
-                type="email"
-                name="email"
-                value={user.email}
-                onChange={handleChange}
-                placeholder="E-mail ID"
-                required
-                 
-              />
-                  <div className="phone-number-container" style={{ position: 'relative', width: '100%' }}>
-            <span className="country-code" style={{ position: 'absolute', left: '10px', top: '21px', transform: 'translateY(-50%)', fontSize: 'small', color: '#555' }}>
-              +974
-            </span>
-            <input
-              type="tel"
-              name="phoneNumber"
-              value={user.phoneNumber}
-              onChange={handleChange}
-              placeholder="Phone number"
-              required
-              style={{ paddingLeft: '50px' }}
-            />
-          </div>
-                </div>
               <div>
                 <label>Academy Image:</label>
                 <input

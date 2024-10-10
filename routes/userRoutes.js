@@ -530,8 +530,8 @@ router.post('/edit/:userId', upload.fields([{ name: 'academyImg' }, { name: 'log
     // user.website = website;
     // user.instaId = instaId;
     // user.location = location;
-    user.email = email;
-    user.phoneNumber = phoneNumber;
+    // user.email = email;
+    // user.phoneNumber = phoneNumber;
 
 
     // Convert files to Base64 and update the user record
