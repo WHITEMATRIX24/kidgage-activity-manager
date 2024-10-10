@@ -88,10 +88,6 @@ const ManageAcademy = () => {
     // formDataToSend.append('location', user.location);
     // formDataToSend.append('description', user.description);
 
-
-
-    
-
     if (formData.academyImgFile) {
       formDataToSend.append('academyImg', user.academyImgFile); // Append Academy Image file
     }
@@ -224,10 +220,6 @@ const handlebuttonclick=()=>{
               </div>
               <div>
                 <label>Phone No:</label>
-                <span className="country-code" style={{ position: 'absolute', left: '10px', top: '21px', transform: 'translateY(-50%)', fontSize: 'small', color: '#555' }}>
-              +974
-            </span>
-
                 <input
                   type="tel"
                   name="phoneNumber"
@@ -251,7 +243,7 @@ const handlebuttonclick=()=>{
                 <input
                   type="text"
                   name="designation"
-                  value={user.designaion}
+                  value={user.designation}
                   onChange={handleChange}
                   required
                 />
