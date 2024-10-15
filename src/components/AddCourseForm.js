@@ -25,7 +25,7 @@ function AddCourseForm({providerId}) {
         preferredGender: 'Any' // Default value can be set as needed
 
     };
-
+    const [isLoading, setIsLoading] = useState(false); // Manage loading state
     const [course, setCourse] = useState(initialCourseState);
     const [showForm, setShowForm] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -134,7 +134,7 @@ const removeImage = (index) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        setIsLoading(true);
         try {
             const formData = new FormData();
 
@@ -194,6 +194,10 @@ const removeImage = (index) => {
                 setError('An error occurred. Please try again later.');
             }
             setSuccess('');
+        }
+        finally {
+            setIsLoading(false); // Stop loading after fetch
+            window.location.reload();
         }
     };
 
@@ -618,6 +622,12 @@ const removeImage = (index) => {
                     {success && <p className="success-message">{success}</p>}
                 </form>
             {/* )} */}
+            {isLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
+            )}
         </div>
     );
 }

@@ -197,3 +197,20 @@
 .rejection-window textarea:active{
     border: 1px solid #387CB8;
 }
+.request-count{
+    width: 0px; /* Fixed width for the circle */
+    height: 0px; /* Fixed height for the circle */
+    margin-left: 5px;
+    border-radius: 50%; /* Makes the div a circle */
+    background-color: #387CB8; /* Background color of the circle */
+    color: white; /* Text color */
+    display: flex; /* Flexbox to center the text */
+    align-items: center; /* Vertically center the text */
+    justify-content: center; /* Horizontally center the text */
+    text-align: center; /* Center text for multi-line */
+    overflow: hidden; /* Ensures text doesn't overflow */
+    padding: 10px; /* Optional padding */
+    font-size: 12px; /* Adjust font size */
+    white-space: nowrap; /* Prevent text wrapping */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Optional shadow for effect */
+}

@@ -9,6 +9,7 @@ function AddAdvertisement() {
         desktopImage: null, // File object for the desktop image
         mobileImage: null,  // File object for the mobile image
     };
+    const [isLoading, setIsLoading] = useState(false); // Manage loading state
 
     const [advertisement, setAdvertisement] = useState(initialAdvertisementState);
     const [showForm, setShowForm] = useState(true);
@@ -34,7 +35,7 @@ function AddAdvertisement() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        setIsLoading(true);
         // Define the space constant
         const space = 1;  // Set the constant value for space
 
@@ -60,6 +61,10 @@ function AddAdvertisement() {
             console.error('Error adding Advertisement', error);
             setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
             setSuccess('');
+        }
+        finally {
+            setIsLoading(false); // Stop loading after fetch
+            window.location.reload();
         }
     };
 
@@ -111,6 +116,13 @@ function AddAdvertisement() {
                     {error && <p className="error-message">{error}</p>}
                     {success && <p className="success-message">{success}</p>}
                 </form>
+                
+            )}
+            {isLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
             )}
         </div>
     );

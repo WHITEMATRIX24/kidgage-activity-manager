@@ -14,6 +14,7 @@ function AddPosterForm() {
     });
 
     const [showForm, setShowForm] = useState(true);
+    const [isLoading, setIsLoading] = useState(false); // Manage loading state
     const [file, setFile] = useState(null);
     const [fileName, setFileName] = useState('No file chosen');
     const [successMessage, setSuccessMessage] = useState('');
@@ -78,7 +79,7 @@ function AddPosterForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        setIsLoading(true);
         if (!validateForm()) return;
 
         const formData = new FormData();
@@ -113,6 +114,10 @@ function AddPosterForm() {
             setCharacterCount(0); // Reset character count
         } catch (error) {
             console.error('Error adding poster:', error);
+        }
+        finally {
+            setIsLoading(false); // Stop loading after fetch
+            window.location.reload();
         }
     };
 
@@ -207,6 +212,12 @@ function AddPosterForm() {
                     <button type="submit">Submit</button>
                     {successMessage && <p className="success-message">{successMessage}</p>}
                 </form>
+            )}
+            {isLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
             )}
         </div>
     );

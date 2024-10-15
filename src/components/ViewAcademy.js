@@ -11,19 +11,23 @@ const ViewAcademy = ({ handleSubmit }) => {
     const [showAForm, setShowAForm] = useState(false);
     const [users, setUsers] = useState([]);
     const [selectedAcademy, setSelectedAcademy] = useState(null);  // State for the academy being edited
-
+    const [loading, setLoading] = useState(true);
+    const [loadinga, setLoadinga] = useState(true);
     const toggleFormVisibility = () => {
         setShowForm(!showForm);
     };
 
     useEffect(() => {
         // Fetch users from the backend
+        setLoading(true);
         axios.get('https://kidgage-adminbackend.onrender.com/api/users/all') // Make sure this matches the actual API route
             .then((response) => {
                 setUsers(response.data);
+                setLoading(false);
             })
             .catch((error) => {
                 console.error('There was an error fetching the users!', error);
+                setLoading(false);
             });
     }, []);
 
@@ -51,12 +55,23 @@ const ViewAcademy = ({ handleSubmit }) => {
     
     return (
         <div className="add-course-form-container">
+            
             {!showAForm && (
                 <>
                     <div className="add-course-form-header" onClick={toggleFormVisibility}>
                         <h2>Academies</h2>
                         <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} />
                     </div>
+                    {loading ? (
+                        <div className="loader-container">
+                        <div className="loading-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    </div>
+                    ) : (
+                        <>
                     {showForm && (
                         <form className="add-course-form">
                             <h2>Total academies registered: {users.length}</h2>
@@ -86,7 +101,8 @@ const ViewAcademy = ({ handleSubmit }) => {
                     )}
                 </>
             )}
-
+            </>
+            )}
             {/* Show AddAcademyForm when showAForm is true */}
             {showAForm && (
                 <div className="add-academy-form-container">
@@ -115,7 +131,9 @@ const ViewAcademy = ({ handleSubmit }) => {
                         handleSubmit={handleCloseEditForm}  // Close form after submission
                     />
                 </div>
+               
             )}
+           
         </div>
     );
 }

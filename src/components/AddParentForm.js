@@ -5,6 +5,7 @@ import { FaChevronDown } from 'react-icons/fa';
 
 const AddParentForm = ({ handleNavigation }) => {
   const [showForm, setShowForm] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // Manage loading state
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -27,6 +28,7 @@ const AddParentForm = ({ handleNavigation }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match.');
       setSuccess('');
@@ -49,6 +51,10 @@ const AddParentForm = ({ handleNavigation }) => {
       setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
       setSuccess('');
     }
+    finally {
+      setIsLoading(false); // Stop loading after fetch
+      window.location.reload();
+  }
   };
 
   const toggleFormVisibility = () => {
@@ -128,6 +134,12 @@ const AddParentForm = ({ handleNavigation }) => {
           {success && <p className="success-message">{success}</p>}
         </form>
       )}
+      {isLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
+            )}
     </div>
   );
 };

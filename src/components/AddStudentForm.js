@@ -16,6 +16,7 @@ function AddStudentForm() {
     };
 
     const [student, setStudent] = useState(initialStudentState);
+    const [isLoading, setIsLoading] = useState(false); // Manage loading state
     const [showForm, setShowForm] = useState(true);
     const [searchResult, setSearchResult] = useState(null);
     const [error, setError] = useState('');
@@ -49,7 +50,7 @@ function AddStudentForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        setIsLoading(true);
         if (!searchResult) {
             setError('Parent not found');
             setSuccess('');
@@ -75,6 +76,10 @@ function AddStudentForm() {
             console.error('Error adding student:', error);
             setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
             setSuccess(''); // Clear any previous success message
+        }
+        finally {
+            setIsLoading(false); // Stop loading after fetch
+            window.location.reload();
         }
     };
 
@@ -213,6 +218,12 @@ function AddStudentForm() {
                     {error && <p className="error-message">{error}</p>}
                     {success && <p className="success-message">{success}</p>}
                 </form>
+            )}
+            {isLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
             )}
         </div>
     );

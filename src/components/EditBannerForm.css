@@ -137,7 +137,7 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 999; /* Just below the popup */
+    z-index: 990; /* Just below the popup */
 }
 
 .confirm-popup {
@@ -150,7 +150,7 @@
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000; /* Ensure it's on top of other elements */
+    z-index: 991; /* Ensure it's on top of other elements */
 }
 
 

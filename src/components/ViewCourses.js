@@ -13,7 +13,8 @@ const ViewCourses = ({ handleSubmit }) => {
     const [courses, setCourses] = useState({});
     const [selectedCourse, setSelectedCourse] = useState(null); // State for the selected course
     const [selectedProviderId, setSelectedProviderId] = useState(null); // State for the selected course
-
+    const [loading, setLoading] = useState(true);
+    const [aloading, asetLoading] = useState(true);
     const [visibleCourses, setVisibleCourses] = useState({});
 
     const toggleFormVisibility = () => {
@@ -21,17 +22,23 @@ const ViewCourses = ({ handleSubmit }) => {
     };
 
     useEffect(() => {
+        setLoading(true);
         axios.get('https://kidgage-adminbackend.onrender.com/api/users/all')
             .then((response) => {
                 setProviders(response.data);
+                setLoading(false);
+
             })
             .catch((error) => {
                 console.error('There was an error fetching the users!', error);
+                setLoading(false);
+
             });
     }, []);
 
     useEffect(() => {
         const fetchCourses = async () => {
+            asetLoading(true);
             const providerIds = providers.map(provider => provider._id);
             try {
                 const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/courses/by-providers', {
@@ -46,9 +53,12 @@ const ViewCourses = ({ handleSubmit }) => {
                     return acc;
                 }, {});
                 setCourses(coursesByProvider);
+                asetLoading(false);
+
             } catch (error) {
                 console.error('Error fetching courses:', error);
-            }
+                asetLoading(false);
+            } 
         };
 
         if (providers.length > 0) {
@@ -95,6 +105,16 @@ const ViewCourses = ({ handleSubmit }) => {
                         <h2>Courses/Activities</h2>
                         {/* <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} /> */}
                     </div>
+                    {loading ? (
+                        <div style={{marginTop:'15%'}} className="loader-container">
+                        <div className="loading-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        </div>
+                        </div>
+                        ) : (
+                        <>
                     {showForm && (
                         <form className="add-course-form">
                             <h3 style={{color:'green',marginTop:'0px'}}>Total {totalCourses} Activities registered under {providers.length} Academies</h3>
@@ -128,6 +148,17 @@ const ViewCourses = ({ handleSubmit }) => {
                                                 {visibleCourses[provider._id] ? 'Hide Courses' : 'See Courses'}
                                             </button>
                                         </div>
+                                        <div style={{width:'100%', minHeight:'30px'}}>
+                                        {aloading ? (
+                                        <div style={{marginTop:'0%'}} className="loader-container">
+                                        <div className="loading-dots">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        </div>
+                                        </div>
+                                        ) : (
+                                        <>
                                         {visibleCourses[provider._id] && courses[provider._id] && courses[provider._id].length > 0 && (
                                             <div className="courses-container" style={{ width: '100%' }}>
                                                 {courses[provider._id].map((course) => (
@@ -141,11 +172,16 @@ const ViewCourses = ({ handleSubmit }) => {
                                                 ))}
                                             </div>
                                         )}
+                                        </>
+                                        )}
+                                        </div>
                                     </div>
                                 ))}
                             </div>
                         </form>
                     )}
+                    </>
+                        )}
                 </>
             )}
 

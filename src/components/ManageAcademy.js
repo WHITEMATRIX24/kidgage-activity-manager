@@ -13,7 +13,8 @@ const ManageAcademy = () => {
   const [showForm, setShowForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [showMainForm, setShowMainForm] = useState(true);
-
+  const [isLoading, setIsLoading] = useState(false); // Manage loading state
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     licenseNo: '',
     academyImgFile: null, // Store the file object
@@ -26,8 +27,10 @@ const ManageAcademy = () => {
   ];
   const [charCount, setCharCount] = useState(0);
 const charLimit = 500;
+
   useEffect(() => {
     const fetchUserDetails = async () => {
+      setLoading(true);
       const userId = sessionStorage.getItem('userid');
       if (!userId) {
         setError('No admin ID found in session storage.');
@@ -46,8 +49,11 @@ const charLimit = 500;
         if (userData.verificationStatus === 'accepted') {
           setShowForm(true);
         }
+        setLoading(false);
+
       } catch (err) {
         setError(err.message);
+        setLoading(false);
       }
     };
 
@@ -92,6 +98,8 @@ const charLimit = 500;
   
   const handleEditSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
     const userId = sessionStorage.getItem('userid');
 
     // Create a new FormData object to send both text fields and file uploads
@@ -130,10 +138,15 @@ const charLimit = 500;
     } catch (error) {
       setError(error.message);
     }
+    finally {
+      setIsLoading(false); // Stop loading after fetch
+      window.location.reload();
+  }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const userId = sessionStorage.getItem('userid');
 
     // Create a new FormData object to send both text fields and file uploads
@@ -162,6 +175,10 @@ const charLimit = 500;
     } catch (error) {
       setError(error.message);
     }
+    finally {
+      setIsLoading(false); // Stop loading after fetch
+      window.location.reload();
+  }
   };
 
   if (!user) {
@@ -187,41 +204,54 @@ const handleclose=()=>{
       {showMainForm&&(
         <div className='add-course-form'>
         <h1>User Profile</h1>
+        {loading ? (
+        <div className="loader-container">
+         <div className="loading-dots">
+         <span></span>
+        <span></span>
+        <span></span>
+        </div>
+        </div>
+        ) : (
+        <>
         <div className="user-detail" style={{width:'100%', display:'flex',justifyContent:'space-between', marginBottom:'10px'}}>
-        <h3 style={{marginBottom:'0',color:'#387CB8'}}>{user.username}</h3>
-        {user.crFile && (
-          <button type="button" onClick={downloadFile} style={{borderRadius:'20px',width:'150px'}}>
-            Download CR File
-          </button>
-        )}
+          <h3 style={{marginBottom:'0',color:'#387CB8'}}>{user.username}</h3>
+          {user.crFile && (
+            <button type="button" onClick={downloadFile} style={{borderRadius:'20px',width:'150px'}}>
+              Download CR File
+            </button>
+          )}
         </div>
         <img style={{width:'50%',height:'100%'}} src={`data:image/jpeg;base64,${user.academyImg}`} alt={`${user.username}'s logo`} className="use-logo" />
         <p> {user.description}</p>
         <p>
-      <FontAwesomeIcon style={{marginRight:'10px'}} icon={faEnvelope} />   {user.email}
-      </p>
-      <p>
-        <FontAwesomeIcon style={{marginRight:'10px'}} icon={faPhone} /> {user.phoneNumber}
-      </p>
-      <p>
-        <FontAwesomeIcon style={{marginRight:'10px'}} icon={faUser} /> {user.fullName}
-      </p>
-      <p>
-        <FontAwesomeIcon style={{marginRight:'10px'}} icon={faBriefcase} /> {user.designation}
-      </p>
-      <p>
-        <FontAwesomeIcon style={{marginRight:'10px'}} icon={faMapMarkerAlt} /> {user.location}
-      </p>
-      <p>
-        <FontAwesomeIcon style={{marginRight:'10px'}} icon={faGlobe} /> {user.website || 'N/A'}
-      </p>
-      <p>
-        <FontAwesomeIcon style={{marginRight:'10px'}} icon={faInstagram} /> {user.instaId || 'N/A'}
-      </p>
-        <button style={{width:'100px',borderRadius:'5px'}} onClick={handlebuttonclick}><FontAwesomeIcon style={{marginRight:'0px'}} icon={faEdit} />edit</button>
-
-      </div>
+          <FontAwesomeIcon style={{marginRight:'10px'}} icon={faEnvelope} />   {user.email}
+          </p>
+          <p>
+            <FontAwesomeIcon style={{marginRight:'10px'}} icon={faPhone} /> {user.phoneNumber}
+          </p>
+          <p>
+            <FontAwesomeIcon style={{marginRight:'10px'}} icon={faUser} /> {user.fullName}
+          </p>
+          <p>
+            <FontAwesomeIcon style={{marginRight:'10px'}} icon={faBriefcase} /> {user.designation}
+          </p>
+          <p>
+            <FontAwesomeIcon style={{marginRight:'10px'}} icon={faMapMarkerAlt} /> {user.location}
+          </p>
+          <p>
+            <FontAwesomeIcon style={{marginRight:'10px'}} icon={faGlobe} /> {user.website || 'N/A'}
+          </p>
+          <p>
+            <FontAwesomeIcon style={{marginRight:'10px'}} icon={faInstagram} /> {user.instaId || 'N/A'}
+          </p>
+            <button style={{width:'100px',borderRadius:'5px'}} onClick={handlebuttonclick}><FontAwesomeIcon style={{marginRight:'0px'}} icon={faEdit} />edit</button>
+            </>
       )}
+      </div>
+   
+      )}
+      
       {showEditForm && (
         <div className="">
           <div className=''>
@@ -338,7 +368,7 @@ const handleclose=()=>{
                 />
               </div>
               <div>
-                <label>Academy Image:</label>
+                <label>Academy Image<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 1280 X 1028 ]</span>:</label>
                 <input
                   type="file"
                   name="academyImg"
@@ -348,7 +378,7 @@ const handleclose=()=>{
                 />
               </div>
               <div>
-                <label>Logo:</label>
+                <label>Logo<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 80 X 80 ]</span>:</label>
                 <input
                   type="file"
                   name="logo"
@@ -361,6 +391,7 @@ const handleclose=()=>{
             </form>
           </div>
         </div>
+       
       )}
       {showForm && (
         <div className="editmodal">
@@ -378,7 +409,7 @@ const handleclose=()=>{
                 />
               </div>
               <div>
-                <label>Academy Image:</label>
+                <label>Academy Image<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 1280 X 1028 ]</span>:</label>
                 <input
                   type="file"
                   name="academyImg"
@@ -387,7 +418,7 @@ const handleclose=()=>{
                 />
               </div>
               <div>
-                <label>Logo:</label>
+                <label>Logo<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 80 X 80 ]</span>:</label>
                 <input
                   type="file"
                   name="logo"
@@ -397,6 +428,12 @@ const handleclose=()=>{
               </div>
               <button type="submit">Save</button>
             </form>
+            {isLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
+            )}
           </div>
         </div>
       )}

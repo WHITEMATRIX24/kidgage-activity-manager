@@ -9,6 +9,7 @@ function AddBannerForm() {
         image: null, // File object for the image
         bookingLink: ''
     };
+    const [isLoading, setIsLoading] = useState(false); // Manage loading state
 
     const [banner, setBanner] = useState(initialBannerState);
     const [showForm, setShowForm] = useState(true);
@@ -33,7 +34,7 @@ function AddBannerForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        setIsLoading(true);
         const formData = new FormData();
         formData.append('title', banner.title);
         formData.append('image', banner.image); // Append the file object
@@ -54,6 +55,10 @@ function AddBannerForm() {
             console.error('Error adding banner', error);
             setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
             setSuccess('');
+        }
+        finally {
+            setIsLoading(false); // Stop loading after fetch
+            window.location.reload();
         }
     };
 
@@ -106,6 +111,12 @@ function AddBannerForm() {
                     {error && <p className="error-message">{error}</p>}
                     {success && <p className="success-message">{success}</p>}
                 </form>
+            )}
+            {isLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
             )}
         </div>
     );

@@ -13,6 +13,8 @@ const AdminSignIn = () => {
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false); // For showing/hiding loader
+  const [progress, setProgress] = useState(0); // To track loader progress
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -24,31 +26,40 @@ const AdminSignIn = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setLoading(true); // Start loader
+    setProgress(10); // Set progress to 10% on form submit
 
     try {
       const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/admin/signin', formData);
       console.log('Sign-in successful:', response.data);
-      const {_id, role,fullName,name,userId} = response.data.admin;
+      const { _id, role, fullName, name, userId } = response.data.admin;
       setSuccess('Sign-in successful');
       setFormData({
         name: '',
         password: '',
       });
-          // Store id and role in sessionStorage
-        sessionStorage.setItem('adminId', _id);
-        sessionStorage.setItem('adminRole', role);
-        sessionStorage.setItem('Name', fullName);
-        sessionStorage.setItem('email', name);
-        sessionStorage.setItem('userid', userId);
+      // Store id and role in sessionStorage
+      sessionStorage.setItem('adminId', _id);
+      sessionStorage.setItem('adminRole', role);
+      sessionStorage.setItem('Name', fullName);
+      sessionStorage.setItem('email', name);
+      sessionStorage.setItem('userid', userId);
 
-
-      // Pass id and role to the dashboard
-      navigate('/dashboard', { state: { _id, role,fullName,name, userId} });
+      // Set progress to 100% just before navigating
+      setProgress(100);
+      
+      // Delay navigation for a short time to let the loader reach 100%
+      setTimeout(() => {
+        setLoading(false); // Stop loader
+        navigate('/dashboard', { state: { _id, role, fullName, name, userId } });
+      }, 500); // Delay navigation by 500ms to allow the loader to complete
     } catch (error) {
       console.error('Sign-in error:', error.response ? error.response.data : error.message);
       setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
+      setLoading(false); // Stop loader if there's an error
     }
   };
+
   return (
     <div className='asign-form-body'>
       <div className='asignup-form'>
@@ -74,6 +85,17 @@ const AdminSignIn = () => {
             required
           />
           <button primary type="submit">Sign In</button>
+
+          {/* Loader */}
+          {loading && (
+            <div className="loader">
+              <p>Signing in... {progress}%</p>
+              <div className="progress-bar">
+                <div className="progress" style={{ width: `${progress}%` }}></div>
+              </div>
+            </div>
+          )}
+
           {error && <p className="error-message">{error}</p>}
           {success && <p className="success-message">{success}</p>}
         </form>

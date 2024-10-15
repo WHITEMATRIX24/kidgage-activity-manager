@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './AddCourseForm.css'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faEnvelope, faPhone, faUser, faBriefcase, faMapMarkerAlt, faGlobe,faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faEnvelope, faPhone, faUser, faBriefcase, faMapMarkerAlt, faGlobe,faEdit, faTrash} from '@fortawesome/free-solid-svg-icons';
 import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 
 const EditAcademyForm = ({ id }) => {
@@ -11,10 +11,13 @@ const EditAcademyForm = ({ id }) => {
     logo: null,       // Store the file object
   });
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState('');
   const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [showEditForm, setShowEditForm] = useState(false);
   const [showMainForm, setShowMainForm] = useState(true);
-
+  const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Manage loading state
   const [formData, setFormData] = useState({
     licenseNo: '',
     academyImgFile: null, // Store the file object
@@ -26,9 +29,54 @@ const EditAcademyForm = ({ id }) => {
     "Umm Salal", "Dukhan", "Mesaieed"
   ];
   const [charCount, setCharCount] = useState(0);
+  const handleDelete = () => {
+    setShowConfirmPopup(true);
+  };
+  const handleConfirmDelete = async () => {
+    setIsLoading(true);
+    try {
+      await axios.delete(`https://kidgage-adminbackend.onrender.com/api/users/academy/${user._id}`);
+      setUser(null);
+      setFormData({
+        username: '',
+        email: '',
+        phoneNumber: '',
+        password: '',
+        confirmPassword: '',
+        firstName: '',
+        lastName: '',
+        logo: [],
+        crFile: [],
+        idCard: [],
+        licenseNo: '',
+        academyImg: [],
+        description: '',
+        academyType: '',
+        location: '',
+      });
+      setShowConfirmPopup(false);
+      setError('');
+      setIsLoading(false);
+      alert('Academy deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting academy:', error);
+      setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
+      setSuccess('');
+      setShowConfirmPopup(false);
+    }
+    finally {
+      setIsLoading(false); // Stop loading after fetch
+      window.location.reload();
+  }
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirmPopup(false);
+  };
 const charLimit = 500;
   useEffect(() => {
     const fetchUserDetails = async () => {
+      setLoading(true);
       const userId = id;
       if (!userId) {
         setError('No admin ID found in session storage.');
@@ -47,8 +95,12 @@ const charLimit = 500;
         if (userData.verificationStatus === 'accepted') {
           setShowForm(true);
         }
+        setLoading(false);
+
       } catch (err) {
         setError(err.message);
+        setLoading(false);
+
       }
     };
 
@@ -93,6 +145,7 @@ const charLimit = 500;
   
   const handleEditSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const userId = id;
 
     // Create a new FormData object to send both text fields and file uploads
@@ -124,13 +177,19 @@ const charLimit = 500;
       if (!response.ok) {
         throw new Error('Failed to update user details.');
       }
-
+      setIsLoading(false);
       alert('Profile updated successfully!');
       setShowEditForm(false);
       setShowMainForm(true); // Hide form after successful update
     } catch (error) {
       setError(error.message);
+      setSuccess("");
+
     }
+    finally {
+      setIsLoading(false); // Stop loading after fetch
+      window.location.reload();
+  }
   };
 
   const handleSubmit = async (e) => {
@@ -187,14 +246,24 @@ const handleclose=()=>{
     <div className=''>
     {showMainForm&&(
       <div className='add-course-form'>
-      
+      {loading ? (
+        <div style={{marginTop:'15%'}} className="loader-container">
+         <div className="loading-dots">
+         <span></span>
+        <span></span>
+        <span></span>
+        </div>
+        </div>
+        ) : (
+        <>
       <div className="user-detail" style={{width:'100%', display:'flex',justifyContent:'space-between', marginBottom:'10px'}}>
-      <h3 style={{marginBottom:'0',color:'#387CB8'}}>{user.username}</h3>
-      {user.crFile && (
-        <button type="button" onClick={downloadFile} style={{borderRadius:'20px',width:'150px'}}>
-          Download CR File
-        </button>
-      )}
+      
+        <h3 style={{marginBottom:'0',color:'#387CB8'}}>{user.username}</h3>
+        {user.crFile && (
+          <button type="button" onClick={downloadFile} style={{borderRadius:'20px',width:'150px'}}>
+            Download CR File
+          </button>
+        )}
       </div>
       <img style={{width:'50%',height:'100%'}} src={`data:image/jpeg;base64,${user.academyImg}`} alt={`${user.username}'s logo`} className="use-logo" />
       <p> {user.description}</p>
@@ -219,8 +288,13 @@ const handleclose=()=>{
     <p>
       <FontAwesomeIcon style={{marginRight:'10px'}} icon={faInstagram} /> {user.instaId || 'N/A'}
     </p>
+      <div style={{display:'flex',flexDirection:'row',gap:'10px'}}>
       <button style={{width:'100px',borderRadius:'5px'}} onClick={handlebuttonclick}><FontAwesomeIcon style={{marginRight:'0px'}} icon={faEdit} />edit</button>
-
+      <button style={{width:'100px',borderRadius:'5px'}} className='delete-course-button' onClick={handleDelete}><FontAwesomeIcon style={{marginRight:'0px'}} icon={faTrash} /> Delete</button>
+      </div>
+      
+      </>
+    )}
     </div>
     )}
     {showEditForm && (
@@ -334,7 +408,7 @@ const handleclose=()=>{
               />
             </div>
             <div>
-              <label>Academy Image:</label>
+              <label>Academy Image<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 1280 X 1028 ]</span>:</label>
               <input
                 type="file"
                 name="academyImg"
@@ -344,7 +418,7 @@ const handleclose=()=>{
               />
             </div>
             <div>
-              <label>Logo:</label>
+              <label>Logo<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 80 X 80 ]</span>:</label>
               <input
                 type="file"
                 name="logo"
@@ -354,11 +428,29 @@ const handleclose=()=>{
               />
             </div>
             <button type="submit">Save</button>
+            {error && <p className="error-message">{error}</p>}
+            {success && <p className="msuccess-message">{success}</p>}
           </form>
         </div>
       </div>
     )}
-    
+    {isLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
+            )}
+    {showConfirmPopup && (
+        <div className="confirm-popup-overlay">
+          <div className="confirm-popup">
+          <div className="confirm-popup-content">
+            <p>Are you sure you want to delete this academy?</p>
+            <button onClick={handleConfirmDelete}>Yes</button>
+            <button onClick={handleCancelDelete}>No</button>
+          </div>
+        </div>
+        </div>
+      )}
   </div>
 );
 };

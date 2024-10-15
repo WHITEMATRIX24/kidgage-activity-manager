@@ -40,6 +40,7 @@ const Dashboard = () => {
     const [showChangePasswordForm, setShowChangePasswordForm] = useState(false); // New state
     const [adminId, setAdminId] = useState('');
     const [adminRole, setAdminRole] = useState('');
+    const [pendingCount, setPendingCount] = useState(0); // State to store pending requests count
     const [Name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [user, setUser] = useState('');
@@ -79,7 +80,19 @@ const Dashboard = () => {
         // Redirect to the homepage
         window.location.replace('/');
     };
-
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/users/pending');
+                setPendingCount(response.data.length);  // Set pending count based on API response
+            } catch (error) {
+                console.error(`Error fetching pending users:`, error);  // Handle errors
+            }
+        };
+    
+        fetchUsers();  // Call fetchUsers when component mounts
+    }, [setPendingCount]);  // Dependency array (no need to put `setPendingCount` in the array unless it comes from props)
+    
     const handleChangePassword = () => {
         setShowChangePasswordForm(true);
     };
@@ -162,13 +175,16 @@ const Dashboard = () => {
                     <h1>Activity Manager</h1>
                     {adminRole === 'admin' && (
                     <>
-                    <div className='request-div' style={{ alignSelf: 'flex-end', marginRight: '10%', fontSize: 'x-large', fontWeight: 'bold', color: 'black', cursor: 'pointer' }} onClick={toggleRequests}>
-                        <FontAwesomeIcon icon={faEnvelope} /> Requests
+                    <div className='request-div' style={{ alignSelf: 'flex-end',display:'flex', flexDirection:'row', alignItems:'center', marginRight: '10%', fontSize: 'x-large', fontWeight: 'bold', color: 'black', cursor: 'pointer' }} onClick={toggleRequests}>
+                        <FontAwesomeIcon style={{marginRight:'5px'}} icon={faEnvelope} /> Requests
+                        {pendingCount > 0 && (
+                            <span className="request-count">{pendingCount}</span>
+                        )}
                     </div>
                     </>
                     )}
                     {showRequests && (
-                        <RequestsPopup show={showRequests} closeRequests={closeRequests} />
+                        <RequestsPopup show={showRequests} closeRequests={closeRequests}/>
                     )}
                 </div>
                 

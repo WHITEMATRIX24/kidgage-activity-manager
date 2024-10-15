@@ -6,7 +6,7 @@ import ConfirmationPopup from './ConfirmationPopup'; // Import the confirmation 
 import RejectionReasonPopup from './RejectionReasonPopup';
 import './requestsPopup.css'; // Create a new CSS file for popup-specific styles
 
-const RequestsPopup = ({ show, closeRequests }) => {
+const RequestsPopup = ({ show, closeRequests, setPendingCount}) => {
     const popupRef = useRef(null);
     const [pendingUsers, setPendingUsers] = useState([]); // State to store pending users
     const [acceptedUsers, setAcceptedUsers] = useState([]); // State to store accepted users
@@ -15,6 +15,7 @@ const RequestsPopup = ({ show, closeRequests }) => {
     const [activeTab, setActiveTab] = useState('pending'); // State for tab management ('pending' or 'accepted')
     const [showConfirmation, setShowConfirmation] = useState(false); // State to manage confirmation popup
     const [showRejectionPopup, setShowRejectionPopup] = useState(false); // State to manage rejection reason popup
+    const [isLoading, setIsLoading] = useState(false); // Manage loading state
 
     // Fetch users from the backend when the popup opens or tab changes
     useEffect(() => {
@@ -25,6 +26,7 @@ const RequestsPopup = ({ show, closeRequests }) => {
                     if (activeTab === 'pending') {
                         const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/users/pending');
                         setPendingUsers(response.data); // Set the pending users data
+                        setPendingCount(response.data.length);
                     } else if (activeTab === 'accepted') {
                         const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/users/accepted'); // Adjust the endpoint for accepted users
                         setAcceptedUsers(response.data); // Set the accepted users data
@@ -37,7 +39,7 @@ const RequestsPopup = ({ show, closeRequests }) => {
             };
             fetchUsers();
         }
-    }, [show, activeTab]);
+    }, [show, activeTab, setPendingCount]);
 
     // Handle click outside the popup to close it
     useEffect(() => {
@@ -53,6 +55,7 @@ const RequestsPopup = ({ show, closeRequests }) => {
     }, [popupRef, closeRequests]);
 
     const handleVerify = async () => {
+        setIsLoading(true);
         if (selectedUser) {
             try {
                 // Include the user's data in the request body
@@ -72,6 +75,9 @@ const RequestsPopup = ({ show, closeRequests }) => {
             } catch (error) {
                 console.error('Error verifying user:', error);
             }
+            finally {
+                setIsLoading(false); // Stop loader
+              }
             setShowConfirmation(false); // Close the confirmation popup after verifying
         }
     };
@@ -86,6 +92,7 @@ const RequestsPopup = ({ show, closeRequests }) => {
     };
 
     const handleReject = async (userId, userDetails) => {
+        setIsLoading(true);
         console.log('Rejecting user with ID:', userId); // Log the user ID
         try {
             await axios.post(`https://kidgage-adminbackend.onrender.com/api/users/reject/${userId}`, userDetails);
@@ -94,6 +101,9 @@ const RequestsPopup = ({ show, closeRequests }) => {
         } catch (error) {
             console.error('Error rejecting user:', error);
         }
+        finally {
+            setIsLoading(false); // Stop loader
+          }
     };
     
 
@@ -113,16 +123,21 @@ const RequestsPopup = ({ show, closeRequests }) => {
                 {/* Tabs for switching between "Pending" and "Accepted" */}
                 <div className="tab-buttons">
                     <button
+                        style={{display:'flex', flexDirection:'row', alignItems:'baseline'}}
                         className={activeTab === 'pending' ? 'active' : ''}
                         onClick={() => setActiveTab('pending')}
                     >
                         Pending Requests
+                        <span className="request-count">{pendingUsers.length}</span> {/* Display pending requests count */}
                     </button>
                     <button
+                        style={{display:'flex', flexDirection:'row', alignItems:'baseline'}}
                         className={activeTab === 'accepted' ? 'active' : ''}
                         onClick={() => setActiveTab('accepted')}
                     >
                         Verified Requests
+                        <span className="request-count">{acceptedUsers.length}</span> {/* Display accepted requests count */}
+
                     </button>
                 </div>
 
@@ -197,7 +212,11 @@ const RequestsPopup = ({ show, closeRequests }) => {
                     }}                                       
                     onCancel={() => setShowRejectionPopup(false)} // Close the popup when canceled
                 />
-
+            {isLoading && (
+                <div className="confirmation-overlay">
+                    <div className="su-loader"></div>
+                </div>
+            )}
             </div>
         </>
     );

@@ -127,7 +127,7 @@ const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) =>
             <div className="profile-section">
                 {user.logo?(<img  src={`data:image/jpeg;base64,${user.logo}`} alt={`${user.username}'s logo`} className="use-logo" />):(<img src={profileImage} alt="Profile" />)}
                 <div className="profile-info">
-                    <h4 style={{marginBottom:'0'}}>{Name}</h4>
+                    <h4 style={{margin:'0'}}>{Name}</h4>
                     <p>{adminRole}</p>
                 </div>
             </div>

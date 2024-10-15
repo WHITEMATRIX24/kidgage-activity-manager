@@ -8,7 +8,7 @@ function AddCourseCategoryForm() {
         name: '',
         image: null,
     });
-
+    const [isLoading, setIsLoading] = useState(false); // Manage loading state
     const [showForm, setShowForm] = useState(true);
     const [fileName, setFileName] = useState('No file chosen');
     const [successMessage, setSuccessMessage] = useState('');
@@ -31,7 +31,7 @@ function AddCourseCategoryForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        setIsLoading(true);
         if (!course.image) {
             alert('Image is required');
             return;
@@ -57,6 +57,10 @@ function AddCourseCategoryForm() {
             setFileName('No file chosen');
         } catch (error) {
             console.error('Error adding course category:', error);
+        }
+        finally {
+            setIsLoading(false); // Stop loading after fetch
+            window.location.reload();
         }
     };
 
@@ -96,7 +100,12 @@ function AddCourseCategoryForm() {
                     {successMessage && <p className="success-message">{successMessage}</p>}
                 </form>
             )}
-            
+            {isLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
+            )}
         </div>
     );
 }

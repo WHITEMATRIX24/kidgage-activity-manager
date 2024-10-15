@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import './AddCourseForm.css';
 import axios from 'axios';
 
@@ -6,7 +6,10 @@ const AddAcademyForm = ({ handleNavigation }) => {
     const [showForm, setShowForm] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
-
+    const [isLoading, setIsLoading] = useState(false); // Manage loading state
+    const logoInputRef = useRef(null); // Ref for logo input
+    const crFileInputRef = useRef(null); // Ref for CR file input
+    const academyImgInputRef = useRef(null); // Ref for academy image input
     const cities = [
         "Doha", "Al Wakrah", "Al Khor", "Al Rayyan", 
         "Al Shamal", "Al Shahaniya", "Al Daayen", 
@@ -79,8 +82,8 @@ const AddAcademyForm = ({ handleNavigation }) => {
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         console.log('button clicked!')
-    
         setError('');
     
         const data = new FormData();
@@ -96,11 +99,19 @@ const AddAcademyForm = ({ handleNavigation }) => {
     
         try {
             const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/users/signup', data);
-            setSuccess('Academy added Successfully!');
+            alert('Academy added Successfully!');
             setFormData({ ...initialFormState }); // Reset form fields
+            if (logoInputRef.current) logoInputRef.current.value = '';
+            if (crFileInputRef.current) crFileInputRef.current.value = '';
+            if (academyImgInputRef.current) academyImgInputRef.current.value = '';
+
         } catch (error) {
             setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
             setSuccess('');
+        }
+        finally {
+            setIsLoading(false); // Stop loading after fetch
+            window.location.reload();
         }
     };
     useEffect(() => {
@@ -204,6 +215,7 @@ return (
                     <input
                         type="file"
                         name="logo"
+                        ref={logoInputRef} // Attach ref
                         onChange={handleChange}
                         accept=".png, .jpg, .jpeg"
                         required
@@ -219,13 +231,14 @@ return (
                 </div>
                 <div className='add-upload-label-group'>
                     <label className='sign-in-label' htmlFor="crFile">CR</label>
-                    <label className='sign-in-label' htmlFor="academyImg">Academy Image</label>
+                    <label className='sign-in-label' htmlFor="academyImg">Academy Image<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 1280 X 1028 ]</span>:</label>
                 </div>
                 {fileError && <p className="error-message">{fileError}</p>}
                 <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
                     <input
                         type="file"
                         name="crFile"
+                        ref={crFileInputRef}
                         onChange={handleFileChange}
                         accept=".pdf"
                         className="hidden-input"
@@ -234,6 +247,7 @@ return (
                     <input 
                         type="file" 
                         name="academyImg" 
+                        ref={academyImgInputRef} // Attach ref
                         onChange={handleChange} 
                         accept=".png, .jpg, .jpeg" 
                         required
@@ -259,8 +273,14 @@ return (
                 </div>
                 <button type="submit">Create Academy</button>
                 {error && <p className="error-message">{error}</p>}
-                {success && <p className="success-message">{success}</p>}
+                {success && <p className="msuccess-message">{success}</p>}
             </form>
+            {isLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
+            )}
     </div>
   );
 }

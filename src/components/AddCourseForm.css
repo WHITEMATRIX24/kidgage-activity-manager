@@ -632,22 +632,6 @@ padding: 10px;
     margin-bottom: 5px;
 }
 
-/* Popup styles */
-.confirm-popup {
-    position: fixed; /* Use fixed positioning */
-    top: 50%; /* Center vertically */
-    left: 50%; /* Center horizontally */
-    transform: translate(-50%, -50%); /* Center both ways */
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    z-index: 9999; /* Ensure it's above other content */
-    max-width: 90%; /* Optional: Restrict width */
-    max-height: 90%; /* Optional: Restrict height */
-    overflow: auto; /* Handle overflow if needed */
-}
 .p-student-cards {
     display: flex;
     flex-direction: column;
