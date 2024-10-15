@@ -10,18 +10,24 @@ const PromoteCourse = () => {
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [promoteMode, setPromoteMode] = useState(true);
-
+    const [loading, setLoading] = useState(true);
+    const [aloading, asetLoading] = useState(true);
     const toggleFormVisibility = () => {
         setShowForm(!showForm);
     };
 
     useEffect(() => {
         const fetchProviders = async () => {
+            setLoading(true);
             try {
                 const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/users/all'); // Adjust the URL as needed
                 setProviders(response.data);
+                setLoading(false);
+
             } catch (error) {
                 console.error('Error fetching providers:', error);
+                setLoading(false);
+
             }
         };
 
@@ -30,6 +36,7 @@ const PromoteCourse = () => {
 
     useEffect(() => {
         const fetchCourses = async () => {
+            asetLoading(true);
             const providerIds = providers.map(provider => provider._id);
             try {
                 const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/courses/by-providers', {
@@ -44,8 +51,10 @@ const PromoteCourse = () => {
                     return acc;
                 }, {});
                 setCourses(coursesByProvider);
+                asetLoading(false);
             } catch (error) {
                 console.error('Error fetching courses:', error);
+                asetLoading(false);
             }
         };
 
@@ -92,27 +101,54 @@ const PromoteCourse = () => {
             </div>
             {showForm && (
                 <div className='add-course-form'>
+                    {loading ? (
+                        <div style={{marginTop:'15%'}} className="loader-container">
+                        <div className="loading-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        </div>
+                        </div>
+                        ) : (
+                        <>
                     <h2>Total providers registered: {providers.length}</h2>
                     {providers.map((provider) => (
                         <div key={provider._id} className="provider-section">
                             <h3>{provider.username}</h3>
                             <div className="courses-item">
-                                {courses[provider._id] && courses[provider._id].map((course) => (
-                                    <div key={course._id} className="course-item">
-                                        <div style={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent: 'space-between', width:'60%'}}>
-                                        <span>{course.name}</span>
-                                        <p style={{ color: 'green', marginRight:'5px'}}>{course.courseType}</p>
-                                            </div>
-                                        {course.promoted ? (
-                                            <button onClick={() => handlePromoteClick(course, false)}>Remove from Promoted</button>
-                                        ) : (
-                                            <button onClick={() => handlePromoteClick(course, true)}>Promote</button>
-                                        )}
-                                    </div>
-                                ))}
+                            {aloading ? (
+                                <div style={{marginTop:'15%'}} className="loader-container">
+                                <div className="loading-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                </div>
+                                </div>
+                                ) : (
+                                <>
+                                {courses[provider._id] && courses[provider._id].length > 0 ? (
+                                                    courses[provider._id].map((course) => (
+                                                        <div key={course._id} className="course-item">
+                                                            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '60%' }}>
+                                                                <span>{course.name}</span>
+                                                                <p style={{ color: 'green', marginRight: '5px' }}>{course.courseType}</p>
+                                                            </div>
+                                                            {course.promoted ? (
+                                                                <button onClick={() => handlePromoteClick(course, false)}>Remove from Promoted</button>
+                                                            ) : (
+                                                                <button onClick={() => handlePromoteClick(course, true)}>Promote</button>
+                                                            )}
+                                                        </div>
+                                                    ))
+                                                ) : (
+                                                    <p>No courses available under this provider.</p>
+                                                )}
+                                </>)}
                             </div>
                         </div>
                     ))}
+                    </>
+                    )}
                 </div>
             )}
             {showConfirmPopup && (
