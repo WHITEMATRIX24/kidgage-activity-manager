@@ -8,7 +8,8 @@ import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 const EditAcademyForm = ({ id }) => {
   const [user, setUser] = useState({
     academyImg: null, // Store the file object
-    logo: null,       // Store the file object
+    logo: null,  
+    crFile:null,     // Store the file object
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState('');
@@ -144,16 +145,20 @@ const charLimit = 500;
     formDataToSend.append('location', user.location);
     formDataToSend.append('description', user.description);
 
-    if (user.academyImg) {
+    if (user.academyImg instanceof File) {
       formDataToSend.append('academyImg', user.academyImg); // Append Academy Image file
     }
 
-    if (user.logo) {
+    // Check if 'logo' is a valid file and append it
+    if (user.logo instanceof File) {
       formDataToSend.append('logo', user.logo); // Append Logo file
+    }
+    if (user.crFile instanceof File) {
+      formDataToSend.append('crFile', user.crFile); // Append Logo file
     }
 
     try {
-      const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/edit/${userId}`, {
+      const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/edits/${userId}`, {
         method: 'POST',
         body: formDataToSend, // Use FormData for file uploads
       });
@@ -367,6 +372,16 @@ const handlebuttonclick=()=>{
                 name="logo"
                 onChange={handleChange} // Handle file input change
                 accept=".png, .jpg" 
+
+              />
+              </div>
+              <div>
+              <label>Company Registration(PDF)<span style={{ fontSize: '.8rem', color: 'grey' }}>[max. size: 1MB ]</span>:</label>
+              <input
+                type="file"
+                name="crFile"
+                onChange={handleChange} // Handle file input change
+                accept=".pdf" 
 
               />
             </div>
