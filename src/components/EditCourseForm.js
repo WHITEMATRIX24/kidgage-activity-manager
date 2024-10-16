@@ -147,49 +147,54 @@ const EditCourseForm = ({ id }) => {
             timeSlots: prevState.timeSlots.filter((_, i) => i !== index)
         }));
     };
+    const [isLoading, setIsLoading] = useState(false); // Manage loading state
+
     const handleSubmit = async (e) => {
-        asetLoading(true);
         e.preventDefault();
+        setIsLoading(true);
+        // Create a new FormData object to send both text fields and file uploads
+        const formDataToSend = new FormData();
+        
+        formDataToSend.append('providerId', formData.providerId);
+        formDataToSend.append('name', formData.name);
+        formDataToSend.append('duration', formData.duration);
+        formDataToSend.append('durationUnit', formData.durationUnit);
+        formDataToSend.append('startDate', formData.startDate);
+        formDataToSend.append('endDate', formData.endDate);
+        formDataToSend.append('description', formData.description);
+        formDataToSend.append('feeAmount', formData.feeAmount);
+        formDataToSend.append('feeType', formData.feeType);
+        formDataToSend.append('promoted', formData.promoted);
+        formDataToSend.append('courseType', formData.courseType);
+        formDataToSend.append('preferredGender', formData.preferredGender); // Append the new field
 
-        if (isEditMode) {
-            // Create an object to hold the modified fields
-            const modifiedData = {};
-            let isModified = false;
+        formDataToSend.append('timeSlots', JSON.stringify(formData.timeSlots));
 
-            // Check for each field to see if it's different from the original course data
-            Object.keys(formData).forEach((key) => {
-                if (formData[key] !== courseData[key]) {
-                    modifiedData[key] = formData[key];
-                    isModified = true;
+            // Append days and locations as arrays
+            formData.days.forEach(day => formDataToSend.append('days[]', day));
+            const validatedLocations = formData.location.map((loc) => ({
+                address: loc.address || '',
+                city: loc.city || '',
+                phoneNumber: loc.phoneNumber || '',
+                link: loc.link || ''
+
+            }));
+
+            // Append location array as a JSON string
+            formDataToSend.append('location', JSON.stringify(validatedLocations));
+            formDataToSend.append('ageGroup', JSON.stringify(formData.ageGroup));
+            // Append each image file (File object)
+            formData.images.forEach((image) => {
+                if (image) {
+                    formDataToSend.append('images[]', image); // Adjust the name here
                 }
-            });
+            });       
 
-            
-            // Check if there's any modified data before sending the request
-            if (Object.keys(modifiedData).length === 0) {
-                setError('No changes made to the course data.');
-                return;
-            }
-            const formDataToSend = new FormData();
-            if (modifiedData.images && modifiedData.images.length > 0) {
-                modifiedData.images.forEach((image, index) => {
-                    // Only append new images (File objects)
-                    if (image instanceof File) {
-                        formDataToSend.append('images', image);  // Append each new image
-                        isModified = true;  // Track that images have been modified
-                    }
-                });
-            }
-            Object.keys(modifiedData).forEach((key) => {
-                if (key !== 'images' && modifiedData[key] !== courseData[key]) {
-                    formDataToSend.append(key, modifiedData[key]);
-                    isModified = true;  // Track if any modification is made
-                }
-            });
+
             try {
                 const response = await axios.put(
                     `https://kidgage-adminbackend.onrender.com/api/courses/update/${courseData._id}`,
-                    modifiedData // Send only modified data
+                    formDataToSend // Send only modified data
                 );
                 setSuccess('Course updated successfully!');
                 setError('');
@@ -201,7 +206,7 @@ const EditCourseForm = ({ id }) => {
                 setSuccess('');
                 asetLoading(false);
             }
-        }
+
     };
 
 
@@ -265,9 +270,6 @@ const EditCourseForm = ({ id }) => {
         setShowConfirmPopup(false);
     };
 
-    const toggleFormVisibility = () => {
-        setShowForm(!showForm);
-    };
     // Handle location changes
     const handleLocationChange = (index, field, value) => {
         const updatedLocation = [...formData.location];
@@ -290,88 +292,6 @@ const EditCourseForm = ({ id }) => {
 
     const fileInputRef = useRef(null); // Reference for the file input
     // Helper function to convert ArrayBuffer to Base64
-    const arrayBufferToBase64 = (buffer) => {
-        let binary = '';
-        const bytes = new Uint8Array(buffer);
-        const len = bytes.byteLength;
-
-        for (let i = 0; i < len; i++) {
-            binary += String.fromCharCode(bytes[i]);
-        }
-
-        return btoa(binary); // Encode binary string to Base64
-    };
-    const handleImageChange = (index, e) => {
-        const file = e.target.files[0]; // Get the selected file
-        if (file) {
-            setFormData((prevCourse) => {
-                const newImages = [...prevCourse.images];
-                newImages[index] = file; // Store the file directly
-                return { ...prevCourse, images: newImages };
-            });
-        }
-    };
-    // const handleImageChange = (event) => {
-    //     const files = event.target.files;
-    //     const newImagesPromises = Array.from(files).map(file => {
-    //         return new Promise((resolve, reject) => {
-    //             const reader = new FileReader();
-
-    //             // Read the file as an ArrayBuffer
-    //             reader.readAsArrayBuffer(file);
-
-    //             reader.onload = () => {
-    //                 // Convert the ArrayBuffer to Base64
-    //                 const base64String = arrayBufferToBase64(reader.result);
-    //                 resolve(base64String); // Resolve promise with the Base64 string
-    //             };
-
-    //             reader.onerror = (error) => {
-    //                 reject(error); // Reject promise on error
-    //             };
-    //         });
-    //     });
-
-    //     // Wait for all images to be read and then update the state with the new array of images
-    //     Promise.all(newImagesPromises).then((loadedImages) => {
-    //         setFormData(prevState => ({
-    //             ...prevState,
-    //             images: [...prevState.images, ...loadedImages] // Append new images to the existing array
-    //         }));
-    //     });
-
-    //     event.target.value = null; // Reset file input
-    // };
-
-    // Function to trigger file input
-    // const addImage = () => {
-    //     if (fileInputRef.current) {
-    //         fileInputRef.current.click(); // Simulate click on file input
-    //     }
-    // };
-
-    // // Function to remove an image
-    // const removeImage = (index) => {
-    //     setFormData(prevState => {
-    //         const updatedImages = prevState.images.filter((_, imgIndex) => imgIndex !== index);
-    //         return { ...prevState, images: updatedImages };
-    //     });
-    // };
-    const removeImage = (index) => {
-        setFormData((prevCourse) => ({
-            ...prevCourse,
-            images: prevCourse.images.filter((_, i) => i !== index),
-        }));
-    };
-    
-    const addImage = () => {
-        setFormData((prevCourse) => ({ ...prevCourse, images: [...prevCourse.images, ''] }));
-    };
-    
-    const getBase64ImageSrc = (base64String) => `data:image/jpeg;base64,${base64String}`;
-
-
-
     const handleAgeGroupChange = (e) => {
         const { name, value } = e.target;
 
@@ -386,7 +306,31 @@ const EditCourseForm = ({ id }) => {
                 : [{ [name]: value }] // If ageGroup is empty or not an array, initialize it with an object
         }));
     };
-
+    const getBase64ImageSrc = (base64String) => `data:image/jpeg;base64,${base64String}`;
+    const addImage = () => {
+        setFormData((prevCourse) => ({ ...prevCourse, images: [...prevCourse.images, ''] }));
+    };
+    
+    // Function to handle the image input change
+    const handleImageChange = (index, e) => {
+        const file = e.target.files[0]; // Get the selected file
+        if (file) {
+            setFormData((prevCourse) => {
+                const newImages = [...prevCourse.images];
+                newImages[index] = file; // Store the file directly
+                return { ...prevCourse, images: newImages };
+            });
+        }
+    };
+    
+    // Function to remove an image input
+    const removeImage = (index) => {
+        setFormData((prevCourse) => ({
+            ...prevCourse,
+            images: prevCourse.images.filter((_, i) => i !== index),
+        }));
+    };
+    
     return (
         <div className="">
             <div className='add-course-form'>
@@ -717,20 +661,7 @@ const EditCourseForm = ({ id }) => {
 
                         {/* images */}
                         <div className="form-group">
-                            <div className='btn-grpp'>
-                                <label>Course Images <span style={{ fontSize: '.8rem', color: 'grey' }}></span>:</label>
-                                {/* <button type="button" className="add-time-slot-btn" onClick={addImage}>
-                                    Add Images
-                                </button> */}
-                                <input
-                                    type="file"
-                                    ref={fileInputRef}
-                                    onChange={handleImageChange}
-                                    accept=".png, .jpg, .jpeg"
-                                    multiple
-                                    style={{ display: 'none' }}
-                                />
-                            </div>
+                           
                             {formData.images.map((img, index) => (
                                 <div key={index} className="time-slot">
                                     <img src={getBase64ImageSrc(img)} alt={`Course Image ${index + 1}`} width="100" />

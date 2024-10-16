@@ -132,34 +132,59 @@ router.get('/search', async (req, res) => {
 //     res.status(500).json({ message: err.message });
 //   }
 // });
-router.put('/update/:id', upload.array('images'), async (req, res) => {
+router.put('/update/:courseId', upload.fields([{ name: 'academyImg' }]), async (req, res) => {
+  const { courseId } = req.params;
   try {
-    // Find the course by ID
-    let course = await Course.findById(req.params.id);
-    if (!course) {
-      return res.status(404).json({ message: 'Course not found' });
-    }
+    const {
+      providerId,
+      name,
+      duration,
+      durationUnit,
+      startDate,
+      endDate,
+      description,
+      feeAmount,
+      feeType,
+      days,
+      timeSlots,
+      location,
+      ageGroup,
+      courseType,
+      promoted,
+      preferredGender
+    } = req.body;
 
-    // Convert uploaded images to Base64 strings
-    if (req.files) {
-      const base64Images = req.files.map(file => {
-        return `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
-      });
-      course.images = base64Images; // Replace images with new Base64 strings
-    }
+    // Ensure the timeSlots are parsed correctly
+    const parsedTimeSlots = typeof timeSlots === 'string' ? JSON.parse(timeSlots) : timeSlots;
+    const parsedLocation = typeof location === 'string' ? JSON.parse(location) : location;
+    const parsedAge = typeof ageGroup === 'string' ? JSON.parse(ageGroup) : ageGroup;
 
-    // Merge existing course with the fields to be updated
-    Object.keys(req.body).forEach((key) => {
-      if (req.body[key] !== undefined && req.body[key] !== null) {
-        course[key] = req.body[key]; // Update only fields that are provided and not null/undefined
-      }
+    // Handle the images
+    const images = req.files ? req.files.map((file) => file.buffer.toString('base64')) : [];
+
+    const newCourse = new Course({
+      providerId,
+      name,
+      duration,
+      durationUnit,
+      startDate,
+      endDate,
+      description,
+      feeAmount,
+      feeType,
+      days,
+      timeSlots: parsedTimeSlots,
+      location: parsedLocation,
+      ageGroup: parsedAge,
+      courseType,
+      images,  // Base64 encoded images
+      promoted,
+      preferredGender
     });
-
-    // Save the updated course
-    const updatedCourse = await course.save();
-    res.json(updatedCourse);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+      await newCourse.save();
+      res.json({ message: 'Course updated successfully!' });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
   }
 });
 
