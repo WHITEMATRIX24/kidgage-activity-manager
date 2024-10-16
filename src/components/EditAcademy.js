@@ -8,7 +8,8 @@ import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 const EditAcademyForm = ({ id }) => {
   const [user, setUser] = useState({
     academyImg: null, // Store the file object
-    logo: null,       // Store the file object
+    logo: null,    
+    crFile:null,   // Store the file object
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState('');
@@ -151,9 +152,12 @@ const charLimit = 500;
     if (user.logo) {
       formDataToSend.append('logo', user.logo); // Append Logo file
     }
+    if (user.crFile) {
+      formDataToSend.append('crFile', user.crFile); // Append Logo file
+    }
 
     try {
-      const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/edit/${userId}`, {
+      const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/edits/${userId}`, {
         method: 'POST',
         body: formDataToSend, // Use FormData for file uploads
       });
@@ -367,6 +371,16 @@ const handlebuttonclick=()=>{
                 name="logo"
                 onChange={handleChange} // Handle file input change
                 accept=".png, .jpg" 
+
+              />
+            </div>
+            <div>
+              <label>Company Registration<span style={{ fontSize: '.8rem', color: 'grey' }}>[PDF size:max. of 1 MB ]</span>:</label>
+              <input
+                type="file"
+                name="crFile"
+                onChange={handleChange} // Handle file input change
+                accept=".pdf" 
 
               />
             </div>
