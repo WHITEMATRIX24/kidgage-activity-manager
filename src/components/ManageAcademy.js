@@ -81,20 +81,18 @@ const charLimit = 500;
     if (name === 'description') {
       setCharCount(value.length);
     }
-    // For file inputs, handle file selection
     if (files) {
-      setUser((prevState) => ({
-        ...prevState,
-        [`${name}File`]: files[0], // Store the selected file in state (for 'academyImg' and 'logo')
-      }));
+        setUser((prevUser) => ({
+            ...prevUser,
+            [name]: files[0], // Store the first file selected
+        }));
     } else {
-      // For text inputs, handle value changes
-      setUser((prevState) => ({
-        ...prevState,
-        [name]: value // Update the text input value in the state
-      }));
+        setUser((prevUser) => ({
+            ...prevUser,
+            [name]: value,
+        }));
     }
-  };
+};
   
   const handleEditSubmit = async (e) => {
     e.preventDefault();
@@ -114,13 +112,16 @@ const charLimit = 500;
     formDataToSend.append('location', user.location);
     formDataToSend.append('description', user.description);
 
-    if (user.academyImg) {
+     // Check if 'academyImg' is a valid file and append it
+    if (user.academyImg instanceof File) {
       formDataToSend.append('academyImg', user.academyImg); // Append Academy Image file
     }
 
-    if (user.logo) {
+    // Check if 'logo' is a valid file and append it
+    if (user.logo instanceof File) {
       formDataToSend.append('logo', user.logo); // Append Logo file
     }
+
 
     try {
       const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/edit/${userId}`, {
@@ -138,10 +139,7 @@ const charLimit = 500;
     } catch (error) {
       setError(error.message);
     }
-    finally {
-      setIsLoading(false); // Stop loading after fetch
-      window.location.reload();
-  }
+
   };
 
   const handleSubmit = async (e) => {
