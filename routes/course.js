@@ -132,9 +132,8 @@ router.get('/search', async (req, res) => {
 //     res.status(500).json({ message: err.message });
 //   }
 // });
-router.put('/update/:courseId', upload.fields([{ name: 'academyImg' }]), async (req, res) => {
+router.put('/update/:courseId', upload.array('academyImg', 10), async (req, res) => {
   const { courseId } = req.params;
-  try {
     const {
       providerId,
       name,
@@ -161,28 +160,32 @@ router.put('/update/:courseId', upload.fields([{ name: 'academyImg' }]), async (
 
     // Handle the images
     const images = req.files ? req.files.map((file) => file.buffer.toString('base64')) : [];
-
-    const newCourse = new Course({
-      providerId,
-      name,
-      duration,
-      durationUnit,
-      startDate,
-      endDate,
-      description,
-      feeAmount,
-      feeType,
-      days,
-      timeSlots: parsedTimeSlots,
-      location: parsedLocation,
-      ageGroup: parsedAge,
-      courseType,
-      images,  // Base64 encoded images
-      promoted,
-      preferredGender
-    });
-      await newCourse.save();
-      res.json({ message: 'Course updated successfully!' });
+    try {
+      const course = await Course.findById(courseId);
+      if (!course) {
+          return res.status(404).json({ message: 'Course not found' });
+      }
+      const newCourse = new Course({
+        providerId,
+        name,
+        duration,
+        durationUnit,
+        startDate,
+        endDate,
+        description,
+        feeAmount,
+        feeType,
+        days,
+        timeSlots: parsedTimeSlots,
+        location: parsedLocation,
+        ageGroup: parsedAge,
+        courseType,
+        images,  // Base64 encoded images
+        promoted,
+        preferredGender
+      });
+        await newCourse.save();
+        res.json({ message: 'Course updated successfully!' });
   } catch (error) {
       res.status(500).json({ message: error.message });
   }
