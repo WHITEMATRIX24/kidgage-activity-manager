@@ -8,8 +8,7 @@ import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 const EditAcademyForm = ({ id }) => {
   const [user, setUser] = useState({
     academyImg: null, // Store the file object
-    logo: null,    
-    crFile:null,    // Store the file object
+    logo: null,       // Store the file object
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState('');
@@ -22,9 +21,7 @@ const EditAcademyForm = ({ id }) => {
   const [formData, setFormData] = useState({
     licenseNo: '',
     academyImgFile: null, // Store the file object
-    logoFile: null,  
-    crFile:null,
-    // Store the file object
+    logoFile: null,       // Store the file object
   });
   const cities = [
     "Doha", "Al Wakrah", "Al Khor", "Al Rayyan", 
@@ -127,28 +124,7 @@ const charLimit = 500;
         }));
     }
 };
-const [fileError, setFileError] = useState('');
-const handleFileChange = (e) => {
-  const { name, files } = e.target;
 
-  // Handle file upload and check file size
-  if (files) {
-    const file = files[0];
-    if (file && file.size > 1024 * 1024) { // 1MB in bytes
-      setFileError(`The file size of ${file.name} exceeds 1MB.`);
-      setFormData((prevState) => ({
-        ...prevState,
-        [name]: null  // Clear file if it exceeds limit
-      }));
-    } else {
-      setFileError(''); // Clear error if file size is valid
-      setFormData((prevState) => ({
-        ...prevState,
-        [name]: file // Directly set the file object
-      }));
-    }
-  }
-};
 
   const handleEditSubmit = async (e) => {
     e.preventDefault();
@@ -168,20 +144,16 @@ const handleFileChange = (e) => {
     formDataToSend.append('location', user.location);
     formDataToSend.append('description', user.description);
 
-    if (user.academyImg) {
+    if (formData.academyImg) {
       formDataToSend.append('academyImg', user.academyImg); // Append Academy Image file
     }
 
-    if (user.logo) {
+    if (formData.logo) {
       formDataToSend.append('logo', user.logo); // Append Logo file
-    }
-    if (user.crFile) {
-      formDataToSend.append('crFile', user.crFile); // Append Logo file
     }
 
     try {
-      console.log(formDataToSend);
-      const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/edits/${userId}`, {
+      const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/edit/${userId}`, {
         method: 'POST',
         body: formDataToSend, // Use FormData for file uploads
       });
@@ -396,15 +368,6 @@ const handlebuttonclick=()=>{
                 onChange={handleChange} // Handle file input change
                 accept=".png, .jpg" 
 
-              />
-            </div>
-            <div>
-              <label>Company Registration(pdf)<span style={{ fontSize: '.8rem', color: 'grey' }}>[ max.size: 1 MB ]</span>:{fileError && <p className="error-message">{fileError}</p>}</label>
-              <input
-                type="file"
-                name="cdFile"
-                onChange={handleFileChange} // Handle file input change
-                accept=".pdf" 
               />
             </div>
             <button type="submit">Save</button>

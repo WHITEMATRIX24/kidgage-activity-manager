@@ -114,11 +114,11 @@ const charLimit = 500;
     formDataToSend.append('location', user.location);
     formDataToSend.append('description', user.description);
 
-    if (user.academyImg) {
+    if (formData.academyImg) {
       formDataToSend.append('academyImg', user.academyImg); // Append Academy Image file
     }
 
-    if (user.logo) {
+    if (formData.logo) {
       formDataToSend.append('logo', user.logo); // Append Logo file
     }
 

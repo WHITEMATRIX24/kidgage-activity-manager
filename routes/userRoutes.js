@@ -591,7 +591,6 @@ router.post('/edits/:userId', upload.fields([{ name: 'academyImg' }, { name: 'lo
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    console.log(req.files.logo);
     // Update the license number and verification status
     user.licenseNo = licenseNo;
     user.fullName = fullName;
