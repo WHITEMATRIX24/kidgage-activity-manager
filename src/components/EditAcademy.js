@@ -8,7 +8,8 @@ import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 const EditAcademyForm = ({ id }) => {
   const [user, setUser] = useState({
     academyImg: null, // Store the file object
-    logo: null,       // Store the file object
+    logo: null,    
+    crFile:null,    // Store the file object
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState('');
@@ -21,7 +22,9 @@ const EditAcademyForm = ({ id }) => {
   const [formData, setFormData] = useState({
     licenseNo: '',
     academyImgFile: null, // Store the file object
-    logoFile: null,       // Store the file object
+    logoFile: null,  
+    crFile:null,
+    // Store the file object
   });
   const cities = [
     "Doha", "Al Wakrah", "Al Khor", "Al Rayyan", 
@@ -106,42 +109,47 @@ const charLimit = 500;
     fetchUserDetails();
   }, []);
 
-  // const handleInputChange = (e) => {
-  //   const { name, value, files } = e.target;
 
-  //   // Handle file inputs separately
-  //   if (files) {
-  //     setFormData((prevState) => ({
-  //       ...prevState,
-  //       [`${name}File`]: files[0], // Save file object in state
-  //     }));
-  //   } else {
-  //     setFormData((prevState) => ({
-  //       ...prevState,
-  //       [name]: value,
-  //     }));
-  //   }
-  // };
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === 'description') {
       setCharCount(value.length);
     }
-    // For file inputs, handle file selection
     if (files) {
-      setUser((prevState) => ({
+        setUser((prevUser) => ({
+            ...prevUser,
+            [name]: files[0], // Store the first file selected
+        }));
+    } else {
+        setUser((prevUser) => ({
+            ...prevUser,
+            [name]: value,
+        }));
+    }
+};
+const [fileError, setFileError] = useState('');
+const handleFileChange = (e) => {
+  const { name, files } = e.target;
+
+  // Handle file upload and check file size
+  if (files) {
+    const file = files[0];
+    if (file && file.size > 1024 * 1024) { // 1MB in bytes
+      setFileError(`The file size of ${file.name} exceeds 1MB.`);
+      setFormData((prevState) => ({
         ...prevState,
-        [`${name}File`]: files[0], // Store the selected file in state (for 'academyImg' and 'logo')
+        [name]: null  // Clear file if it exceeds limit
       }));
     } else {
-      // For text inputs, handle value changes
-      setUser((prevState) => ({
+      setFileError(''); // Clear error if file size is valid
+      setFormData((prevState) => ({
         ...prevState,
-        [name]: value // Update the text input value in the state
+        [name]: file // Directly set the file object
       }));
     }
-  };
-  
+  }
+};
+
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -149,6 +157,7 @@ const charLimit = 500;
 
     // Create a new FormData object to send both text fields and file uploads
     const formDataToSend = new FormData();
+    
     formDataToSend.append('licenseNo', user.licenseNo);
     formDataToSend.append('email', user.email);
     formDataToSend.append('phoneNumber', user.phoneNumber);
@@ -159,16 +168,20 @@ const charLimit = 500;
     formDataToSend.append('location', user.location);
     formDataToSend.append('description', user.description);
 
-    if (formData.academyImg) {
+    if (user.academyImg) {
       formDataToSend.append('academyImg', user.academyImg); // Append Academy Image file
     }
 
-    if (formData.logo) {
+    if (user.logo) {
       formDataToSend.append('logo', user.logo); // Append Logo file
+    }
+    if (user.crFile) {
+      formDataToSend.append('crFile', user.crFile); // Append Logo file
     }
 
     try {
-      const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/edit/${userId}`, {
+      console.log(formDataToSend);
+      const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/edits/${userId}`, {
         method: 'POST',
         body: formDataToSend, // Use FormData for file uploads
       });
@@ -189,41 +202,6 @@ const charLimit = 500;
     }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const userId = id;
-
-  //   // Create a new FormData object to send both text fields and file uploads
-  //   const formDataToSend = new FormData();
-  //   formDataToSend.append('licenseNo', formData.licenseNo);
-
-  //   if (formData.academyImgFile) {
-  //     formDataToSend.append('academyImg', formData.academyImgFile); // Append Academy Image file
-  //   }
-
-  //   if (formData.logoFile) {
-  //     formDataToSend.append('logo', formData.logoFile); // Append Logo file
-  //   }
-
-  //   try {
-  //     const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/complete/${userId}`, {
-  //       method: 'POST',
-  //       body: formDataToSend, // Use FormData for file uploads
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error('Failed to update user details.');
-  //     }
-  //     alert('Profile updated successfully!');
-  //     setShowForm(false); // Hide form after successful update
-  //   } catch (error) {
-  //     setError(error.message);
-  //   }
-  // };
-
-  // if (!user) {
-  //   return <div>Loading...</div>;
-  // }
   const downloadFile = () => {
     const base64String = user.crFile; // Assuming this is the Base64 string
     const link = document.createElement('a');
@@ -234,10 +212,6 @@ const charLimit = 500;
 const handlebuttonclick=()=>{
   setShowEditForm(true);
   setShowMainForm(false);
-}
-const handleclose=()=>{
-  setShowEditForm(false);
-  setShowMainForm(true);
 }
   return (
     <div className=''>
@@ -422,6 +396,15 @@ const handleclose=()=>{
                 onChange={handleChange} // Handle file input change
                 accept=".png, .jpg" 
 
+              />
+            </div>
+            <div>
+              <label>Company Registration(pdf)<span style={{ fontSize: '.8rem', color: 'grey' }}>[ max.size: 1 MB ]</span>:{fileError && <p className="error-message">{fileError}</p>}</label>
+              <input
+                type="file"
+                name="cdFile"
+                onChange={handleFileChange} // Handle file input change
+                accept=".pdf" 
               />
             </div>
             <button type="submit">Save</button>
