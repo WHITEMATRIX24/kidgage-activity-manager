@@ -609,6 +609,7 @@
   width: 60px;
   height: 60px;
   animation: spin 1s linear infinite;
+  z-index: 99999;
 }
 
 @keyframes spin {
