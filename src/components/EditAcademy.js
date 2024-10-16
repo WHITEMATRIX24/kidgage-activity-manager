@@ -129,13 +129,13 @@ const charLimit = 500;
     }
     // For file inputs, handle file selection
     if (files) {
-      setFormData((prevState) => ({
+      setUser((prevState) => ({
         ...prevState,
         [`${name}File`]: files[0], // Store the selected file in state (for 'academyImg' and 'logo')
       }));
     } else {
       // For text inputs, handle value changes
-      setFormData((prevState) => ({
+      setUser((prevState) => ({
         ...prevState,
         [name]: value // Update the text input value in the state
       }));
@@ -149,22 +149,22 @@ const charLimit = 500;
 
     // Create a new FormData object to send both text fields and file uploads
     const formDataToSend = new FormData();
-    formDataToSend.append('licenseNo', formData.licenseNo);
-    formDataToSend.append('email', formData.email);
-    formDataToSend.append('phoneNumber', formData.phoneNumber);
-    formDataToSend.append('fullName', formData.fullName);
-    formDataToSend.append('designation', formData.designation);
-    formDataToSend.append('website', formData.website);
-    formDataToSend.append('instaId', formData.instaId);
-    formDataToSend.append('location', formData.location);
-    formDataToSend.append('description', formData.description);
+    formDataToSend.append('licenseNo', user.licenseNo);
+    formDataToSend.append('email', user.email);
+    formDataToSend.append('phoneNumber', user.phoneNumber);
+    formDataToSend.append('fullName', user.fullName);
+    formDataToSend.append('designation', user.designation);
+    formDataToSend.append('website', user.website);
+    formDataToSend.append('instaId', user.instaId);
+    formDataToSend.append('location', user.location);
+    formDataToSend.append('description', user.description);
 
     if (formData.academyImg) {
-      formDataToSend.append('academyImg', formData.academyImg); // Append Academy Image file
+      formDataToSend.append('academyImg', user.academyImg); // Append Academy Image file
     }
 
     if (formData.logo) {
-      formDataToSend.append('logo', formData.logo); // Append Logo file
+      formDataToSend.append('logo', user.logo); // Append Logo file
     }
 
     try {
