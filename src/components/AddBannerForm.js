@@ -51,15 +51,15 @@ function AddBannerForm() {
             setFileName('No file chosen');
             setSuccess('Banner added successfully!');
             setError('');
+            setIsLoading(false); // Stop loading after fetch
+            window.location.reload();
         } catch (error) {
             console.error('Error adding banner', error);
             setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
             setSuccess('');
-        }
-        finally {
             setIsLoading(false); // Stop loading after fetch
-            window.location.reload();
         }
+        
     };
 
     const toggleFormVisibility = () => {

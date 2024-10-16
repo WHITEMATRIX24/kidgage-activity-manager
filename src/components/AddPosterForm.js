@@ -112,12 +112,11 @@ function AddPosterForm() {
             setFileName('No file chosen');
             setErrors({});
             setCharacterCount(0); // Reset character count
-        } catch (error) {
-            console.error('Error adding poster:', error);
-        }
-        finally {
             setIsLoading(false); // Stop loading after fetch
             window.location.reload();
+        } catch (error) {
+            console.error('Error adding poster:', error);
+            setIsLoading(false); // Stop loading after fetch
         }
     };
 

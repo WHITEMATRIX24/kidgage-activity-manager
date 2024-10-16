@@ -2,11 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './AddCourseForm.css'; // Reuse the same CSS file for styling
 import { FaChevronDown, FaEdit, FaTrash, FaSearch, FaTrashAlt, FaPlus } from 'react-icons/fa';
-
+import ScrollToTop from './ScrollToTOp';
 const EditCourseForm = ({ id }) => {
     const [showForm, setShowForm] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [courseData, setCourseData] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [aloading, asetLoading] = useState(false);
     const [formData, setFormData] = useState({
         providerId: '',
         name: '',
@@ -63,6 +65,7 @@ const EditCourseForm = ({ id }) => {
         }
     }, [success]);
     const handleSearch = async (courseId) => {
+        setLoading(true);
         console.log('Searching for course ID:', courseId); // Log the courseId
         try {
             // Assuming searchQuery now contains the course ID
@@ -96,9 +99,11 @@ const EditCourseForm = ({ id }) => {
                 setSearchError('Course not found.');
                 setCourseData(null);
             }
+            setLoading(false);
         } catch (error) {
             setSearchError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
             setCourseData(null);
+            setLoading(false);
         }
     };
 
@@ -143,6 +148,7 @@ const EditCourseForm = ({ id }) => {
         }));
     };
     const handleSubmit = async (e) => {
+        asetLoading(true);
         e.preventDefault();
         console.log(courseData); // Original course data
         console.log(formData); // New form data
@@ -172,9 +178,12 @@ const EditCourseForm = ({ id }) => {
                 setSuccess('Course updated successfully!');
                 setError('');
                 setIsEditMode(false);
+                asetLoading(false);
+                window.location.reload();
             } catch (error) {
                 setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
                 setSuccess('');
+                asetLoading(false);
             }
         }
     };
@@ -185,6 +194,7 @@ const EditCourseForm = ({ id }) => {
     };
 
     const handleConfirmDelete = async () => {
+        asetLoading(true);
         try {
             await axios.delete(`https://kidgage-adminbackend.onrender.com/api/courses/delete/${courseData._id}`);
             setCourseData(null);
@@ -211,10 +221,13 @@ const EditCourseForm = ({ id }) => {
             });
             setShowConfirmPopup(false);
             setSuccess('Course deleted successfully!');
+            asetLoading(false);
+            window.location.reload();
         } catch (error) {
             setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
             setSuccess('');
             setShowConfirmPopup(false);
+            asetLoading(false);
         }
     };
     const [courseTypes, setCourseTypes] = useState([]);
@@ -341,28 +354,15 @@ const EditCourseForm = ({ id }) => {
 
     return (
         <div className="">
-            {/* <div className="add-course-form-header" onClick={toggleFormVisibility}>
-                <h2>Edit/Remove a Course</h2>
-                <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} />
-            </div> */}
-            {/* {showForm && ( */}
             <div className='add-course-form'>
-                {/* {!isEditMode && (
-                        <div className="form-group search-provider-group">
-                            <label htmlFor="search">Search Course</label>
-                            <input
-                                type="text"
-                                id="search"
-                                name="search"
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                placeholder="Enter Full course name..."
-                            />
-                            <button type="button" className="search-provider-button" onClick={handleSearch}>
-                                <FaSearch />
-                            </button>
-                        </div>
-                    )} */}
+                {loading?(<div style={{marginTop:'15%'}} className="loader-container">
+                <div className="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+                </div>
+                </div>):(
+                <>
                 {searchError && <p className="error-message">{searchError}</p>}
                 {courseData && (
                     <form className="add-course-form" onSubmit={handleSubmit}>
@@ -729,8 +729,14 @@ const EditCourseForm = ({ id }) => {
                         {success && <p className="success-message">{success}</p>}
                     </form>
                 )}
+                </>)}
             </div>
-            {/* )} */}
+            {aloading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
+            )}
             {showConfirmPopup && (
                 <div className="confirm-popup">
                     <div className="confirm-popup-content">

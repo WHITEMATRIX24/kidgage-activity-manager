@@ -55,13 +55,13 @@ function AddCourseCategoryForm() {
             // Reset form
             setCourse({ name: '', image: null });
             setFileName('No file chosen');
+            setIsLoading(false); // Stop loading after fetch
         } catch (error) {
             console.error('Error adding course category:', error);
-        }
-        finally {
             setIsLoading(false); // Stop loading after fetch
             window.location.reload();
         }
+        
     };
 
     const toggleFormVisibility = () => {

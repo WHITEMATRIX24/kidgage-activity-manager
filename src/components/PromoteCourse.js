@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './AddCourseForm.css'; // Reuse the same CSS file for styling
-import { FaChevronDown, FaPlus, FaTimes } from 'react-icons/fa';
+import { FaChevronDown} from 'react-icons/fa';
 import axios from 'axios';
 
 const PromoteCourse = () => {
@@ -117,7 +117,7 @@ const PromoteCourse = () => {
                             <h3>{provider.username}</h3>
                             <div className="courses-item">
                             {aloading ? (
-                                <div style={{marginTop:'15%'}} className="loader-container">
+                                <div style={{marginTop:'10%',marginBottom:'10%'}} className="loader-container">
                                 <div className="loading-dots">
                                 <span></span>
                                 <span></span>
@@ -127,22 +127,21 @@ const PromoteCourse = () => {
                                 ) : (
                                 <>
                                 {courses[provider._id] && courses[provider._id].length > 0 ? (
-                                                    courses[provider._id].map((course) => (
-                                                        <div key={course._id} className="course-item">
-                                                            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '60%' }}>
-                                                                <span>{course.name}</span>
-                                                                <p style={{ color: 'green', marginRight: '5px' }}>{course.courseType}</p>
-                                                            </div>
-                                                            {course.promoted ? (
-                                                                <button onClick={() => handlePromoteClick(course, false)}>Remove from Promoted</button>
-                                                            ) : (
-                                                                <button onClick={() => handlePromoteClick(course, true)}>Promote</button>
-                                                            )}
-                                                        </div>
-                                                    ))
-                                                ) : (
-                                                    <p>No courses available under this provider.</p>
-                                                )}
+                                courses[provider._id].map((course) => (
+                                   <div key={course._id} className="course-item">
+                                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '60%' }}>
+                                        <span>{course.name}</span>
+                                    </div>
+                                    {course.promoted ? (
+                                        <button onClick={() => handlePromoteClick(course, false)}>Remove from Promoted</button>
+                                    ) : (
+                                    <button onClick={() => handlePromoteClick(course, true)}>Promote</button>
+                                    )}
+                                    </div>
+                                    ))
+                                    ) : (
+                                    <p>No courses available under this provider.</p>
+                                )}
                                 </>)}
                             </div>
                         </div>

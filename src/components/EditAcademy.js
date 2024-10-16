@@ -58,16 +58,15 @@ const EditAcademyForm = ({ id }) => {
       setError('');
       setIsLoading(false);
       alert('Academy deleted successfully!');
+      setIsLoading(false); // Stop loading after fetch
+      window.location.reload();
     } catch (error) {
       console.error('Error deleting academy:', error);
       setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
       setSuccess('');
       setShowConfirmPopup(false);
-    }
-    finally {
       setIsLoading(false); // Stop loading after fetch
-      window.location.reload();
-  }
+    }
   };
 
   const handleCancelDelete = () => {
@@ -107,22 +106,22 @@ const charLimit = 500;
     fetchUserDetails();
   }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value, files } = e.target;
+  // const handleInputChange = (e) => {
+  //   const { name, value, files } = e.target;
 
-    // Handle file inputs separately
-    if (files) {
-      setFormData((prevState) => ({
-        ...prevState,
-        [`${name}File`]: files[0], // Save file object in state
-      }));
-    } else {
-      setFormData((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
-  };
+  //   // Handle file inputs separately
+  //   if (files) {
+  //     setFormData((prevState) => ({
+  //       ...prevState,
+  //       [`${name}File`]: files[0], // Save file object in state
+  //     }));
+  //   } else {
+  //     setFormData((prevState) => ({
+  //       ...prevState,
+  //       [name]: value,
+  //     }));
+  //   }
+  // };
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === 'description') {
@@ -181,52 +180,50 @@ const charLimit = 500;
       alert('Profile updated successfully!');
       setShowEditForm(false);
       setShowMainForm(true); // Hide form after successful update
+      setIsLoading(false); // Stop loading after fetch
+      window.location.reload();
     } catch (error) {
       setError(error.message);
       setSuccess("");
-
-    }
-    finally {
       setIsLoading(false); // Stop loading after fetch
-      window.location.reload();
-  }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const userId = id;
-
-    // Create a new FormData object to send both text fields and file uploads
-    const formDataToSend = new FormData();
-    formDataToSend.append('licenseNo', formData.licenseNo);
-
-    if (formData.academyImgFile) {
-      formDataToSend.append('academyImg', formData.academyImgFile); // Append Academy Image file
-    }
-
-    if (formData.logoFile) {
-      formDataToSend.append('logo', formData.logoFile); // Append Logo file
-    }
-
-    try {
-      const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/complete/${userId}`, {
-        method: 'POST',
-        body: formDataToSend, // Use FormData for file uploads
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to update user details.');
-      }
-      alert('Profile updated successfully!');
-      setShowForm(false); // Hide form after successful update
-    } catch (error) {
-      setError(error.message);
     }
   };
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const userId = id;
+
+  //   // Create a new FormData object to send both text fields and file uploads
+  //   const formDataToSend = new FormData();
+  //   formDataToSend.append('licenseNo', formData.licenseNo);
+
+  //   if (formData.academyImgFile) {
+  //     formDataToSend.append('academyImg', formData.academyImgFile); // Append Academy Image file
+  //   }
+
+  //   if (formData.logoFile) {
+  //     formDataToSend.append('logo', formData.logoFile); // Append Logo file
+  //   }
+
+  //   try {
+  //     const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/complete/${userId}`, {
+  //       method: 'POST',
+  //       body: formDataToSend, // Use FormData for file uploads
+  //     });
+
+  //     if (!response.ok) {
+  //       throw new Error('Failed to update user details.');
+  //     }
+  //     alert('Profile updated successfully!');
+  //     setShowForm(false); // Hide form after successful update
+  //   } catch (error) {
+  //     setError(error.message);
+  //   }
+  // };
+
+  // if (!user) {
+  //   return <div>Loading...</div>;
+  // }
   const downloadFile = () => {
     const base64String = user.crFile; // Assuming this is the Base64 string
     const link = document.createElement('a');
@@ -444,7 +441,7 @@ const handleclose=()=>{
         <div className="confirm-popup-overlay">
           <div className="confirm-popup">
           <div className="confirm-popup-content">
-            <p>Are you sure you want to delete this academy?</p>
+            <p>Deleting an academy causes deletion of all activities listed under that academy.Are you sure you want to delete this academy?</p>
             <button onClick={handleConfirmDelete}>Yes</button>
             <button onClick={handleCancelDelete}>No</button>
           </div>

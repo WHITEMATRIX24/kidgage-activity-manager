@@ -6,7 +6,7 @@ import ConfirmationPopup from './ConfirmationPopup'; // Import the confirmation 
 import RejectionReasonPopup from './RejectionReasonPopup';
 import './requestsPopup.css'; // Create a new CSS file for popup-specific styles
 
-const RequestsPopup = ({ show, closeRequests, setPendingCount}) => {
+const RequestsPopup = ({ show, closeRequests}) => {
     const popupRef = useRef(null);
     const [pendingUsers, setPendingUsers] = useState([]); // State to store pending users
     const [acceptedUsers, setAcceptedUsers] = useState([]); // State to store accepted users
@@ -26,7 +26,6 @@ const RequestsPopup = ({ show, closeRequests, setPendingCount}) => {
                     if (activeTab === 'pending') {
                         const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/users/pending');
                         setPendingUsers(response.data); // Set the pending users data
-                        setPendingCount(response.data.length);
                     } else if (activeTab === 'accepted') {
                         const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/users/accepted'); // Adjust the endpoint for accepted users
                         setAcceptedUsers(response.data); // Set the accepted users data
@@ -39,7 +38,7 @@ const RequestsPopup = ({ show, closeRequests, setPendingCount}) => {
             };
             fetchUsers();
         }
-    }, [show, activeTab, setPendingCount]);
+    }, [show, activeTab]);
 
     // Handle click outside the popup to close it
     useEffect(() => {

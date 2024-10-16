@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User'); // Adjust the path as necessary
 const nodemailer = require('nodemailer');
 const Admin = require('../models/adminModel');
+const Course = require('../models/Course');
 const fs = require('fs');
 
 const router = express.Router();
@@ -466,10 +467,12 @@ router.delete('/academy/:id', async (req, res) => {
     if (!deletedAcademy) {
       return res.status(404).json({ message: 'Academy not found' });
     }
-
-    res.status(200).json({ message: 'Academy deleted successfully' });
+    // Delete all courses associated with this academy
+    await Course.deleteMany({ providerId: id });
+    
+    res.status(200).json({ message: 'Academy and associated courses deleted successfully' });
   } catch (error) {
-    console.error('Error deleting academy:', error);
+    console.error('Error deleting academy and courses:', error);
     res.status(500).json({ message: 'Internal server error. Please try again later.' });
   }
 });

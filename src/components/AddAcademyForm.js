@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState, useRef } from "react";
 import './AddCourseForm.css';
 import axios from 'axios';
@@ -37,7 +38,7 @@ const AddAcademyForm = ({ handleNavigation }) => {
         const [fileError, setFileError] = useState('');
 
     const handleChange = (e) => {
-        const { name, value, type, files } = e.target;
+        const { name, value, files } = e.target;
         if (name === 'description') {
             setCharCount(value.length);
           }
@@ -55,7 +56,7 @@ const AddAcademyForm = ({ handleNavigation }) => {
         }
     };
     const handleFileChange = (e) => {
-        const { name, value, type, files } = e.target;
+        const { name, value, files } = e.target;
 
         // Handle file upload and check file size
         if (files) {
@@ -104,15 +105,14 @@ const AddAcademyForm = ({ handleNavigation }) => {
             if (logoInputRef.current) logoInputRef.current.value = '';
             if (crFileInputRef.current) crFileInputRef.current.value = '';
             if (academyImgInputRef.current) academyImgInputRef.current.value = '';
-
+            setIsLoading(false); // Stop loading after fetch
+            window.location.reload();
         } catch (error) {
             setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
             setSuccess('');
-        }
-        finally {
             setIsLoading(false); // Stop loading after fetch
-            window.location.reload();
         }
+
     };
     useEffect(() => {
         if (success) {
@@ -123,6 +123,7 @@ const AddAcademyForm = ({ handleNavigation }) => {
           return () => clearTimeout(timer); // Cleanup the timer on component unmount or re-render
         }
       }, [success]);
+    // eslint-disable-next-line no-unused-vars
     const toggleFormVisibility = () => {
         setShowForm(!showForm);
     };

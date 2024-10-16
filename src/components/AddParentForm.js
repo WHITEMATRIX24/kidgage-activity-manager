@@ -47,14 +47,14 @@ const AddParentForm = ({ handleNavigation }) => {
         lastName: '',
         confirmPassword: '',
       });
+      setIsLoading(false); // Stop loading after fetch
+      window.location.reload();
     } catch (error) {
       setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
       setSuccess('');
-    }
-    finally {
       setIsLoading(false); // Stop loading after fetch
-      window.location.reload();
-  }
+    }
+    
   };
 
   const toggleFormVisibility = () => {

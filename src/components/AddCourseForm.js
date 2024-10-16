@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaChevronDown, FaSearch, FaTrash} from 'react-icons/fa';
+import {FaTrash} from 'react-icons/fa';
 import axios from 'axios';
 import './AddCourseForm.css';
 function AddCourseForm({providerId}) {
@@ -185,7 +185,8 @@ const removeImage = (index) => {
             setCourse(initialCourseState);
             setSuccess('Course added successfully!');
             setError('');
-
+            setIsLoading(false); // Stop loading after fetch
+            window.location.reload();
         } catch (error) {
             console.error('Error adding course. Check if all fields are filled', error);
             if (error.response) {
@@ -194,11 +195,9 @@ const removeImage = (index) => {
                 setError('An error occurred. Please try again later.');
             }
             setSuccess('');
-        }
-        finally {
             setIsLoading(false); // Stop loading after fetch
-            window.location.reload();
         }
+
     };
 
     const handleAgeGroupChange = (e) => {
@@ -207,11 +206,6 @@ const removeImage = (index) => {
             ...prev,
             ageGroup: { ...prev.ageGroup, [name]: value || '' }, // Set to empty string if value is undefined
         }));
-    };
-
-    
-    const toggleFormVisibility = () => {
-        setShowForm(!showForm);
     };
 
     const handleSearch = async () => {
@@ -484,6 +478,7 @@ const removeImage = (index) => {
                                             onChange={(e) => handleLocationChange(index, 'city', e.target.value)}
                                             style={{ width: '33%' }}
                                         >
+                                            <option value="">Select A City</option>
                                             <option value="Doha">Doha</option>
                                             <option value="Al Rayyan">Al Rayyan</option>
                                             <option value="Al Wakrah">Al Wakrah</option>

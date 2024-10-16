@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import './AddCourseForm.css';
 import './ViewForm.css';
-import { FaChevronDown, FaPlus, FaTimes,FaEye } from "react-icons/fa";
+import { FaChevronDown, FaPlus, FaTimes} from "react-icons/fa";
 import axios from 'axios';
 import AddAcademyForm from './AddAcademyForm'; // Import AddAcademyForm component
 import EditAcademyForm from './EditAcademy'; // Import EditAcademyForm component
@@ -12,7 +12,6 @@ const ViewAcademy = ({ handleSubmit }) => {
     const [users, setUsers] = useState([]);
     const [selectedAcademy, setSelectedAcademy] = useState(null);  // State for the academy being edited
     const [loading, setLoading] = useState(true);
-    const [loadinga, setLoadinga] = useState(true);
     const toggleFormVisibility = () => {
         setShowForm(!showForm);
     };
@@ -63,7 +62,7 @@ const ViewAcademy = ({ handleSubmit }) => {
                         <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} />
                     </div>
                     {loading ? (
-                        <div className="loader-container">
+                        <div style={{marginTop:'10%'}} className="loader-container">
                         <div className="loading-dots">
                         <span></span>
                         <span></span>
@@ -115,7 +114,6 @@ const ViewAcademy = ({ handleSubmit }) => {
                     <AddAcademyForm handleSubmit={handleCloseForm}/>  {/* Pass handleCloseForm to close form after submission */}
                 </div>
             )}
-
             {/* Show EditAcademyForm when an academy is selected */}
             {selectedAcademy && (
                 <div className="edit-academy-form-container">

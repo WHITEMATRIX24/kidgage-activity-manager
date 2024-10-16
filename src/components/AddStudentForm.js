@@ -72,14 +72,13 @@ function AddStudentForm() {
             setStudent(initialStudentState); // Clear the form
             setSuccess('Student added successfully!');
             setError(''); // Clear any previous error
+            setIsLoading(false); // Stop loading after fetch
+            window.location.reload();
         } catch (error) {
             console.error('Error adding student:', error);
             setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
             setSuccess(''); // Clear any previous success message
-        }
-        finally {
             setIsLoading(false); // Stop loading after fetch
-            window.location.reload();
         }
     };
 
