@@ -14,6 +14,7 @@ const ManageAcademy = () => {
   const [showEditForm, setShowEditForm] = useState(false);
   const [showMainForm, setShowMainForm] = useState(true);
   const [isLoading, setIsLoading] = useState(false); // Manage loading state
+  const [asLoading, setAsLoading] = useState(false); // Manage loading state
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     licenseNo: '',
@@ -95,9 +96,8 @@ const charLimit = 500;
 };
   
   const handleEditSubmit = async (e) => {
+    setAsLoading(true);
     e.preventDefault();
-    setIsLoading(true);
-
     const userId = sessionStorage.getItem('userid');
 
     // Create a new FormData object to send both text fields and file uploads
@@ -136,8 +136,11 @@ const charLimit = 500;
       alert('Profile updated successfully!');
       setShowEditForm(false);
       setShowMainForm(true); // Hide form after successful update
+      setAsLoading(false);
+      window.location.reload();
     } catch (error) {
       setError(error.message);
+      setAsLoading(false);
     }
 
   };
@@ -170,18 +173,15 @@ const charLimit = 500;
       }
       alert('Profile updated successfully!');
       setShowForm(false); // Hide form after successful update
-    } catch (error) {
-      setError(error.message);
-    }
-    finally {
       setIsLoading(false); // Stop loading after fetch
       window.location.reload();
-  }
+    } catch (error) {
+      setError(error.message);
+      setIsLoading(false); // Stop loading after fetch
+    }
   };
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+
   const downloadFile = () => {
     const base64String = user.crFile; // Assuming this is the Base64 string
     const link = document.createElement('a');
@@ -259,8 +259,7 @@ const handleclose=()=>{
                     <FontAwesomeIcon icon={faTimes} />
             </button>
             </div>
-            <form className="add-course-form" onSubmit={handleEditSubmit}>
-            
+            <form className="add-course-form" onSubmit={handleEditSubmit}>     
             <input
                 type="text"
                 name="username"
@@ -426,14 +425,22 @@ const handleclose=()=>{
               </div>
               <button type="submit">Save</button>
             </form>
-            {isLoading && (
+            
+          </div>
+          {isLoading && (
                 <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
                     <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
                     <div className="su-loader"></div>
                 </div>
             )}
-          </div>
+            {asLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
+            )}
         </div>
+        
       )}
     </div>
   );

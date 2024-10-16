@@ -132,12 +132,20 @@ router.get('/search', async (req, res) => {
 //     res.status(500).json({ message: err.message });
 //   }
 // });
-router.put('/update/:id', async (req, res) => {
+router.put('/update/:id', upload.array('images'), async (req, res) => {
   try {
     // Find the course by ID
     let course = await Course.findById(req.params.id);
     if (!course) {
       return res.status(404).json({ message: 'Course not found' });
+    }
+
+    // Convert uploaded images to Base64 strings
+    if (req.files) {
+      const base64Images = req.files.map(file => {
+        return `data:${file.mimetype};base64,${file.buffer.toString('base64')}`;
+      });
+      course.images = base64Images; // Replace images with new Base64 strings
     }
 
     // Merge existing course with the fields to be updated
@@ -149,12 +157,12 @@ router.put('/update/:id', async (req, res) => {
 
     // Save the updated course
     const updatedCourse = await course.save();
-
     res.json(updatedCourse);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
+
 
 
 // Delete a course

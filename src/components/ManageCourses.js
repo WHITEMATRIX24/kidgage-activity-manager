@@ -60,10 +60,14 @@ const ManageCourse = () => {
     const handleAddAcademyClick = (userId) => {
         setShowAForm(true);
         setSelectedProviderId(userId);
+        setShowForm(false); // Hide the provider list when editing a course
+
 
     };
     const handleCloseForm = () => {
         setShowAForm(false);
+        setShowForm(true); // Hide the provider list when editing a course
+
     };
     const toggleCourseVisibility = (providerId) => {
         setVisibleCourses(prevVisibleCourses => ({
@@ -84,7 +88,8 @@ const ManageCourse = () => {
     };
     return (
         <div className="add-course-form-container">
-            <div className="add-course-form">
+            {showForm&&(
+                <div className="add-course-form">
                 <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'flex-start' }}>
                     <div style={{marginLeft:'10px' }}>
                      <p className="users-name">{provider.username}</p>
@@ -112,6 +117,7 @@ const ManageCourse = () => {
                  ):(<p>No courses available for this provider.</p>
              )}
             </div>
+            )}
             {showAForm && (
                 <div className="add-academy-form-container">
                     <div className="form-header">

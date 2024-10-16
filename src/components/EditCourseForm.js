@@ -150,26 +150,42 @@ const EditCourseForm = ({ id }) => {
     const handleSubmit = async (e) => {
         asetLoading(true);
         e.preventDefault();
-        console.log(courseData); // Original course data
-        console.log(formData); // New form data
 
         if (isEditMode) {
             // Create an object to hold the modified fields
             const modifiedData = {};
+            let isModified = false;
 
             // Check for each field to see if it's different from the original course data
             Object.keys(formData).forEach((key) => {
                 if (formData[key] !== courseData[key]) {
                     modifiedData[key] = formData[key];
+                    isModified = true;
                 }
             });
 
+            
             // Check if there's any modified data before sending the request
             if (Object.keys(modifiedData).length === 0) {
                 setError('No changes made to the course data.');
                 return;
             }
-
+            const formDataToSend = new FormData();
+            if (modifiedData.images && modifiedData.images.length > 0) {
+                modifiedData.images.forEach((image, index) => {
+                    // Only append new images (File objects)
+                    if (image instanceof File) {
+                        formDataToSend.append('images', image);  // Append each new image
+                        isModified = true;  // Track that images have been modified
+                    }
+                });
+            }
+            Object.keys(modifiedData).forEach((key) => {
+                if (key !== 'images' && modifiedData[key] !== courseData[key]) {
+                    formDataToSend.append(key, modifiedData[key]);
+                    isModified = true;  // Track if any modification is made
+                }
+            });
             try {
                 const response = await axios.put(
                     `https://kidgage-adminbackend.onrender.com/api/courses/update/${courseData._id}`,
@@ -285,54 +301,73 @@ const EditCourseForm = ({ id }) => {
 
         return btoa(binary); // Encode binary string to Base64
     };
-
-    const handleImageChange = (event) => {
-        const files = event.target.files;
-        const newImagesPromises = Array.from(files).map(file => {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-
-                // Read the file as an ArrayBuffer
-                reader.readAsArrayBuffer(file);
-
-                reader.onload = () => {
-                    // Convert the ArrayBuffer to Base64
-                    const base64String = arrayBufferToBase64(reader.result);
-                    resolve(base64String); // Resolve promise with the Base64 string
-                };
-
-                reader.onerror = (error) => {
-                    reject(error); // Reject promise on error
-                };
+    const handleImageChange = (index, e) => {
+        const file = e.target.files[0]; // Get the selected file
+        if (file) {
+            setFormData((prevCourse) => {
+                const newImages = [...prevCourse.images];
+                newImages[index] = file; // Store the file directly
+                return { ...prevCourse, images: newImages };
             });
-        });
-
-        // Wait for all images to be read and then update the state with the new array of images
-        Promise.all(newImagesPromises).then((loadedImages) => {
-            setFormData(prevState => ({
-                ...prevState,
-                images: [...prevState.images, ...loadedImages] // Append new images to the existing array
-            }));
-        });
-
-        event.target.value = null; // Reset file input
-    };
-
-    // Function to trigger file input
-    const addImage = () => {
-        if (fileInputRef.current) {
-            fileInputRef.current.click(); // Simulate click on file input
         }
     };
+    // const handleImageChange = (event) => {
+    //     const files = event.target.files;
+    //     const newImagesPromises = Array.from(files).map(file => {
+    //         return new Promise((resolve, reject) => {
+    //             const reader = new FileReader();
 
-    // Function to remove an image
+    //             // Read the file as an ArrayBuffer
+    //             reader.readAsArrayBuffer(file);
+
+    //             reader.onload = () => {
+    //                 // Convert the ArrayBuffer to Base64
+    //                 const base64String = arrayBufferToBase64(reader.result);
+    //                 resolve(base64String); // Resolve promise with the Base64 string
+    //             };
+
+    //             reader.onerror = (error) => {
+    //                 reject(error); // Reject promise on error
+    //             };
+    //         });
+    //     });
+
+    //     // Wait for all images to be read and then update the state with the new array of images
+    //     Promise.all(newImagesPromises).then((loadedImages) => {
+    //         setFormData(prevState => ({
+    //             ...prevState,
+    //             images: [...prevState.images, ...loadedImages] // Append new images to the existing array
+    //         }));
+    //     });
+
+    //     event.target.value = null; // Reset file input
+    // };
+
+    // Function to trigger file input
+    // const addImage = () => {
+    //     if (fileInputRef.current) {
+    //         fileInputRef.current.click(); // Simulate click on file input
+    //     }
+    // };
+
+    // // Function to remove an image
+    // const removeImage = (index) => {
+    //     setFormData(prevState => {
+    //         const updatedImages = prevState.images.filter((_, imgIndex) => imgIndex !== index);
+    //         return { ...prevState, images: updatedImages };
+    //     });
+    // };
     const removeImage = (index) => {
-        setFormData(prevState => {
-            const updatedImages = prevState.images.filter((_, imgIndex) => imgIndex !== index);
-            return { ...prevState, images: updatedImages };
-        });
+        setFormData((prevCourse) => ({
+            ...prevCourse,
+            images: prevCourse.images.filter((_, i) => i !== index),
+        }));
     };
-
+    
+    const addImage = () => {
+        setFormData((prevCourse) => ({ ...prevCourse, images: [...prevCourse.images, ''] }));
+    };
+    
     const getBase64ImageSrc = (base64String) => `data:image/jpeg;base64,${base64String}`;
 
 
@@ -684,9 +719,9 @@ const EditCourseForm = ({ id }) => {
                         <div className="form-group">
                             <div className='btn-grpp'>
                                 <label>Course Images <span style={{ fontSize: '.8rem', color: 'grey' }}></span>:</label>
-                                <button type="button" className="add-time-slot-btn" onClick={addImage}>
+                                {/* <button type="button" className="add-time-slot-btn" onClick={addImage}>
                                     Add Images
-                                </button>
+                                </button> */}
                                 <input
                                     type="file"
                                     ref={fileInputRef}
@@ -699,16 +734,45 @@ const EditCourseForm = ({ id }) => {
                             {formData.images.map((img, index) => (
                                 <div key={index} className="time-slot">
                                     <img src={getBase64ImageSrc(img)} alt={`Course Image ${index + 1}`} width="100" />
-                                    <button
+                                    {/* <button
                                         type="button"
                                         className="rem-button"
                                         onClick={() => removeImage(index)}
                                     >
                                         Remove
-                                    </button>
+                                    </button> */}
                                 </div>
                             ))}
                         </div>
+                        <div className="form-group">
+                        <div className='btn-grpp'>
+                            <label>Course Images<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 1280 X 1028 ]</span>:</label>
+                            <button type="button" className="add-time-slot-btn" onClick={addImage}>
+                                Add Images
+                            </button>
+                            
+                        </div>
+                        {formData.images.map((img, index) => (
+                            <div key={index} className="time-slot">
+                                <input
+                                    type="file"
+                                    name={index === 0 ? "academyImg" : `academyImg-${index}`}
+                                    onChange={(e) => handleImageChange(index, e)}
+                                    accept=".png, .jpg, .jpeg"
+                                />
+
+                                {index > 0 && (
+                                    <button
+                                        type="button"
+                                        className="rem-button"
+                                        onClick={() => removeImage(index)}
+                                    >
+                                        <FaTrash />
+                                    </button>
+                                )}
+                            </div>
+                        ))}
+                    </div>
 
                         {/* Action Buttons */}
 
