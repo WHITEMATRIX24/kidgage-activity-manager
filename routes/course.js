@@ -132,65 +132,29 @@ router.get('/search', async (req, res) => {
 //     res.status(500).json({ message: err.message });
 //   }
 // });
-router.put('/update/:courseId', upload.array('academyImg', 10), async (req, res) => {
-  const { courseId } = req.params;
-    const {
-      providerId,
-      name,
-      duration,
-      durationUnit,
-      startDate,
-      endDate,
-      description,
-      feeAmount,
-      feeType,
-      days,
-      timeSlots,
-      location,
-      ageGroup,
-      courseType,
-      promoted,
-      preferredGender
-    } = req.body;
+router.put('/update/:id', async (req, res) => {
+  try {
+    // Find the course by ID
+    let course = await Course.findById(req.params.id);
+    if (!course) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
 
-    // Ensure the timeSlots are parsed correctly
-    const parsedTimeSlots = typeof timeSlots === 'string' ? JSON.parse(timeSlots) : timeSlots;
-    const parsedLocation = typeof location === 'string' ? JSON.parse(location) : location;
-    const parsedAge = typeof ageGroup === 'string' ? JSON.parse(ageGroup) : ageGroup;
-
-    // Handle the images
-    const images = req.files ? req.files.map((file) => file.buffer.toString('base64')) : [];
-    try {
-      const course = await Course.findById(courseId);
-      if (!course) {
-          return res.status(404).json({ message: 'Course not found' });
+    // Merge existing course with the fields to be updated
+    Object.keys(req.body).forEach((key) => {
+      if (req.body[key] !== undefined && req.body[key] !== null) {
+        course[key] = req.body[key]; // Update only fields that are provided and not null/undefined
       }
-      const newCourse = new Course({
-        providerId,
-        name,
-        duration,
-        durationUnit,
-        startDate,
-        endDate,
-        description,
-        feeAmount,
-        feeType,
-        days,
-        timeSlots: parsedTimeSlots,
-        location: parsedLocation,
-        ageGroup: parsedAge,
-        courseType,
-        images,  // Base64 encoded images
-        promoted,
-        preferredGender
-      });
-        await newCourse.save();
-        res.json({ message: 'Course updated successfully!' });
-  } catch (error) {
-      res.status(500).json({ message: error.message });
+    });
+
+    // Save the updated course
+    const updatedCourse = await course.save();
+
+    res.json(updatedCourse);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
-
 
 
 // Delete a course
