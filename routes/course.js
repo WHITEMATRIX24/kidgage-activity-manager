@@ -132,9 +132,10 @@ router.get('/search', async (req, res) => {
 //     res.status(500).json({ message: err.message });
 //   }
 // });
-router.put('/update/:id', upload.array('academyImg', 10), async (req, res) => {
+router.put('/update/:id', async (req, res) => {
   try {
-    const course = await Course.findById(req.params.id);
+    // Find the course by ID
+    let course = await Course.findById(req.params.id);
     if (!course) {
       return res.status(404).json({ message: 'Course not found' });
     }
@@ -142,23 +143,16 @@ router.put('/update/:id', upload.array('academyImg', 10), async (req, res) => {
     // Merge existing course with the fields to be updated
     Object.keys(req.body).forEach((key) => {
       if (req.body[key] !== undefined && req.body[key] !== null) {
-        course[key] = JSON.parse(req.body[key]); // Parse back JSON strings
+        course[key] = req.body[key]; // Update only fields that are provided and not null/undefined
       }
     });
 
-    // Handle file uploads
-    if (req.files) {
-      const imagePaths = req.files.map((file) => {
-        // Here you might want to handle saving the file to your cloud storage or local storage
-        return file.buffer.toString('base64'); // Convert buffer to base64 string
-      });
-      course.images = imagePaths; // Update images with new uploaded files
-    }
+    // Save the updated course
+    const updatedCourse = await course.save();
 
-    await course.save();
-    res.status(200).json({ message: 'Course updated successfully', course });
-  } catch (error) {
-    res.status(500).json({ message: 'Error updating course', error });
+    res.json(updatedCourse);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 
