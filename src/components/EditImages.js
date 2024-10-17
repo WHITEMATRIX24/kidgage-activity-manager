@@ -39,19 +39,34 @@ const EditImages = ({ courseId }) => {
         setFileInputs([...fileInputs, null]);
     };
 
-    // Function to handle form submission
-    const handleImageSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await axios.put(`https://kidgage-adminbackend.onrender.com/api/courses/images/${courseId}`, {
-                images // Send the new array of images to the backend
-            });
-            alert('Images updated successfully!');
-        } catch (error) {
-            console.error('Error updating images:', error);
-            alert('Failed to update images');
+// Function to handle form submission
+const handleImageSubmit = async (e) => {
+    e.preventDefault();
+    console.log(images);
+
+    // Create a new FormData instance
+    const formData = new FormData();
+
+    // Append images to FormData
+    images.forEach((image, index) => {
+        if (image) { // Only append if the image is not null
+            formData.append(`images[${index}]`, image); // Use an array notation to maintain indexing
         }
-    };
+    });
+
+    try {
+        await axios.put(`https://kidgage-adminbackend.onrender.com/api/courses/images/${courseId}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data', // Specify the content type for FormData
+            }
+        });
+        alert('Images updated successfully!');
+    } catch (error) {
+        console.error('Error updating images:', error);
+        alert('Failed to update images');
+    }
+};
+
 
     useEffect(() => {
         // Optionally fetch the existing images when the component mounts

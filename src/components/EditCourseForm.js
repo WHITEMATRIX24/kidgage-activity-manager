@@ -708,7 +708,7 @@ const EditCourseForm = ({ id }) => {
                                     </button>
                                 </div>
                             ))}
-                            <EditImages courseId={courseData._id} />
+                            {/* <EditImages courseId={courseData._id} /> */}
                         </div>
 
                         {/* Action Buttons */}
