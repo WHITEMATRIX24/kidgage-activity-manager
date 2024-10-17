@@ -86,7 +86,7 @@ const EditCourseForm = ({ id }) => {
                     timeSlots: response.data.timeSlots,
                     location: response.data.location,
                     courseType: response.data.courseType,
-                    images: [],
+                    images: response.data.images || [],
                     promoted: response.data.promoted,
                     ageGroup: response.data.ageGroup,
                     preferredGender: response.data.preferredGender
@@ -148,47 +148,45 @@ const EditCourseForm = ({ id }) => {
         }));
     };
     const handleSubmit = async (e) => {
-        e.preventDefault();
         asetLoading(true);
-      
-        const formData = new FormData();
-        
-        // Append text fields
-        Object.keys(courseData).forEach((key) => {
-          if (key !== 'images') {
-            formData.append(key, courseData[key]);
-          }
-        });
-      
-        // Append images (file inputs)
-        if (formData.images && formData.images.length > 0) {
-          formData.images.forEach((image) => {
-            formData.append('images', image); // Append each image file
-          });
-        }
-      
-        try {
-          const response = await axios.put(
-            `https://kidgage-adminbackend.onrender.com/api/courses/update/${courseData._id}`,
-            formData,
-            {
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              }
+        e.preventDefault();
+
+
+        if (isEditMode) {
+            // Create an object to hold the modified fields
+            const modifiedData = {};
+
+            // Check for each field to see if it's different from the original course data
+            Object.keys(formData).forEach((key) => {
+                if (formData[key] !== courseData[key]) {
+                    modifiedData[key] = formData[key];
+                }
+            });
+
+            // Check if there's any modified data before sending the request
+            if (Object.keys(modifiedData).length === 0) {
+                setError('No changes made to the course data.');
+                return;
             }
-          );
-      
-          setSuccess('Course updated successfully!');
-          setError('');
-          asetLoading(false);
-          window.location.reload();
-        } catch (error) {
-          setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
-          setSuccess('');
-          asetLoading(false);
+
+            try {
+                const response = await axios.put(
+                    `https://kidgage-adminbackend.onrender.com/api/courses/update/${courseData._id}`,
+                    modifiedData // Send only modified data
+                );
+                setSuccess('Course updated successfully!');
+                setError('');
+                setIsEditMode(false);
+                asetLoading(false);
+                window.location.reload();
+            } catch (error) {
+                setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
+                setSuccess('');
+                asetLoading(false);
+            }
         }
-      };
-      
+    };
+
 
     const handleDelete = () => {
         setShowConfirmPopup(true);
@@ -273,30 +271,69 @@ const EditCourseForm = ({ id }) => {
         setFormData(prev => ({ ...prev, location: prev.location.filter((_, i) => i !== index) }));
     };
 
-    const addImage = () => {
-        setFormData((prevCourse) => ({ ...prevCourse, images: [...prevCourse.images, ''] }));
+    const fileInputRef = useRef(null); // Reference for the file input
+    // Helper function to convert ArrayBuffer to Base64
+    const arrayBufferToBase64 = (buffer) => {
+        let binary = '';
+        const bytes = new Uint8Array(buffer);
+        const len = bytes.byteLength;
+
+        for (let i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+
+        return btoa(binary); // Encode binary string to Base64
     };
 
-// Function to handle image changes
-const handleImageChange = (index, e) => {
-    const file = e.target.files[0]; // Get the selected file
-    if (file) {
-        setFormData((prevCourse) => {
-            const newImages = [...prevCourse.images];
-            newImages[index] = file; // Store the file directly
-            return { ...prevCourse, images: newImages };
+    const handleImageChange = (event) => {
+        const files = event.target.files;
+        const newImagesPromises = Array.from(files).map(file => {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+
+                // Read the file as an ArrayBuffer
+                reader.readAsArrayBuffer(file);
+
+                reader.onload = () => {
+                    // Convert the ArrayBuffer to Base64
+                    const base64String = arrayBufferToBase64(reader.result);
+                    resolve(base64String); // Resolve promise with the Base64 string
+                };
+
+                reader.onerror = (error) => {
+                    reject(error); // Reject promise on error
+                };
+            });
         });
-    }
-};
-    
-    // Function to remove an image input
-    const removeImage = (index) => {
-        setFormData((prevCourse) => ({
-            ...prevCourse,
-            images: prevCourse.images.filter((_, i) => i !== index),
-        }));
+
+        // Wait for all images to be read and then update the state with the new array of images
+        Promise.all(newImagesPromises).then((loadedImages) => {
+            setFormData(prevState => ({
+                ...prevState,
+                images: [...prevState.images, ...loadedImages] // Append new images to the existing array
+            }));
+        });
+
+        event.target.value = null; // Reset file input
     };
-    
+
+    // Function to trigger file input
+    const addImage = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click(); // Simulate click on file input
+        }
+    };
+
+    // Function to remove an image
+    const removeImage = (index) => {
+        setFormData(prevState => {
+            const updatedImages = prevState.images.filter((_, imgIndex) => imgIndex !== index);
+            return { ...prevState, images: updatedImages };
+        });
+    };
+
+    const getBase64ImageSrc = (base64String) => `data:image/jpeg;base64,${base64String}`;
+
 
 
     const handleAgeGroupChange = (e) => {
@@ -646,41 +683,32 @@ const handleImageChange = (index, e) => {
                         <div className="form-group">
                             <div className='btn-grpp'>
                                 <label>Course Images <span style={{ fontSize: '.8rem', color: 'grey' }}></span>:</label>
-                            </div>
-                            {courseData.images.map((img, index) => (
-                                <div key={index} className="time-slot">
-                                    <img src={`data:image/jpeg;base64,${img}`} alt={`Course Image ${index + 1}`} width="100" />
-                                </div>
-                            ))}
-                        </div>
-                        <div className="form-group">
-                        <div className='btn-grpp'>
-                            <label>Course Images<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 1280 X 1028 ]</span>:</label>
-                            <button type="button" className="add-time-slot-btn" onClick={addImage}>
-                                Add Images
-                            </button>
-                        </div>
-                        {formData.images.map((img, index) => (
-                            <div key={index} className="time-slot">
+                                <button type="button" className="add-time-slot-btn" onClick={addImage}>
+                                    Add Images
+                                </button>
                                 <input
                                     type="file"
-                                    name={index === 0 ? "academyImg" : `academyImg-${index}`}
-                                    onChange={(e) => handleImageChange(index, e)}
+                                    ref={fileInputRef}
+                                    onChange={handleImageChange}
                                     accept=".png, .jpg, .jpeg"
+                                    multiple
+                                    style={{ display: 'none' }}
                                 />
-
-                                {index > 0 && (
+                            </div>
+                            {formData.images.map((img, index) => (
+                                <div key={index} className="time-slot">
+                                    <img src={getBase64ImageSrc(img)} alt={`Course Image ${index + 1}`} width="100" />
                                     <button
                                         type="button"
                                         className="rem-button"
                                         onClick={() => removeImage(index)}
                                     >
-                                        <FaTrash />
+                                        Remove
                                     </button>
-                                )}
-                            </div>
-                        ))}
-                    </div>
+                                </div>
+                            ))}
+                        </div>
+
                         {/* Action Buttons */}
 
                         <div className="button-container">

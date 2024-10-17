@@ -132,7 +132,7 @@ router.get('/search', async (req, res) => {
 //     res.status(500).json({ message: err.message });
 //   }
 // });
-router.put('/update/:id', upload.array('images'), async (req, res) => {
+router.put('/update/:id', async (req, res) => {
   try {
     // Find the course by ID
     let course = await Course.findById(req.params.id);
@@ -140,28 +140,22 @@ router.put('/update/:id', upload.array('images'), async (req, res) => {
       return res.status(404).json({ message: 'Course not found' });
     }
 
-    // Update fields other than images
+    // Merge existing course with the fields to be updated
     Object.keys(req.body).forEach((key) => {
-      if (key !== 'images' && req.body[key] !== undefined && req.body[key] !== null) {
-        course[key] = req.body[key];
+      if (req.body[key] !== undefined && req.body[key] !== null) {
+        course[key] = req.body[key]; // Update only fields that are provided and not null/undefined
       }
     });
 
-    // Handle image files, if any
-    if (req.files && req.files.length > 0) {
-      // Convert uploaded files to Base64 strings and replace the images array
-      const base64Images = req.files.map((file) => file.buffer.toString('base64'));
-      course.images = base64Images; // Replace the entire image array with new Base64 images
-    }
-
     // Save the updated course
     const updatedCourse = await course.save();
-    res.json(updatedCourse);
 
+    res.json(updatedCourse);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
+
 
 // Delete a course
 router.delete('/delete/:id', async (req, res) => {
