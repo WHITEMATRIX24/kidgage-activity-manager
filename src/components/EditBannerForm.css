@@ -26,6 +26,7 @@
 .banner-box {
     display: flex;
     border: 1px solid #ddd;
+    justify-content: space-between;
     border-radius: 8px;
     overflow: hidden;
     padding: 0 10px ;
@@ -42,6 +43,8 @@
 
 .banner-info {
     display: flex;
+    width: 70%;
+    justify-content: space-between;
     margin: 10px;
 }
 

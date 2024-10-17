@@ -44,7 +44,7 @@ const Dashboard = () => {
     const [Name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [user, setUser] = useState('');
-
+    const [isLoading, setIsLoading] = useState(false); // Manage loading state
 
 
     useEffect(() => {
@@ -105,6 +105,7 @@ const Dashboard = () => {
     };
 
     const handleConfirmDelete = async () => {
+        setIsLoading(true);
         if (itemToDelete) {
             try {
                 if (deleteType === 'poster') {
@@ -115,13 +116,12 @@ const Dashboard = () => {
                 setItemToDelete(null);
                 setDeleteType('');
                 setShowPopup(false);
-                setShowSuccessMessage(true);
-                setTimeout(() => {
-                    setShowSuccessMessage(false);
-                    window.location.reload(); // Refresh the entire page
-                }, 3000);
+                setIsLoading(false);
+                alert('Succesfully deleted!');
+                window.location.reload();
             } catch (error) {
                 console.error('Error deleting item:', error);
+                setIsLoading(false);
             }
         }
     };
@@ -215,21 +215,21 @@ const Dashboard = () => {
                         <EditStudentForm onDelete={handleDeleteStudent} />
                     </section>
                     <section id="add-banners" className="db-section">
-                        <AddBannerForm />
                         <EditBannerForm />
+                        <AddBannerForm />
                     </section>
                     <section id="event-posters" className="db-section">
-                        <AddPosterForm />
                         <EditPosterForm onDelete={handleDeletePoster} />
+                        <AddPosterForm />
                     </section>
                     <section id="advertisements" className="db-section">
+                        <EditAdvertisementForm />
                         <AddAdvertisement />
                         <AddAdvertisement2 />
-                        <EditAdvertisementForm />
                     </section>
                     <section id="course-categories" className="db-section">
-                        <AddCourseCategoryForm />
                         <EditCourseCategoryForm />
+                        <AddCourseCategoryForm />
                     </section>
                     <section id="settings" className="db-section">
                         <div className="settings-content">
@@ -298,6 +298,12 @@ const Dashboard = () => {
                         {deleteType === 'poster' ? 'Poster deleted successfully.' : 'Student deleted successfully.'}
                     </div>
                 )}
+                {isLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
+            )}
             </div>
         </div>
     );

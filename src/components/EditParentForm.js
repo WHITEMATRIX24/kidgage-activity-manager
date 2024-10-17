@@ -19,6 +19,7 @@ const EditParentForm = () => {
   const [searchError, setSearchError] = useState('');
   const [showConfirmPopup, setShowConfirmPopup] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false); // Edit mode state
+  const [isLoading, setIsLoading] = useState(false); // Manage loading state
 
   const handleSearch = async () => {
     try {
@@ -65,6 +66,7 @@ const EditParentForm = () => {
   };
 
   const handleSubmit = async (e) => {
+    setIsLoading(true);
     e.preventDefault();
     if (isEditMode) {
       try {
@@ -72,10 +74,15 @@ const EditParentForm = () => {
         setSuccess('Parent updated successfully!');
         setError('');
         setIsEditMode(false); // Exit edit mode after updating
+        setIsLoading(false);
+            alert('Succesfully edited!');
+            window.location.reload();
       } catch (error) {
         console.error('Error updating parent:', error);
         setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
         setSuccess('');
+        setIsLoading(false);
+   
       }
     }
   };
@@ -93,6 +100,7 @@ const EditParentForm = () => {
   };
 
   const handleConfirmDelete = async () => {
+    setIsLoading(true);
     try {
       await axios.delete(`https://kidgage-adminbackend.onrender.com/api/personal/parent/${parentData._id}`);
       setParentData(null);
@@ -105,12 +113,16 @@ const EditParentForm = () => {
       });
       setShowConfirmPopup(false);
       setError('');
-      setSuccess('Parent deleted successfully!');
+      alert('Parent deleted successfully!');
+      setIsLoading(false);
+      window.location.reload();
     } catch (error) {
       console.error('Error deleting parent:', error);
       setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
       setSuccess('');
       setShowConfirmPopup(false);
+      setIsLoading(false);
+
     }
   };
 
@@ -212,6 +224,12 @@ const EditParentForm = () => {
           )}
         </div>
       )}
+      {isLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
+            )}
 
       {showConfirmPopup && (
         <div className="confirm-popup">

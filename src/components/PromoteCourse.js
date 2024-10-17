@@ -102,7 +102,7 @@ const PromoteCourse = () => {
             {showForm && (
                 <div className='add-course-form'>
                     {loading ? (
-                        <div style={{marginTop:'15%'}} className="loader-container">
+                        <div style={{marginTop:'15%',marginBottom:'15%'}} className="loader-container">
                         <div className="loading-dots">
                         <span></span>
                         <span></span>

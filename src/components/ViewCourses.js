@@ -106,7 +106,7 @@ const ViewCourses = ({ handleSubmit }) => {
                         {/* <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} /> */}
                     </div>
                     {loading ? (
-                        <div style={{marginTop:'15%'}} className="loader-container">
+                        <div style={{marginTop:'15%',marginBottom:'15%'}} className="loader-container">
                         <div className="loading-dots">
                         <span></span>
                         <span></span>

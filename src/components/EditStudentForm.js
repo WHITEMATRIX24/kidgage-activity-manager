@@ -26,6 +26,7 @@ function EditStudentForm({ onDelete }) {
     const [success, setSuccess] = useState('');
     const [error, setError] = useState('');
     const [deleting, setDeleting] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // Manage loading state
 
     const handleSearch = async () => {
         try {
@@ -109,26 +110,22 @@ function EditStudentForm({ onDelete }) {
     };
 
     const handleSaveStudent = async () => {
+        setIsLoading(true);
         try {
             await axios.put(`https://kidgage-adminbackend.onrender.com/api/student/update/${selectedStudent?._id}`, editStudent);
-            setSuccess('Student updated successfully!');
+            alert('Student updated successfully!');
             setError('');
             fetchStudents(parentData?._id);
             setSelectedStudent(null);
             setEditStudent(null);
+            setIsLoading(false);
+            window.location.reload();
         } catch (error) {
             console.error('Error updating student:', error);
             setError(error.response ? error.response.data.message : 'An error occurred. Please try again later.');
             setSuccess('');
+            setIsLoading(false);
         }
-    };
-
-   
-
-    const handleCancelDelete = () => {
-        setShowConfirmPopup(false);
-        setSelectedStudent(null);
-        setDeleting(false);
     };
 
     const toggleFormVisibility = () => {
@@ -300,7 +297,12 @@ function EditStudentForm({ onDelete }) {
                             </div>
                         </div>
                     )}
-                   
+                   {isLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
+            )}
                     {success && <p className="success-message">{success}</p>}
                     {error && <p className="error-message">{error}</p>}
                 </div>

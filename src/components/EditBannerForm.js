@@ -4,23 +4,28 @@ import { FaChevronDown, FaEdit, FaTrash } from 'react-icons/fa';
 import './EditBannerForm.css';
 
 const EditBannerForm = () => {
-    const [showForm, setShowForm] = useState(false);
+    const [showForm, setShowForm] = useState(true);
     const [banners, setBanners] = useState([]);
     const [editingBanner, setEditingBanner] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deletingBannerId, setDeletingBannerId] = useState(null);
     const [fileName, setFileName] = useState('No file chosen');
+    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // Manage loading state
 
     useEffect(() => {
         fetchBanners();
     }, []);
 
     const fetchBanners = async () => {
+        setLoading(true);
         try {
             const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/banners');
             setBanners(response.data);
+            setLoading(false);
         } catch (error) {
             console.error('Error fetching banners:', error);
+            setLoading(false);
         }
     };
 
@@ -48,6 +53,7 @@ const EditBannerForm = () => {
     };
 
     const handleSubmit = async (e) => {
+        setIsLoading(true);
         e.preventDefault();
         try {
             const formData = new FormData();
@@ -61,19 +67,28 @@ const EditBannerForm = () => {
             fetchBanners();
             setEditingBanner(null);
             setFileName('No file chosen');
+            setIsLoading(false);
+            alert('Succesfully edited!');
+            window.location.reload();
         } catch (error) {
             console.error('Error updating banner:', error);
+            setIsLoading(false);
         }
     };
 
     const confirmDelete = async () => {
+        setIsLoading(true);
         try {
             await axios.delete(`https://kidgage-adminbackend.onrender.com/api/banners/${deletingBannerId}`);
             fetchBanners();
             setShowDeleteModal(false);
             setDeletingBannerId(null);
+            setIsLoading(false);
+            alert('Succesfully deleted!');
+            window.location.reload();
         } catch (error) {
             console.error('Error deleting banner:', error);
+            setIsLoading(false);
         }
     };
 
@@ -88,12 +103,22 @@ const EditBannerForm = () => {
                 <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} />
             </div>
             {showForm && (
-                <div className="add-course-form">
+                <>
+                {loading ?(
+                    <div style={{marginTop:'10%',marginBottom:'10%'}} className="loader-container">
+                    <div className="loading-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    </div>
+                    </div>
+                ):(
+                    <div className="add-course-form">
                     {editingBanner ? (
                         <form onSubmit={handleSubmit}>
-                            <div className="form-group add-course-label-group">
+                            <div style={{gap:'50%'}} className="form-group add-course-label-group">
                                 <label htmlFor="title">Title</label>
-                                <label htmlFor="file-upload">Image</label>
+                                <label htmlFor="file-upload">Image<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 1045 X 275 ]</span></label>
                             </div>
                             <div className="form-group add-course-group">
                                 <input
@@ -148,8 +173,16 @@ const EditBannerForm = () => {
                         </div>
                     )}
                 </div>
+                )}
+                </>
+                
             )}
-
+            {isLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
+            )}
             {showDeleteModal && (
                 <div className="confirm-popup">
                     <h2>Confirm Delete</h2>

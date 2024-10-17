@@ -7,22 +7,27 @@ const EditCourseCategoryForm = () => {
     const [courses, setCourses] = useState([]);
     const [selectedBanner, setSelectedBanner] = useState(null);
     const [editMode, setEditMode] = useState(false);
-    const [showForm, setShowForm] = useState(false);
+    const [showForm, setShowForm] = useState(true);
     const [fileName, setFileName] = useState('No file chosen');
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const [bannerToDelete, setBannerToDelete] = useState(null);
     const [file, setFile] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // Manage loading state
 
     useEffect(() => {
         fetchCourses();
     }, []);
 
     const fetchCourses = async () => {
+        setLoading(true);
         try {
             const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/course-category/categories');
             setCourses(response.data);
+            setLoading(false);
         } catch (error) {
             console.error('Error fetching courses:', error);
+            setLoading(false);
         }
     };
 
@@ -47,6 +52,7 @@ const EditCourseCategoryForm = () => {
     };
 
     const handleConfirmDelete = async () => {
+        setIsLoading(true);
         try {
             await axios.delete(`https://kidgage-adminbackend.onrender.com/api/course-category/delete/${bannerToDelete._id}`);
             setSelectedBanner(null);
@@ -54,8 +60,12 @@ const EditCourseCategoryForm = () => {
             setShowConfirmPopup(false);
             setBannerToDelete(null);
             fetchCourses(); // Refresh the course list
+            setIsLoading(false);
+            alert('Succesfully deleted!');
+            window.location.reload();
         } catch (error) {
             console.error('Error deleting course category:', error);
+            setIsLoading(false);
         }
     };
 
@@ -70,6 +80,7 @@ const EditCourseCategoryForm = () => {
     };
 
     const handleSubmit = async (e) => {
+        setIsLoading(true);
         e.preventDefault();
         const formData = new FormData();
         formData.append('name', selectedBanner.name);
@@ -84,8 +95,12 @@ const EditCourseCategoryForm = () => {
             setFileName('No file chosen');
             setFile(null);
             fetchCourses(); // Refresh the course list
+            setIsLoading(false);
+            alert('Succesfully edited!');
+            window.location.reload();
         } catch (error) {
             console.error('Error updating course category:', error);
+            setIsLoading(false);
         }
     };
 
@@ -100,6 +115,17 @@ const EditCourseCategoryForm = () => {
                 <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} />
             </div>
             {showForm && (
+                <>
+                 {loading ?(
+                    <div style={{marginTop:'10%',marginBottom:'10%'}} className="loader-container">
+                    <div className="loading-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    </div>
+                    </div>
+                ):(
+
                 <div className="add-course-form">
                     {!editMode ? (
                         <div className="banner-list">
@@ -122,9 +148,9 @@ const EditCourseCategoryForm = () => {
                         </div>
                     ) : (
                         <form onSubmit={handleSubmit}>
-                            <div className="form-group add-course-label-group">
+                            <div style={{gap:'50%'}} className="form-group add-course-label-group">
                                 <label htmlFor="name">Title</label>
-                                <label htmlFor="file-upload">Image</label>
+                                <label htmlFor="file-upload">Image<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 540 X 360 ]</span></label>
                             </div>
                             <div className="form-group add-course-group">
                                 <input
@@ -147,8 +173,16 @@ const EditCourseCategoryForm = () => {
                         </form>
                     )}
                 </div>
+                )}
+                </>
+                
             )}
-
+            {isLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
+            )}
             {showConfirmPopup && (
                 <>
                 <div className="confirm-popup-overlay" ></div>

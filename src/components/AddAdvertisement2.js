@@ -10,9 +10,8 @@ function AddAdvertisement2() {
         mobileImage: null,  // File object for the mobile image
     };
     const [isLoading, setIsLoading] = useState(false); // Manage loading state
-
     const [advertisement, setAdvertisement] = useState(initialAdvertisementState);
-    const [showForm, setShowForm] = useState(false);
+    const [showForm, setShowForm] = useState(true);
     const [desktopFileName, setDesktopFileName] = useState('No file chosen');
     const [mobileFileName, setMobileFileName] = useState('No file chosen');
     const [error, setError] = useState('');
@@ -91,8 +90,8 @@ function AddAdvertisement2() {
                             />
                         </div>
                         <div className="form-group file-upload-container">
-                            <label htmlFor="desktop-file-upload">Desktop View Image<span style={{ fontSize: '.8rem', color: 'grey' }}><br />
-                                [ size: 336 X 297 ]</span></label>
+                            <label htmlFor="desktop-file-upload">Desktop View Image
+                                <span style={{ fontSize: '.8rem', color: 'grey' }}><br />[ size: 336 X 297 ]</span></label>
                             <input
                                 type="file"
                                 id="desktop-file-upload"

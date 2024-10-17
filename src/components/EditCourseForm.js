@@ -355,7 +355,7 @@ const EditCourseForm = ({ id }) => {
     return (
         <div className="">
             <div className='add-course-form'>
-                {loading?(<div style={{marginTop:'15%'}} className="loader-container">
+                {loading?(<div style={{marginTop:'15%',marginBottom:'10%'}} className="loader-container">
                 <div className="loading-dots">
                 <span></span>
                 <span></span>

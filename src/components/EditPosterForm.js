@@ -2,26 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { FaChevronDown, FaEdit, FaTrash } from 'react-icons/fa';
 import axios from 'axios';
 import './AddCourseForm.css'; // Reuse the same CSS file
+import { faL } from '@fortawesome/free-solid-svg-icons';
 
 const EditPosterForm = ({ onDelete }) => {
     const [posters, setPosters] = useState([]);
     const [selectedPoster, setSelectedPoster] = useState(null);
     const [editMode, setEditMode] = useState(false);
-    const [showForm, setShowForm] = useState(false);
+    const [showForm, setShowForm] = useState(true);
     const [fileName, setFileName] = useState('No file chosen');
     const [file, setFile] = useState(null);
     const [errors, setErrors] = useState({}); // For validation errors
+    const [loading, setLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // Manage loading state
 
     useEffect(() => {
         fetchPosters();
     }, []);
 
     const fetchPosters = async () => {
+        setLoading(true);
         try {
             const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/posters');
             setPosters(response.data);
+            setLoading(false);
         } catch (error) {
             console.error('Error fetching posters:', error);
+            setLoading(false);
         }
     };
 
@@ -79,6 +85,7 @@ const EditPosterForm = ({ onDelete }) => {
     };
 
     const handleSubmit = async (e) => {
+        setIsLoading(true);
         e.preventDefault();
         
         const isDescriptionValid = validateDescription(selectedPoster.description);
@@ -104,8 +111,12 @@ const EditPosterForm = ({ onDelete }) => {
             setFileName('No file chosen');
             setFile(null);
             fetchPosters(); // Refresh the poster list
+            setIsLoading(false);
+            alert('Succesfully edited!');
+            window.location.reload();
         } catch (error) {
             console.error('Error updating poster:', error);
+            setIsLoading(false);
         }
     };
 
@@ -127,7 +138,17 @@ const EditPosterForm = ({ onDelete }) => {
                 <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} />
             </div>
             {showForm && (
-                <div className="add-course-form">
+                <>
+                {loading ?(
+                    <div style={{marginTop:'10%',marginBottom:'10%'}} className="loader-container">
+                    <div className="loading-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    </div>
+                    </div>
+                ):(
+                    <div className="add-course-form">
                     {!editMode ? (
                         <div className="poster-list">
                             {posters.map((poster) => (
@@ -209,13 +230,21 @@ const EditPosterForm = ({ onDelete }) => {
                                 />
                             </div>
                             <div>
-                                <label>Image:</label>
+                                <label>Image<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 1080 X 1080 ]</span>:</label>
                                 <input type="file" onChange={handleFileChange} />
                                 <p>{fileName}</p>
                             </div>
                             <button type="submit">Update Poster</button>
                         </form>
                     )}
+                </div>
+                )}</>
+                
+            )}
+            {isLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
                 </div>
             )}
         </div>

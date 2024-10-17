@@ -4,24 +4,35 @@ import { FaChevronDown, FaEdit, FaTrash } from 'react-icons/fa';
 import './EditBannerForm.css';
 
 const EditAdvertisementForm = () => {
-    const [showForm, setShowForm] = useState(false);
+    const [showForm, setShowForm] = useState(true);
     const [advertisements, setAdvertisements] = useState([]);
     const [editingAdvertisement, setEditingAdvertisement] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [deletingAdvertisementId, setDeletingAdvertisementId] = useState(null);
     const [desktopFileName, setDesktopFileName] = useState('No file chosen');
     const [mobileFileName, setMobileFileName] = useState('No file chosen');
+    const [loading, setLoading] = useState(false);
+    const [space, setSpace] = useState(null); // Default space value
+    const [isLoading, setIsLoading] = useState(false); // Manage loading state
+
 
     useEffect(() => {
         fetchAdvertisements();
     }, []);
 
     const fetchAdvertisements = async () => {
+        setLoading(true);
         try {
             const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/advertisement');
             setAdvertisements(response.data);
+            if (response.data.length > 0) {
+                setSpace(response.data[0].space); // Set space based on the fetched data
+            }
+            setLoading(false);
+
         } catch (error) {
             console.error('Error fetching advertisements:', error);
+            setLoading(false);
         }
     };
 
@@ -53,6 +64,7 @@ const EditAdvertisementForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
             const formData = new FormData();
             formData.append('title', editingAdvertisement.title);
@@ -72,19 +84,28 @@ const EditAdvertisementForm = () => {
             setEditingAdvertisement(null);
             setDesktopFileName('No file chosen');
             setMobileFileName('No file chosen');
+            setIsLoading(false);
+            alert('Succesfully edited!');
+            window.location.reload();
         } catch (error) {
             console.error('Error updating advertisement:', error);
+            setIsLoading(false);
         }
     };
 
     const confirmDelete = async () => {
+        setIsLoading(true);
         try {
             await axios.delete(`https://kidgage-adminbackend.onrender.com/api/advertisement/${deletingAdvertisementId}`);
             fetchAdvertisements();
             setShowDeleteModal(false);
             setDeletingAdvertisementId(null);
+            setIsLoading(false);
+            alert('Succesfully deleted!');
+            window.location.reload();
         } catch (error) {
             console.error('Error deleting advertisement:', error);
+            setIsLoading(false);
         }
     };
 
@@ -99,7 +120,17 @@ const EditAdvertisementForm = () => {
                 <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} />
             </div>
             {showForm && (
-                <div className="add-course-form">
+                <>
+                {loading ?(
+                    <div style={{marginTop:'10%',marginBottom:'10%'}} className="loader-container">
+                    <div className="loading-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    </div>
+                    </div>
+                ):(
+                    <div className="add-course-form">
                     {editingAdvertisement ? (
                         <form onSubmit={handleSubmit}>
                             <div className="form-group">
@@ -114,7 +145,9 @@ const EditAdvertisementForm = () => {
                                 />
                             </div>
                             <div className="form-group">
-                                <label htmlFor="desktop-file-upload">Desktop Image</label>
+                                <label htmlFor="desktop-file-upload">Desktop Image <span style={{ fontSize: '.8rem', color: 'grey' }}>
+                                               {editingAdvertisement.space === 2 ? '[ size: 336 X 297 ]' : '[ size: 342 X 634 ]'}
+                                            </span></label>
                                 <input
                                     type="file"
                                     id="desktop-file-upload"
@@ -123,7 +156,9 @@ const EditAdvertisementForm = () => {
                                 <span>{desktopFileName}</span>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="mobile-file-upload">Mobile Image</label>
+                                <label htmlFor="mobile-file-upload">Mobile Image<span style={{ fontSize: '.8rem', color: 'grey' }}>
+                                                {editingAdvertisement.space === 2 ? '[ size: 634 X 342 ]' : '[ size: 634 X 342 ]'}
+                                            </span></label>
                                 <input
                                     type="file"
                                     id="mobile-file-upload"
@@ -159,8 +194,15 @@ const EditAdvertisementForm = () => {
                         </div>
                     )}
                 </div>
+                )}
+                </>
             )}
-
+            {isLoading && (
+                <div style={{display:'flex', flexDirection:'column'}} className="confirmation-overlay">
+                    <p style={{zIndex:'1000',color:'white'}}>Please wait till process is completed</p>
+                    <div className="su-loader"></div>
+                </div>
+            )}
             {showDeleteModal && (
                 <div className="confirm-popup">
                     <h2>Confirm Delete</h2>
