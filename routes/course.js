@@ -155,7 +155,45 @@ router.put('/update/:id', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+const convertToBase64 = (image) => {
+  if (typeof image === 'string') {
+      return image; // If already a base64 string, return it as is
+  }
+  
+  // If the image is a file (Blob or File), convert it
+  if (image instanceof Blob) {
+      return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = (error) => reject(error);
+          reader.readAsDataURL(image);
+      });
+  }
 
+  throw new Error('Invalid image type');
+};
+router.put('/courses/images/:id', async (req, res) => {
+  let { images } = req.body; // Get the images from the request body
+
+  try {
+      // Convert all images to base64 if they are not already
+      images = await Promise.all(images.map(image => convertToBase64(image)));
+
+      const updatedCourse = await Course.findByIdAndUpdate(
+          req.params.id,
+          { images }, // Update the images field
+          { new: true, runValidators: true }
+      );
+
+      if (!updatedCourse) {
+          return res.status(404).json({ message: 'Course not found' });
+      }
+      res.status(200).json(updatedCourse);
+  } catch (error) {
+      console.error('Error updating course:', error); // Log error details
+      res.status(500).json({ message: 'Error updating course', error: error.message });
+  }
+});
 
 // Delete a course
 router.delete('/delete/:id', async (req, res) => {
