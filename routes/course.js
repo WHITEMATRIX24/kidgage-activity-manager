@@ -6,11 +6,7 @@ const Course = require('../models/Course');
 
 // Set up multer for file handling
 const storage = multer.memoryStorage();
-// Increase file size limit to 10MB
-const upload = multer({
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
-  storage: multer.memoryStorage(), // Store files in memory buffer
-}).array('academyImg', 10); // Allow up to 10 files
+const upload = multer({ storage });
 
 
 // Add a new course
