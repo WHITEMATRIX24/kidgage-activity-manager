@@ -13,56 +13,6 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// router.post('/signup', upload.fields([
-//   { name: 'logo', maxCount: 1 },
-//   { name: 'crFile', maxCount: 1 },
-//   { name: 'academyImg', maxCount: 1 }
-// ]), async (req, res) => {
-//   const { username, email, phoneNumber, password, fullName, designation, licenseNo, description, location, agreeTerms } = req.body;
-
-//   const files = req.files;
-//   const fileBase64 = {};
-
-//   if (files) {
-//     if (files.logo) fileBase64.logo = files.logo[0].buffer.toString('base64');
-//     if (files.crFile) fileBase64.crFile = files.crFile[0].buffer.toString('base64');
-//     if (files.academyImg) fileBase64.academyImg = files.academyImg[0].buffer.toString('base64');
-//   }
-
-//   try {
-//     const existingUser = await User.findOne({ $or: [{ email }, { phoneNumber }] });
-//     if (existingUser) {
-//       return res.status(400).json({ message: 'User with this email or phone number already exists.' });
-//     }
-
-//     const saltRounds = 10;
-//     const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-//     const newUser = new User({
-//       username,
-//       email,
-//       phoneNumber,
-//       password: hashedPassword,
-//       fullName,
-//       designation,
-//       logo: fileBase64.logo,
-//       crFile: fileBase64.crFile,
-//       licenseNo,
-//       academyImg: fileBase64.academyImg,
-//       description,
-//       location,
-//       agreeTerms,
-//       });
-
-//     await newUser.save();
-//     res.status(201).json({ message: 'User registered successfully!' });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Server error.' });
-//   }
-// });
-
-
 router.post('/signup', upload.fields([
   { name: 'logo', maxCount: 1 },
   { name: 'crFile', maxCount: 1 },
@@ -105,6 +55,28 @@ router.post('/signup', upload.fields([
 
     await newUser.save();
     res.status(201).json({ message: 'User registered successfully!' });
+    const existingAdmin = await Admin.findOne({ name: email });
+    if (existingAdmin) {
+      console.log('Admin with this email already exists');
+      return res.status(400).json({ message: 'Admin with this email already exists' });
+    }
+
+    // Hash the phone number to use as password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(phoneNumber, salt);
+    const role= "provider";
+    // Create a new Admin account using the provided user data
+    const admin = new Admin({
+      name: email,
+      password: hashedPassword,
+      fullName: fullName,
+      role: role,
+      userId: newUser._id
+    });
+
+    // Save the new Admin account
+    await admin.save();
+    console.log('Admin saved successfully:', admin);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error.' });
@@ -312,16 +284,6 @@ router.get('/search', async (req, res) => {
   }
 });
 
-// New route to get all users
-// router.get('/all', async (req, res) => {
-//   try {
-//     const users = await User.find({}, 'username logo email'); // Fetch only the username and logo fields
-//     res.status(200).json(users);
-//   } catch (error) {
-//     res.status(400).json({ message: error.message });
-//   }
-// });
-
 router.get('/all', async (req, res) => {
   try {
     // Fetch only verified users with the specified fields (username, logo)
@@ -344,15 +306,7 @@ router.get('/provider/:id', async (req, res) => {
     res.status(500).json({ message: 'Server error', error });
   }
 });
-const fileToBase64 = (filePath) => {
-  try {
-    const fileData = fs.readFileSync(filePath);
-    return fileData.toString('base64');
-  } catch (error) {
-    console.error('Error converting file to base64:', error);
-    return null;
-  }
-};
+
 router.put('/update/:id', upload.fields([{ name: 'logo' }, { name: 'crFile' }, { name: 'academyImg' }]), async (req, res) => {
   const { id } = req.params;
   const { username, email, phoneNumber, fullName, designation, description, location, website, instaId, licenseNo } = req.body;
@@ -401,61 +355,6 @@ router.put('/update/:id', upload.fields([{ name: 'logo' }, { name: 'crFile' }, {
     res.status(500).json({ message: 'Internal server error. Please try again later.' });
   }
 });
-// // PUT endpoint to update academy details
-// router.put('/update/:id', upload.fields([
-//   { name: 'logo', maxCount: 1 },
-//   { name: 'crFile', maxCount: 1 },
-//   { name: 'academyImg', maxCount: 1 }
-// ]), async (req, res) => {
-//   const academyId = req.params.id;
-
-//   try {
-//     // Fetch the current academy data from the database
-//     const currentAcademy = await User.findById(academyId);
-//     if (!currentAcademy) {
-//       return res.status(404).json({ message: 'Academy not found.' });
-//     }
-
-//     // Process the uploaded files and convert them to base64
-//     const files = req.files || {};
-//     const fileBase64 = {
-//       logo: files.logo ? files.logo[0].buffer.toString('base64') : currentAcademy.logo,
-//       crFile: files.crFile ? files.crFile[0].buffer.toString('base64') : currentAcademy.crFile,
-//       academyImg: files.academyImg ? files.academyImg[0].buffer.toString('base64') : currentAcademy.academyImg,
-//     };
-
-//     // Prepare the updated data object
-//     const updatedData = {
-//       username: req.body.username || currentAcademy.username,
-//       email: req.body.email || currentAcademy.email,
-//       phoneNumber: req.body.phoneNumber || currentAcademy.phoneNumber,
-//       fullName: req.body.fullName || currentAcademy.fullName,
-//       designation: req.body.designation || currentAcademy.designation,
-//       website: req.body.website || currentAcademy.website,
-//       instaId: req.body.instaId || currentAcademy.instaId,
-//       logo: fileBase64.logo, // Updated logo in base64 format
-//       crFile: fileBase64.crFile, // Updated crFile in base64 format
-//       academyImg: fileBase64.academyImg, // Updated academyImg in base64 format
-//       licenseNo: req.body.licenseNo || currentAcademy.licenseNo,
-//       description: req.body.description || currentAcademy.description,
-//       location: req.body.location || currentAcademy.location,
-//     };
-
-//     // Update the academy details in the database
-//     const updatedAcademy = await User.findByIdAndUpdate(academyId, updatedData, { new: true });
-//     if (!updatedAcademy) {
-//       return res.status(404).json({ message: 'Academy not found.' });
-//     }
-
-//     // Send the updated data back as the response
-//     res.status(200).json(updatedAcademy);
-//   } catch (error) {
-//     console.error('Error updating academy:', error);
-//     res.status(500).json({ message: 'An error occurred while updating the academy. Please try again later.' });
-//   }
-// });
-
-
 
 // New route to delete academy by id
 router.delete('/academy/:id', async (req, res) => {
