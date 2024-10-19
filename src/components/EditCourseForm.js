@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import EditImages from './EditImages';
 import './AddCourseForm.css'; // Reuse the same CSS file for styling
 import { FaChevronDown, FaEdit, FaTrash, FaSearch, FaTrashAlt, FaPlus } from 'react-icons/fa';
-import ScrollToTop from './ScrollToTOp';
 const EditCourseForm = ({ id }) => {
     const [showForm, setShowForm] = useState(true);
-    const [searchQuery, setSearchQuery] = useState('');
     const [courseData, setCourseData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [aloading, asetLoading] = useState(false);
@@ -708,7 +705,6 @@ const EditCourseForm = ({ id }) => {
                                     </button>
                                 </div>
                             ))}
-                            {/* <EditImages courseId={courseData._id} /> */}
                         </div>
 
                         {/* Action Buttons */}

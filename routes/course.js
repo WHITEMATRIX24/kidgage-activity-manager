@@ -79,18 +79,6 @@ router.get('/course/:id', async (req, res) => {
   }
 });
 
-// router.get('/course/:id', async (req, res) => {
-//   try {
-//     const course = await Course.findById(req.params.id);
-//     if (!course) {
-//       return res.status(404).json({ message: 'Course not found' });
-//     }
-//     res.status(200).json(course);
-//   } catch (error) {
-//     res.status(500).json({ message: 'Server error', error });
-//   }
-// });
-
 // Route to search for a course by ID
 router.get('/search', async (req, res) => {
   try {
@@ -120,18 +108,6 @@ router.get('/search', async (req, res) => {
 });
 
 
-// Update a course
-// router.put('/update/:id', async (req, res) => {
-//   try {
-//     const course = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true });
-//     if (!course) {
-//       return res.status(404).json({ message: 'Course not found' });
-//     }
-//     res.json(course);
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// });
 router.put('/update/:id', async (req, res) => {
   try {
     // Find the course by ID
@@ -153,45 +129,6 @@ router.put('/update/:id', async (req, res) => {
     res.json(updatedCourse);
   } catch (err) {
     res.status(500).json({ message: err.message });
-  }
-});
-const convertToBase64 = (image) => {
-  if (typeof image === 'string') {
-      return image; // If already a base64 string, return it as is
-  }
-  
-  // If the image is a file (Blob or File), convert it
-  if (image instanceof Blob) {
-      return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.onerror = (error) => reject(error);
-          reader.readAsDataURL(image);
-      });
-  }
-
-  throw new Error('Invalid image type');
-};
-router.put('/courses/images/:id', async (req, res) => {
-  let { images } = req.body; // Get the images from the request body
-
-  try {
-      // Convert all images to base64 if they are not already
-      images = await Promise.all(images.map(image => convertToBase64(image)));
-
-      const updatedCourse = await Course.findByIdAndUpdate(
-          req.params.id,
-          { images }, // Update the images field
-          { new: true, runValidators: true }
-      );
-
-      if (!updatedCourse) {
-          return res.status(404).json({ message: 'Course not found' });
-      }
-      res.status(200).json(updatedCourse);
-  } catch (error) {
-      console.error('Error updating course:', error); // Log error details
-      res.status(500).json({ message: 'Error updating course', error: error.message });
   }
 });
 

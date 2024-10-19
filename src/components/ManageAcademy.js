@@ -375,7 +375,7 @@ const handleclose=()=>{
                 />
               </div>
               <div>
-                <label>Logo<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 80 X 80 ]</span>:</label>
+                <label>Logo<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 240 X 240 ]</span>:</label>
                 <input
                   type="file"
                   name="logo"

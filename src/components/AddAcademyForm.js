@@ -209,7 +209,7 @@ return (
                 />
                 </div>
                 <div className='add-upload-label-group' style={{gap:'25%'}}>
-                <label className='sign-in-label' htmlFor="logo">Academy Logo <span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 80 X 80 ]</span></label>
+                <label className='sign-in-label' htmlFor="logo">Academy Logo <span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 240 X 240 ]</span></label>
                 <label className='sign-in-label' htmlFor="crFile">License No.</label>
                 </div>
                 <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>
