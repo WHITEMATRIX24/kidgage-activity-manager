@@ -232,7 +232,7 @@ return (
                 </div>
                 <div className='add-upload-label-group'>
                     <label className='sign-in-label' htmlFor="crFile">CR</label>
-                    <label className='sign-in-label' htmlFor="academyImg">Academy Image<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 1280 X 1028 ]</span>:</label>
+                    <label className='sign-in-label' htmlFor="academyImg">Academy Image<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 870 X 580 ]</span>:</label>
                 </div>
                 {fileError && <p className="error-message">{fileError}</p>}
                 <div className='side-by-side' style={{display:'flex', flexDirection:'row'}}>

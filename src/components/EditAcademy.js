@@ -356,7 +356,7 @@ const handlebuttonclick=()=>{
               />
             </div>
             <div>
-              <label>Academy Image<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 1280 X 1028 ]</span>:</label>
+              <label>Academy Image<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 870 X 580 ]</span>:</label>
               <input
                 type="file"
                 name="academyImg"

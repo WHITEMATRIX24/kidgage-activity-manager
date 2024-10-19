@@ -195,17 +195,18 @@ const Dashboard = () => {
                 <div className={`dashboard-content ${sidebarOpen ? 'expanded' : ''}`}>
                 {adminRole === 'admin' && (
                     <>
+                    <section id="academies" className="db-section">
+                    <ViewAcademy/>
+                        {/* <AddAcademyForm /> */}
+                        {/* <EditAcademyForm /> */}
+                    </section>
                     <section id="courses" className="db-section">
                         <ViewCourses/>
                         {/* <AddCourseForm /> */}
                         <PromoteCourse />
                         {/* <EditCourseForm /> */}
                     </section>
-                    <section id="academies" className="db-section">
-                    <ViewAcademy/>
-                        {/* <AddAcademyForm /> */}
-                        {/* <EditAcademyForm /> */}
-                    </section>
+                    
                     <section id="parents" className="db-section">
                         <AddParentForm />
                         <EditParentForm />
@@ -249,13 +250,13 @@ const Dashboard = () => {
                     )}
                 {adminRole === 'provider' && (
                     <>
+                    <section id="academies" className="db-section">
+                        <ManageAcademy/>
+                    </section>
                     <section id="courses" className="db-section">
                         <ManageCourses/>
                     </section>
-                    <section id="academies" className="db-section">
-                        <ManageAcademy/>
-
-                    </section>
+                    
                     <section id="settings" className="db-section">
                         <div className="settings-content">
                             <button className="sidebar-heading-button" onClick={handleChangePassword}>

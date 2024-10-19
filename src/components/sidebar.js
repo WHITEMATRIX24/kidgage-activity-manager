@@ -5,7 +5,7 @@ import profileImage from './assets/images/profile.png';
 import './dashboard.css';
 
 const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) => {
-    const [activeItem, setActiveItem] = useState('courses');
+    const [activeItem, setActiveItem] = useState('academies');
     const sectionRefs = useRef({});
     const [adminId, setAdminId] = useState('');
     const [adminRole, setAdminRole] = useState('');
@@ -56,7 +56,7 @@ const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) =>
       }, []);
       
     useEffect(() => {
-        const sections = ['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'advertisements', 'course-categories', 'settings'];
+        const sections = ['academies','courses', 'parents', 'students', 'add-banners', 'event-posters', 'advertisements', 'course-categories', 'settings'];
 
         sections.forEach(section => {
             sectionRefs.current[section] = document.getElementById(section);
@@ -117,7 +117,7 @@ const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) =>
     };
     
     const allowedSectionsByRole = {
-        admin: ['courses', 'academies', 'parents', 'students', 'add-banners', 'event-posters', 'advertisements', 'course-categories', 'settings'],
+        admin: ['academies','courses',  'parents', 'students', 'add-banners', 'event-posters', 'advertisements', 'course-categories', 'settings'],
         provider: ['academies','courses',  'settings'],
     };
     const allowedSections = allowedSectionsByRole[adminRole.toLowerCase()] || [];
@@ -145,11 +145,6 @@ const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) =>
 
                 </ul>
             </nav>
-            {/* <div className="sidebar-footer">
-                <a href="#privacy">Privacy Policy | </a>
-                <a href="#terms">Terms of Service | </a>
-                <a href="#support">Support</a>
-            </div> */}
         </div>
     );
 };

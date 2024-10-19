@@ -54,7 +54,15 @@ const ManageCourse = () => {
     }
 
     if (!provider) {
-        return <div>Loading...</div>;
+        return <div style={{minHeight:'200px'}} className='add-course-form-container'>
+            <div className="loader-container">
+         <div style={{marginBottom:'20%'}} className="loading-dots">
+         <span></span>
+        <span></span>
+        <span></span>
+        </div>
+        </div>
+        </div>;
     }
 
     const handleAddAcademyClick = (userId) => {
@@ -87,7 +95,7 @@ const ManageCourse = () => {
         setShowForm(true); // Show the provider list again
     };
     return (
-        <div className="add-course-form-container">
+        <div style={{minHeight:'400px'}} className="add-course-form-container">
             {showForm&&(
                 <div className="add-course-form">
                 <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'flex-start' }}>

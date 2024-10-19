@@ -203,8 +203,8 @@ const handleclose=()=>{
         <div className='add-course-form'>
         <h1>User Profile</h1>
         {loading ? (
-        <div className="loader-container">
-         <div className="loading-dots">
+        <div style={{minHeight:'100px',marginTop:'10%',marginBottom:'10%'}} className="loader-container">
+         <div  className="loading-dots">
          <span></span>
         <span></span>
         <span></span>
@@ -365,7 +365,7 @@ const handleclose=()=>{
                 />
               </div>
               <div>
-                <label>Academy Image<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 1280 X 1028 ]</span>:</label>
+                <label>Academy Image<span style={{ fontSize: '.8rem', color: 'grey' }}>[ size: 870 X 580 ]</span>:</label>
                 <input
                   type="file"
                   name="academyImg"

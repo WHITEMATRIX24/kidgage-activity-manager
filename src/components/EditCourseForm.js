@@ -104,10 +104,14 @@ const EditCourseForm = ({ id }) => {
             setLoading(false);
         }
     };
-
+    const [charCount, setCharCount] = useState(0);
+    const charLimit = 500;
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        if (name === 'description') {
+            setCharCount(value.length);
+          }
         setFormData(prevState => ({
             ...prevState,
             [name]: value
@@ -468,7 +472,11 @@ const EditCourseForm = ({ id }) => {
                                 value={formData.description}
                                 onChange={handleChange}
                                 disabled={!isEditMode}
+                                maxLength={charLimit}
+
                             />
+                            <p style={{fontSize:'smaller', marginBottom:'20px',marginLeft:'10px' , color:'darkblue'}}>{charCount}/{charLimit} characters</p>
+
                         </div>
                         <div className="form-group">
                             <label>Fee Structure</label>

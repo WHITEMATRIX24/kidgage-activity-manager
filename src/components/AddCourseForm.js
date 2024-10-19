@@ -48,10 +48,14 @@ function AddCourseForm({providerId}) {
         fetchCourseTypes();
     }, []);
 
-
+    const [charCount, setCharCount] = useState(0);
+    const charLimit = 500;
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        if (name === 'description') {
+            setCharCount(value.length);
+          }
         setCourse((prev) => ({ ...prev, [name]: value }));
     };
 
@@ -222,34 +226,8 @@ const removeImage = (index) => {
 
     return (
         <div className="">
-            {/* <div className="add-course-form-header" onClick={toggleFormVisibility}>
-                <h2>Add Course</h2>
-                <FaChevronDown className={`dropdown-icon ${showForm ? 'open' : ''}`} />
-            </div> */}
-            {/* {showForm && ( */}
                 <form className="add-course-form" onSubmit={handleSubmit}>
-                    {/* <div className="form-group search-provider-group">
-                        <label htmlFor="provider">Provider</label>
-                        <input
-                            type="text"
-                            id="provider"
-                            name="provider"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            placeholder="Search provider by email or phone number..."
-                        />
-                        <button type="button" className="search-provider-button" onClick={handleSearch}>
-                            <FaSearch />
-                        </button>
-                    </div>
-                    {searchError && <p className="error-message">{searchError}</p>}
-                    {searchResult && (
-                        <div className="search-result">
-                            <p>Provider: {searchResult.username}</p>
-                            <p>Email: {searchResult.email}</p>
-                            <p>ID: {searchResult._id}</p>
-                        </div>
-                    )} */}
+                    
                     <label htmlFor="name">Course Name</label>
 
                     <input
@@ -345,7 +323,11 @@ const removeImage = (index) => {
                             name="description"
                             value={course.description}
                             onChange={handleChange}
+                            maxLength={charLimit}
+
                         />
+                        <p style={{fontSize:'smaller', marginBottom:'20px',marginLeft:'10px' , color:'darkblue'}}>{charCount}/{charLimit} characters</p>
+
                     </div>
 
                     <div className="form-group">
@@ -527,57 +509,6 @@ const removeImage = (index) => {
                                         />
                                     </div>
                                 ))}
-                        {/* {course.location.map((loc, index) => (
-                            <div key={index} className="time-slot" style={{ display: 'flex', gap: '1rem' }}>
-                                <input
-                                    type="text"
-                                    name="address"
-                                    value={loc.address}
-                                    placeholder={index === 0 ? 'Area name' : `Area name ${index+1}`}
-                                    onChange={(e) => handleLocationChange(index, 'address', e.target.value)}
-                                    style={{ width: '33%' }}
-                                />
-
-                                <select
-                                    name="city"
-                                    value={loc.city}
-                                    onChange={(e) => handleLocationChange(index, 'city', e.target.value)}
-                                    style={{ width: '33%' }}
-                                >
-                                    
-                                            <option value="Doha">Doha</option>
-                                            <option value="Al Rayyan">Al Rayyan</option>
-                                            <option value="Al Wakrah">Al Wakrah</option>
-                                            <option value="Al Shamal">Al Shamal</option>
-                                            <option value="Al Khor">Al Khor</option>
-                                            <option value="Umm Salal">Umm Salal</option>
-                                            <option value="Al Daayen">Al Daayen</option>
-                                            <option value="Al Shahaniya">Al Shahaniya</option>
-                                            <option value="Dukhan">Dukhan</option>
-                                            <option value="Mesaieed">Mesaieed</option>
-                                </select>
-                                <input
-                                    type="text"
-                                    name="phoneNumber"
-                                    value={loc.phoneNumber}
-                                    placeholder={index === 0 ? 'Phone Number' : `Phone Number ${index+1}`}
-                                    onChange={(e) => handleLocationChange(index, 'phoneNumber', e.target.value)}
-                                    style={{ width: '36%' }}
-                                />
-
-
-                                {index > 0 && (
-                                    <button
-                                        type="button"
-                                        className="rem-button"
-                                        onClick={() => removeLocation(index)}
-                                    >
-                                        <FaTrash />
-                                    </button>
-                                )}
-                            </div>
-                        ))} */}
-
 
                     </div>
 
