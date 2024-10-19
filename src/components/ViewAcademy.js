@@ -19,7 +19,7 @@ const ViewAcademy = ({ handleSubmit }) => {
     useEffect(() => {
         // Fetch users from the backend
         setLoading(true);
-        axios.get('https://kidgage-adminbackend.onrender.com/api/users/all') // Make sure this matches the actual API route
+        axios.get('https://kidgage-activity-manager-backend.onrender.com/api/users/all') // Make sure this matches the actual API route
             .then((response) => {
                 setUsers(response.data);
                 setLoading(false);

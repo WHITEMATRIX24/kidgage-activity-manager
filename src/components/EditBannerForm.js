@@ -20,7 +20,7 @@ const EditBannerForm = () => {
     const fetchBanners = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/banners');
+            const response = await axios.get('https://kidgage-activity-manager-backend.onrender.com/api/banners');
             setBanners(response.data);
             setLoading(false);
         } catch (error) {
@@ -63,7 +63,7 @@ const EditBannerForm = () => {
                 formData.append('image', editingBanner.image);
             }
 
-            await axios.put(`https://kidgage-adminbackend.onrender.com/api/banners/${editingBanner._id}`, formData);
+            await axios.put(`https://kidgage-activity-manager-backend.onrender.com/api/banners/${editingBanner._id}`, formData);
             fetchBanners();
             setEditingBanner(null);
             setFileName('No file chosen');
@@ -79,7 +79,7 @@ const EditBannerForm = () => {
     const confirmDelete = async () => {
         setIsLoading(true);
         try {
-            await axios.delete(`https://kidgage-adminbackend.onrender.com/api/banners/${deletingBannerId}`);
+            await axios.delete(`https://kidgage-activity-manager-backend.onrender.com/api/banners/${deletingBannerId}`);
             fetchBanners();
             setShowDeleteModal(false);
             setDeletingBannerId(null);

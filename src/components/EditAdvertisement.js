@@ -23,7 +23,7 @@ const EditAdvertisementForm = () => {
     const fetchAdvertisements = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/advertisement');
+            const response = await axios.get('https://kidgage-activity-manager-backend.onrender.com/api/advertisement');
             setAdvertisements(response.data);
             if (response.data.length > 0) {
                 setSpace(response.data[0].space); // Set space based on the fetched data
@@ -75,7 +75,7 @@ const EditAdvertisementForm = () => {
                 formData.append('mobileImage', editingAdvertisement.mobileImage);
             }
 
-            await axios.put(`https://kidgage-adminbackend.onrender.com/api/advertisement/${editingAdvertisement._id}`, formData, {
+            await axios.put(`https://kidgage-activity-manager-backend.onrender.com/api/advertisement/${editingAdvertisement._id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -96,7 +96,7 @@ const EditAdvertisementForm = () => {
     const confirmDelete = async () => {
         setIsLoading(true);
         try {
-            await axios.delete(`https://kidgage-adminbackend.onrender.com/api/advertisement/${deletingAdvertisementId}`);
+            await axios.delete(`https://kidgage-activity-manager-backend.onrender.com/api/advertisement/${deletingAdvertisementId}`);
             fetchAdvertisements();
             setShowDeleteModal(false);
             setDeletingAdvertisementId(null);

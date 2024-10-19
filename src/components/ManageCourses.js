@@ -23,12 +23,12 @@ const ManageCourse = () => {
 
             try {
                 // Fetch provider data
-                const providerResponse = await axios.get(`https://kidgage-adminbackend.onrender.com/api/users/user/${userId}`);
+                const providerResponse = await axios.get(`https://kidgage-activity-manager-backend.onrender.com/api/users/user/${userId}`);
                 console.log('Provider Response:', providerResponse.data);
                 setProvider(providerResponse.data);
                 // Fetch courses for the specific provider using the provider's ID
                 const providerId = providerResponse.data.id; // Use the correct property for the provider ID
-                const coursesResponse = await axios.get(`https://kidgage-adminbackend.onrender.com/api/courses/by-providers`, {
+                const coursesResponse = await axios.get(`https://kidgage-activity-manager-backend.onrender.com/api/courses/by-providers`, {
                     params: {
                         providerIds: [userId], // Pass the provider ID as an array
                     },

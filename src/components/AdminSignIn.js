@@ -30,7 +30,7 @@ const AdminSignIn = () => {
     setProgress(10); // Set progress to 10% on form submit
 
     try {
-      const response = await axios.post('https://kidgage-adminbackend.onrender.com/api/admin/signin', formData);
+      const response = await axios.post('https://kidgage-activity-manager-backend.onrender.com/api/admin/signin', formData);
       console.log('Sign-in successful:', response.data);
       const { _id, role, fullName, name, userId } = response.data.admin;
       setSuccess('Sign-in successful');

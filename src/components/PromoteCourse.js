@@ -20,7 +20,7 @@ const PromoteCourse = () => {
         const fetchProviders = async () => {
             setLoading(true);
             try {
-                const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/users/all'); // Adjust the URL as needed
+                const response = await axios.get('https://kidgage-activity-manager-backend.onrender.com/api/users/all'); // Adjust the URL as needed
                 setProviders(response.data);
                 setLoading(false);
 
@@ -39,7 +39,7 @@ const PromoteCourse = () => {
             asetLoading(true);
             const providerIds = providers.map(provider => provider._id);
             try {
-                const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/courses/by-providers', {
+                const response = await axios.get('https://kidgage-activity-manager-backend.onrender.com/api/courses/by-providers', {
                     params: { providerIds }
                 });
                 const coursesByProvider = response.data.reduce((acc, course) => {
@@ -73,7 +73,7 @@ const PromoteCourse = () => {
         if (!selectedCourse) return;
 
         try {
-            await axios.post(`https://kidgage-adminbackend.onrender.com/api/promoted/promote/${selectedCourse._id}`, { promote: promoteMode });
+            await axios.post(`https://kidgage-activity-manager-backend.onrender.com/api/promoted/promote/${selectedCourse._id}`, { promote: promoteMode });
             // Refresh the courses list
             setCourses((prevCourses) => ({
                 ...prevCourses,

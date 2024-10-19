@@ -24,10 +24,10 @@ const RequestsPopup = ({ show, closeRequests}) => {
                 try {
                     setLoading(true);
                     if (activeTab === 'pending') {
-                        const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/users/pending');
+                        const response = await axios.get('https://kidgage-activity-manager-backend.onrender.com/api/users/pending');
                         setPendingUsers(response.data); // Set the pending users data
                     } else if (activeTab === 'accepted') {
-                        const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/users/accepted'); // Adjust the endpoint for accepted users
+                        const response = await axios.get('https://kidgage-activity-manager-backend.onrender.com/api/users/accepted'); // Adjust the endpoint for accepted users
                         setAcceptedUsers(response.data); // Set the accepted users data
                     }
                 } catch (error) {
@@ -66,7 +66,7 @@ const RequestsPopup = ({ show, closeRequests}) => {
                 };
                 console.log(userData);
                 // Send POST request to verify and create an admin account
-                await axios.post(`https://kidgage-adminbackend.onrender.com/api/users/verify/${selectedUser._id}`, userData);
+                await axios.post(`https://kidgage-activity-manager-backend.onrender.com/api/users/verify/${selectedUser._id}`, userData);
     
                 // Remove user from the pending list after successful verification
                 setPendingUsers(pendingUsers.filter(user => user._id !== selectedUser._id));
@@ -94,7 +94,7 @@ const RequestsPopup = ({ show, closeRequests}) => {
         setIsLoading(true);
         console.log('Rejecting user with ID:', userId); // Log the user ID
         try {
-            await axios.post(`https://kidgage-adminbackend.onrender.com/api/users/reject/${userId}`, userDetails);
+            await axios.post(`https://kidgage-activity-manager-backend.onrender.com/api/users/reject/${userId}`, userDetails);
             setPendingUsers(pendingUsers.filter(user => user._id !== userId)); // Remove user from list after rejecting
             setSelectedUser(null); // Reset selected user
         } catch (error) {

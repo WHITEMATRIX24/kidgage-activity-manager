@@ -31,7 +31,7 @@ const Sidebar = ({ sidebarOpen, toggleSidebar, onSignOut, onChangePassword }) =>
         const fetchUserDetails = async () => {
           const userId = sessionStorage.getItem('userid');
           try {
-            const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/user/${userId}`);
+            const response = await fetch(`https://kidgage-activity-manager-backend.onrender.com/api/users/user/${userId}`);
             if (!response.ok) {
               throw new Error('Failed to fetch user details.');
             }

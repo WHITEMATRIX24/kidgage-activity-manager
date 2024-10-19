@@ -30,7 +30,7 @@ function EditStudentForm({ onDelete }) {
 
     const handleSearch = async () => {
         try {
-            const response = await axios.get('https://kidgage-adminbackend.onrender.com/api/personal/search', {
+            const response = await axios.get('https://kidgage-activity-manager-backend.onrender.com/api/personal/search', {
                 params: { query }
             });
             if (response.data) {
@@ -52,7 +52,7 @@ function EditStudentForm({ onDelete }) {
 
     const fetchStudents = async (parentId) => {
         try {
-            const response = await axios.get(`https://kidgage-adminbackend.onrender.com/api/student/parent/${parentId}`);
+            const response = await axios.get(`https://kidgage-activity-manager-backend.onrender.com/api/student/parent/${parentId}`);
             if (Array.isArray(response.data)) {
                 setStudents(response.data);
             } else {
@@ -112,7 +112,7 @@ function EditStudentForm({ onDelete }) {
     const handleSaveStudent = async () => {
         setIsLoading(true);
         try {
-            await axios.put(`https://kidgage-adminbackend.onrender.com/api/student/update/${selectedStudent?._id}`, editStudent);
+            await axios.put(`https://kidgage-activity-manager-backend.onrender.com/api/student/update/${selectedStudent?._id}`, editStudent);
             alert('Student updated successfully!');
             setError('');
             fetchStudents(parentData?._id);

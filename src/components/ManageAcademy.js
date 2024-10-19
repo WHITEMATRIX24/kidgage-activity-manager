@@ -39,7 +39,7 @@ const charLimit = 500;
       }
 
       try {
-        const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/user/${userId}`);
+        const response = await fetch(`https://kidgage-activity-manager-backend.onrender.com/api/users/user/${userId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch user details.');
         }
@@ -124,7 +124,7 @@ const charLimit = 500;
 
 
     try {
-      const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/edit/${userId}`, {
+      const response = await fetch(`https://kidgage-activity-manager-backend.onrender.com/api/users/edit/${userId}`, {
         method: 'POST',
         body: formDataToSend, // Use FormData for file uploads
       });
@@ -163,7 +163,7 @@ const charLimit = 500;
     }
 
     try {
-      const response = await fetch(`https://kidgage-adminbackend.onrender.com/api/users/complete/${userId}`, {
+      const response = await fetch(`https://kidgage-activity-manager-backend.onrender.com/api/users/complete/${userId}`, {
         method: 'POST',
         body: formDataToSend, // Use FormData for file uploads
       });
