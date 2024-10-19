@@ -22,7 +22,7 @@ const EditPosterForm = ({ onDelete }) => {
     const fetchPosters = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('https://kidgage-activity-manager-backend.onrender.com/api/posters');
+            const response = await axios.get('http://localhost:5001/api/posters');
             setPosters(response.data);
             setLoading(false);
         } catch (error) {
@@ -105,7 +105,7 @@ const EditPosterForm = ({ onDelete }) => {
         }
 
         try {
-            await axios.put(`https://kidgage-activity-manager-backend.onrender.com/api/posters/${selectedPoster._id}`, formData);
+            await axios.put(`http://localhost:5001/api/posters/${selectedPoster._id}`, formData);
             setEditMode(false);
             setSelectedPoster(null);
             setFileName('No file chosen');

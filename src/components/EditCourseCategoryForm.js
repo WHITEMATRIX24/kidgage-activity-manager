@@ -22,7 +22,7 @@ const EditCourseCategoryForm = () => {
     const fetchCourses = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('https://kidgage-activity-manager-backend.onrender.com/api/course-category/categories');
+            const response = await axios.get('http://localhost:5001/api/course-category/categories');
             setCourses(response.data);
             setLoading(false);
         } catch (error) {
@@ -54,7 +54,7 @@ const EditCourseCategoryForm = () => {
     const handleConfirmDelete = async () => {
         setIsLoading(true);
         try {
-            await axios.delete(`https://kidgage-activity-manager-backend.onrender.com/api/course-category/delete/${bannerToDelete._id}`);
+            await axios.delete(`http://localhost:5001/api/course-category/delete/${bannerToDelete._id}`);
             setSelectedBanner(null);
             setEditMode(false);
             setShowConfirmPopup(false);
@@ -89,7 +89,7 @@ const EditCourseCategoryForm = () => {
         }
 
         try {
-            await axios.put(`https://kidgage-activity-manager-backend.onrender.com/api/course-category/update/${selectedBanner._id}`, formData);
+            await axios.put(`http://localhost:5001/api/course-category/update/${selectedBanner._id}`, formData);
             setEditMode(false);
             setSelectedBanner(null);
             setFileName('No file chosen');

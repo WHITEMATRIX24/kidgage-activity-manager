@@ -45,7 +45,7 @@ const EditCourseForm = ({ id }) => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('https://kidgage-activity-manager-backend.onrender.com/api/course-category/categories');
+                const response = await axios.get('http://localhost:5001/api/course-category/categories');
                 // Handle categories if needed
             } catch (error) {
                 console.error('Error fetching categories', error);
@@ -67,7 +67,7 @@ const EditCourseForm = ({ id }) => {
         console.log('Searching for course ID:', courseId); // Log the courseId
         try {
             // Assuming searchQuery now contains the course ID
-            const response = await axios.get(`https://kidgage-activity-manager-backend.onrender.com/api/courses/course/${courseId}`);
+            const response = await axios.get(`http://localhost:5001/api/courses/course/${courseId}`);
             if (response.data) {
                 setCourseData(response.data);
                 setFormData({
@@ -173,7 +173,7 @@ const EditCourseForm = ({ id }) => {
 
             try {
                 const response = await axios.put(
-                    `https://kidgage-activity-manager-backend.onrender.com/api/courses/update/${courseData._id}`,
+                    `http://localhost:5001/api/courses/update/${courseData._id}`,
                     modifiedData // Send only modified data
                 );
                 setSuccess('Course updated successfully!');
@@ -197,7 +197,7 @@ const EditCourseForm = ({ id }) => {
     const handleConfirmDelete = async () => {
         asetLoading(true);
         try {
-            await axios.delete(`https://kidgage-activity-manager-backend.onrender.com/api/courses/delete/${courseData._id}`);
+            await axios.delete(`http://localhost:5001/api/courses/delete/${courseData._id}`);
             setCourseData(null);
             setFormData({
                 providerId: '',
@@ -237,7 +237,7 @@ const EditCourseForm = ({ id }) => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await axios.get('https://kidgage-activity-manager-backend.onrender.com/api/course-category/categories');
+                const response = await axios.get('http://localhost:5001/api/course-category/categories');
                 setCourseTypes(response.data);
             } catch (error) {
                 console.error('Error fetching categories', error);

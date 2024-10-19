@@ -58,7 +58,7 @@ function AddStudentForm() {
         }
 
         try {
-            const response = await axios.post('https://kidgage-activity-manager-backend.onrender.com/api/student/add', {
+            const response = await axios.post('http://localhost:5001/api/student/add', {
                 parent: searchResult._id,
                 firstName: student.firstName,
                 lastName: student.lastName,
@@ -88,7 +88,7 @@ function AddStudentForm() {
 
     const handleSearch = async () => {
         try {
-            const response = await axios.get('https://kidgage-activity-manager-backend.onrender.com/api/personal/search', {
+            const response = await axios.get('http://localhost:5001/api/personal/search', {
                 params: { query: student.parent }
             });
             setSearchResult(response.data);

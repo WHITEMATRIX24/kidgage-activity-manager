@@ -92,7 +92,7 @@ function AddPosterForm() {
         formData.append('image', file);
 
         try {
-            const response = await axios.post('https://kidgage-activity-manager-backend.onrender.com/api/posters/add', formData, {
+            const response = await axios.post('http://localhost:5001/api/posters/add', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

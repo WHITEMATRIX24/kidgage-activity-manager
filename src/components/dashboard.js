@@ -83,7 +83,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get('https://kidgage-activity-manager-backend.onrender.com/api/users/pending');
+                const response = await axios.get('http://localhost:5001/api/users/pending');
                 setPendingCount(response.data.length);  // Set pending count based on API response
             } catch (error) {
                 console.error(`Error fetching pending users:`, error);  // Handle errors
@@ -109,9 +109,9 @@ const Dashboard = () => {
         if (itemToDelete) {
             try {
                 if (deleteType === 'poster') {
-                    await axios.delete(`https://kidgage-activity-manager-backend.onrender.com/api/posters/${itemToDelete._id}`);
+                    await axios.delete(`http://localhost:5001/api/posters/${itemToDelete._id}`);
                 } else if (deleteType === 'student') {
-                    await axios.delete(`https://kidgage-activity-manager-backend.onrender.com/api/student/delete/${itemToDelete._id}`);
+                    await axios.delete(`http://localhost:5001/api/student/delete/${itemToDelete._id}`);
                 }
                 setItemToDelete(null);
                 setDeleteType('');

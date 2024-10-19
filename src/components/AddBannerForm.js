@@ -41,7 +41,7 @@ function AddBannerForm() {
         formData.append('bookingLink', banner.bookingLink);
 
         try {
-            const response = await axios.post('https://kidgage-activity-manager-backend.onrender.com/api/banners/addbanner', formData, {
+            const response = await axios.post('http://localhost:5001/api/banners/addbanner', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data' // Set the content type to multipart/form-data
                 }

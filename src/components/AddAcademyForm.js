@@ -99,7 +99,7 @@ const AddAcademyForm = ({ handleNavigation }) => {
         });
     
         try {
-            const response = await axios.post('https://kidgage-activity-manager-backend.onrender.com/api/users/signup', data);
+            const response = await axios.post('http://localhost:5001/api/users/signup', data);
             alert('Academy added Successfully!');
             setFormData({ ...initialFormState }); // Reset form fields
             if (logoInputRef.current) logoInputRef.current.value = '';
